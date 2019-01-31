@@ -38,15 +38,19 @@ export default {
 
   methods:{
     buyStock(){
-       console.log("stock bought");
-      var order= {
+       console.log("stock buy button");
+       
+       const order= {
         name : this.stock.name,
         price : this.stock.price,
         quantity : this.quantity
       };
-     
+      
       this.$store.dispatch('buyStock', order);
+      
       this.quantity = 0;
+      //console.log(order);
+
     }
   }
 }

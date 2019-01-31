@@ -1,5 +1,0 @@
-const state = {
-    funds: 100000000,
-    stocks: []
-};
- 

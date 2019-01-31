@@ -20,16 +20,16 @@ export default {
         appstock: stock
     },
 
-    computed: {
-      ...mapGetters([
-            'stocks'
-        ])
-    } 
     // computed: {
-    //     stocks(){
-    //         return this.$store.getters.stocks;
-    //     }
-    // }
+    //   ...mapGetters([
+    //         'stocks'
+    //     ])
+    // } 
+    computed: {
+        stocks(){
+            return this.$store.getters.stocks;
+        }
+    }
 
 }
 </script>

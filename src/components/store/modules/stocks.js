@@ -23,9 +23,9 @@ const actions = {
               const arr = response.data.stocks
               for(let stock in arr){
                   const a = arr[stock]
-                  console.log(stock);
-                  console.log("==+=")
-                  console.log(a);
+                  //console.log(stock);
+                  //console.log("==+=")
+                  //console.log(a);
                   commit('SET_STOCKS', a);
             }
               
@@ -37,6 +37,10 @@ const actions = {
              console.log(error);
          });
 
+    },
+
+    buyStock : ({ commit }, order) => {
+        commit('BUY_STOCK', order);
     }
  
 
@@ -44,7 +48,7 @@ const actions = {
 
 const getters = {
     stocks : state => {
-     return state.stocks
+     return state.stocks;
     }
 };
 
