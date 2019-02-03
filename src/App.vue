@@ -19,6 +19,9 @@ export default {
   components:{
     appHeader: Header
     //appHome: Home
+  },
+  created() {
+    this.$store.dispatch('loadStocks');
   }
 }
 </script>

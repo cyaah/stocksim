@@ -7,9 +7,11 @@ const state = {
 const mutations = {
     'SET_STOCKS' (state, a){
         //state.stocks = stocks;
-        //console.log(state);
          state.stocks.push(a);
+         //console.log(state.stocks);
+         //console.log("stocks loaded");
     }
+
 };
 
 const actions = {
@@ -41,6 +43,10 @@ const actions = {
 
     buyStock : ({ commit }, order) => {
         commit('BUY_STOCK', order);
+    },
+
+    sellStock: ({ commit }, order) =>{
+        commit('SELL_STOCK', order);
     }
  
 

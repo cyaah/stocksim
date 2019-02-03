@@ -25,6 +25,21 @@ const mutations = {
     'SET_PORTFOLIO' (state, portfolio) {
         state.funds = funds,
         state.stocks = portfolio.stockPortfolio ? portfolio.stockPortfolio : [];
+    },
+    'SELL_STOCK' (state, {price, name, quantity}){
+        console.log("stock sold")
+        console.log(quantity);
+        const record = state.stocks.find(element => {
+            element.name == name
+        });
+        console.log(record);
+        if(record.quantity > quantity){
+            record.quantity -= quantity
+        } else {
+            state.stocks.splice(state.stocks.indexOf(record),1);
+        }
+        state.funds += price * quantity;
+        console.log(state.stocks);
     }
 };
 

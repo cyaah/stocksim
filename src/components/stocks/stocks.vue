@@ -13,9 +13,9 @@ import { mapGetters } from 'vuex'
 
 export default {
 //Fix bug when this component re-renders it calls the axios get request again. 
-    mounted(){
-        this.$store.dispatch('loadStocks')
-    },
+    // mounted(){
+    //     this.$store.dispatch('loadStocks')
+    // },
     components: {
         appstock: stock
     },
