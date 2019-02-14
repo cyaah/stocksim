@@ -8,8 +8,11 @@
     <div class="col">
        <div class="card text-right" style="width: 18rem;">
             <div class="card-body">
-              <h5 class="card-title">Name: {{stock.name}}</h5>
-              <p class="card-text">Price: {{stock.price}}</p>
+              <h5 class="card-title">Name: {{stock['01. symbol']}}</h5>
+              <p class="card-text">Price: ${{stock['05. price']}}</p>
+              <p class="card-text">High: ${{stock['03. high']}}</p>
+              <p class="card-text">Low: ${{stock['04. low']}}</p>
+              <p class="card-text">Prev Close: ${{stock['08. previous close']}}</p>
               <div class="input-group mb-3">
                 <input type="number" v-model="quantity" class="form-control" placeholder="Enter Quantity" aria-describedby="basic-addon2">
                 <div class="input-group-append">
@@ -41,11 +44,12 @@ export default {
        console.log("stock buy button");
        
        const order= {
-        name : this.stock.name,
-        price : this.stock.price,
+        name : this.stock['01. symbol'],
+        price : this.stock['05. price'],
         quantity : this.quantity
       };
-      
+      console.log('order');
+      console.log(order);
       this.$store.dispatch('buyStock', order);
       
       this.quantity = 0;

@@ -14,10 +14,15 @@ export default {
         appstock: stock
     },
 
-    computed: {
-        ...mapGetters({
-            stocks: 'stockPortfolio'
-        })
+    // computed: {
+    //     ...mapGetters({
+    //         stocks: 'stockPortfolio'
+    //     })
+    // },
+      computed: {
+        stocks(){
+            return this.$store.getters.stockPortfolio;
+        }
     }
 }
 </script>
