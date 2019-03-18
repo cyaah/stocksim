@@ -2,33 +2,36 @@
   <div>
     <app-header></app-header>
     <router-view></router-view>
-  </div>  
+  </div>
 
   <!-- <div class="container">
     //Put div container in the body 
-  </div> -->
+  </div>-->
 </template>
 
 <script>
-import Header from './components/Header.vue';
+import Header from "./components/Header.vue";
 //import { mapState } from 'vuex';
 
-
-
 export default {
-  components:{
+  components: {
     appHeader: Header
     //appHome: Home
   },
+  data() {
+    return {
+      keywords: "",
+      reults: []
+    };
+  },
   created() {
-    this.$store.dispatch('loadStocks');
+    this.$store.dispatch("loadStocks");
   }
-}
+};
 </script>
 
 <style>
-.container{
+/* .container{
   font-family: 'Taviraj', serif;
-}
-
+} */
 </style>
