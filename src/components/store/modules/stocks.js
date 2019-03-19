@@ -41,22 +41,22 @@ const actions = {
 
     // },
 
-    loadStocks: ({
-        commit
-    }) => {
-        axios.get('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=MSFT&apikey=030CF83Z0LHP1H0B')
-            .then(res => {
-                if (res) {
-                    console.log(res.data['Global Quote']);
-                    const s = res.data['Global Quote'];
-                    commit('SET_STOCKS', s);
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            });
+    // loadStocks: ({
+    //     commit
+    // }) => {
+    //     axios.get('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=MSFT&apikey=030CF83Z0LHP1H0B')
+    //         .then(res => {
+    //             if (res) {
+    //                 console.log(res.data['Global Quote']);
+    //                 const s = res.data['Global Quote'];
+    //                 commit('SET_STOCKS', s);
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.log(error);
+    //         });
 
-    },
+    // },
     buyStock: ({
         commit
     }, order) => {
