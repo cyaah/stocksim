@@ -6,12 +6,12 @@
     <div class="col">
       <div class="card text-right" style="width: 18rem;">
         <div class="card-body">
-          <h5 class="card-title">Name: {{stock['01. symbol']}}</h5>
+          <!-- <h5 class="card-title">Name: {{stock['01. symbol']}}</h5>
           <p class="card-text">Price: ${{stock['05. price']}}</p>
           <p class="card-text">High: ${{stock['03. high']}}</p>
           <p class="card-text">Low: ${{stock['04. low']}}</p>
           <p class="card-text">Prev Close: ${{stock['08. previous close']}}</p>
-          <div class="input-group mb-3">
+          <div class="input-group mb-3"> -->
             <input
               type="number"
               v-model="quantity"
@@ -19,9 +19,9 @@
               placeholder="Enter Quantity"
               aria-describedby="basic-addon2"
             >
-            <div class="input-group-append">
+            <!-- <div class="input-group-append">
               <button @click="buyStock">Buy</button>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -54,6 +54,7 @@ export default {
       };
       console.log("order");
       console.log(order);
+      //calling at action buy stock and passing order info as payload
       this.$store.dispatch("buyStock", order);
 
       this.quantity = 0;

@@ -28,9 +28,10 @@
           class="form-control"
           placeholder="Enter Quantity"
           aria-describedby="basic-addon2"
+          v-model="quantity"
         >
         <div>
-          <button>Buy</button>
+          <button @click="buyStock">Buy</button>
         </div>
       </div>
     </div>
@@ -48,14 +49,15 @@ export default {
     return {
       searchTerm: "",
       results: [],
-      noResults: false
+      noResults: false,
+      quantity: 0
     };
   },
   methods: {
     search: function() {
       var term = this.searchTerm;
-      console.log("term");
       console.log(term);
+      console.log("term");
       axios
         .get(
           `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${encodeURIComponent(
@@ -67,11 +69,11 @@ export default {
           if (res) {
             this.results = [];
             this.noResults = false;
-            console.log(res.data["Global Quote"]);
+            //console.log(res.data["Global Quote"]);
             const s = res.data["Global Quote"];
             //this.resutls = s;
-            console.log(s);
-            console.log("0000");
+            //console.log(s);
+            //console.log("0000");
             if (isEmpty(s)) {
               this.noResults = true;
               this;
@@ -79,7 +81,7 @@ export default {
               console.log("results");
             } else {
               this.results.push(s);
-              console.log("=+=+");
+             
               //console.log(this.results[0]['01. symbol']);
               console.log(this.results);
             }
@@ -92,12 +94,27 @@ export default {
       var isEmpty = obj => {
         for (var key in obj) {
           if (obj.hasOwnProperty(key)) {
-            console.log(key);
             return false;
           }
         }
         return true;
       };
+    },
+
+    buyStock() {
+      console.log("stock buy button");
+      console.log(this.quantity);
+      const order = {
+        name: this.results[0]["01. symbol"],
+        price: this.results[0]["05. price"],
+        quantity: this.quantity
+      };
+      console.log("order");
+      console.log(order);
+      this.$store.dispatch("buyStock", order);
+
+      this.quantity = 0;
+      //console.log(order);
     }
   }
 };

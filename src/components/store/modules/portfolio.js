@@ -9,16 +9,18 @@ const mutations = {
         console.log(name);
         //console.log(state.stocks[0]);
         const record = state.stocks.find(element => {
-            element.name == name});
+            console.log(element);
+            return element.name === name});
             //console.log("check")
-        //console.log(record);
+        console.log(record);
         if(record){
             record.quantity += quantity;
+            console.log('if stock exists')
         } else {
             state.stocks.push({name : name,
             quantity: quantity, price: price });
-            //console.log("checking if inside thise loop")
-            //console.log(state.stocks);
+            console.log("adding new stock")
+            console.log(state.stocks);
 
         }
         state.funds -= quantity * price;
@@ -26,14 +28,20 @@ const mutations = {
     },
     'SET_PORTFOLIO' (state, portfolio) {
         state.funds = funds,
+        console.log("stock portfolio")
         state.stocks = portfolio.stockPortfolio ? portfolio.stockPortfolio : [];
         console.log(state.stocks);
     },
     'SELL_STOCK' (state, {price, name, quantity}){
         console.log("stock sold")
-        console.log(quantity);
+        //console.log(name);
+        //console.log(state.stocks[0].name);
         const record = state.stocks.find(element => {
-            element.name == name
+            //element.name === name
+            console.log(name);
+            console.log(element.name);
+            console.log("=+=");
+            element.name === name
         });
         console.log(record);
         if(record.quantity > quantity){
@@ -51,21 +59,30 @@ const actions = {
 };
 
 const getters = {
-    stockPortfolio (state, getters) {
-        console.log(state.stocks);
-        return state.stocks.map(stock => {
-            console.log(getters.stocks[0]['01. symbol'])
+    stockPortfolio (state) {
+        //console.log(state.stocks);
+        console.log("inside getters stockPOrtfolio");
+        // console.log(getters);
+        // console.log(state.stocks);
+         console.log(getters.stocks)
+         state.stocks.map(stock => {
+            //console.log(getters.stocks[0]['01. symbol'])
             
-            console.log(state.stocks[0].name);
-            const record = getters.stocks.find(element => element['01. symbol'] === stock.name);
-            console.log("-=-=-=");
-            console.log(record['05. price']);
-            return {
-                quantity: stock.quantity,
-                name: record['01. symbol'],
-                price: record['05. price']
-            }
+           
+           console.log(stock);
+             const record = getters.stocks.find(element =>  element.name === stock.name);
+             console.log("-=-=-=");
+             //console.log(record);
+             console.log(record.name);
+            return record;
+             //  return {
+            //      quantity: stock.quantity,
+            //      name: record.name,
+            //      price: record.price
+            //  }
         });
+
+       
     
     }
 }

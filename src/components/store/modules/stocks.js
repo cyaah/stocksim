@@ -57,6 +57,13 @@ const actions = {
     //         });
 
     // },
+
+    loadStocks: ({
+        commit
+    }) => {
+
+    },
+
     buyStock: ({
         commit
     }, order) => {
@@ -77,6 +84,7 @@ const getters = {
         return state.stocks;
     }
 };
+
 
 
 export default {

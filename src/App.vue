@@ -25,7 +25,8 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch("loadStocks");
+    console.log("at create")
+    //this.$store.dispatch("loadStocks");
   }
 };
 </script>
