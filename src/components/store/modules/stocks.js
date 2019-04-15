@@ -1,6 +1,6 @@
 import axios from 'axios';
 const state = {
-    stocks: []
+    stocks: [{name: 'a'}]
 };
 
 
@@ -80,9 +80,9 @@ const actions = {
 };
 
 const getters = {
-    stocks: state => {
-        return state.stocks;
-    }
+    // stocks: state => {
+    //     return state.stocks;
+    // }
 };
 
 

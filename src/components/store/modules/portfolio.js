@@ -12,9 +12,10 @@ const mutations = {
             console.log(element);
             return element.name === name});
             //console.log("check")
-        console.log(record);
+            console.log(record);
         if(record){
-            record.quantity += quantity;
+            record.quantity =  parseFloat(quantity) + parseFloat(record.quantity);
+            console.log(record.quantity);
             console.log('if stock exists')
         } else {
             state.stocks.push({name : name,
@@ -40,9 +41,10 @@ const mutations = {
             //element.name === name
             console.log(name);
             console.log(element.name);
-            console.log("=+=");
-            element.name === name
+            
+            return element.name === name
         });
+        console.log("=+=");
         console.log(record);
         if(record.quantity > quantity){
             record.quantity -= quantity
@@ -59,31 +61,36 @@ const actions = {
 };
 
 const getters = {
-    stockPortfolio (state) {
+    stockPortfolio (state,getters) {
         //console.log(state.stocks);
         console.log("inside getters stockPOrtfolio");
         // console.log(getters);
         // console.log(state.stocks);
          console.log(getters.stocks)
-         state.stocks.map(stock => {
+       return state.stocks.map(stock => {
             //console.log(getters.stocks[0]['01. symbol'])
             
            
-           console.log(stock);
+            console.log(stock);
              const record = getters.stocks.find(element =>  element.name === stock.name);
              console.log("-=-=-=");
              //console.log(record);
-             console.log(record.name);
-            return record;
-             //  return {
-            //      quantity: stock.quantity,
-            //      name: record.name,
-            //      price: record.price
-            //  }
+             console.log(stock.quantity);
+             //return record;
+              return {
+                 quantity: stock.quantity,
+                 name: record.name,
+                 price: record.price
+             }
         });
 
        
     
+    },
+
+
+    stocks: state => {
+        return state.stocks;
     }
 }
 

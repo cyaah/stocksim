@@ -1,9 +1,10 @@
 <template>
   <div class="container">
     <h1>Trade Stocks and Manage your own Portfolio</h1>
-    <h5>Your Funds</h5>
+   
     <div class="input-groupmb-3">
       <input
+        v-on:keyup.enter="search"
         type="search"
         class="form-control"
         placeholder="Enter Stock Ticker"
@@ -12,26 +13,32 @@
       >
 
       <div class="input-group-append">
-        <button @click="search" class="btn btn-outline-secondary" type="button">Search</button>
+        <button @click="search" class="btn btn-success" type="button">Search</button>
       </div>
     </div>
 
     <div v-if="results.length > 0" class="card" style="width: 18rem;">
       <div class="card-body">
-        <h5 class="card-title">Ticker: {{this.results[0]['01. symbol']}}</h5>
+        <h5 class="card-title">Symbol: {{this.results[0]['01. symbol']}}</h5>
         <h6 class="card-subtitle mb-2">Price: ${{this.results[0]['05. price']}}</h6>
         <p>Open: {{this.results[0]['02. open']}}</p>
         <p class="infoRight">High: {{this.results[0]['03. high']}}</p>
         <p class="infoRight">Low: {{this.results[0]['04. low']}}</p>
+
+
+        <!-- bug- Input allows the enter of 'e' when only shouldbe number. Result in empty string quantity-->
         <input
+          v-on:keyup.enter="buyStock"
           type="number"
           class="form-control"
           placeholder="Enter Quantity"
           aria-describedby="basic-addon2"
           v-model="quantity"
+Rating: 5/5 (10 cast)
+Run time: 35
         >
         <div>
-          <button @click="buyStock">Buy</button>
+          <button class ="btn btn-outline-success" @click="buyStock">Buy</button>
         </div>
       </div>
     </div>
@@ -72,16 +79,16 @@ export default {
             //console.log(res.data["Global Quote"]);
             const s = res.data["Global Quote"];
             //this.resutls = s;
-            //console.log(s);
-            //console.log("0000");
+            console.log(s);
+            console.log("0000");
             if (isEmpty(s)) {
               this.noResults = true;
-              this;
+              //this;
 
               console.log("results");
             } else {
               this.results.push(s);
-             
+
               //console.log(this.results[0]['01. symbol']);
               console.log(this.results);
             }
@@ -99,6 +106,7 @@ export default {
         }
         return true;
       };
+      this.term = "";
     },
 
     buyStock() {
@@ -121,7 +129,16 @@ export default {
 </script>
 
 <style>
+.container{
+font-family: 'Roboto', sans-serif; */
+width:1000px; 
+margin: 300px auto;
+
+}
 .input-group {
+  margin-top: 25px;
+}
+.input-groupmb-3{
   margin-top: 25px;
 }
 .infoRight {

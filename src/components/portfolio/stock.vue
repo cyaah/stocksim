@@ -47,7 +47,7 @@ export default {
         price : this.stock.price,
         quantity : this.quantity
       };
-      console.log(order);
+      console.log("sell order "+order);
       this.placeSellOrder(order);
       this.quantity = 0;
     }
