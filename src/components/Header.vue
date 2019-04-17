@@ -65,7 +65,7 @@ export default {
 
 <style>
 .navbar{
-  margin-top: 25px;
+
   margin-right: 25px;
   margin-left: 25px;
   font-family: 'Roboto';

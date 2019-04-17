@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>Trade Stocks and Manage your own Portfolio</h1>
+    <h1 class="main-header">Trade Stocks and Manage your own Portfolio</h1>
    
     <div class="input-groupmb-3">
       <input
@@ -10,11 +10,9 @@
         placeholder="Enter Stock Ticker"
         aria-label="Recipient's username"
         v-model="searchTerm"
+        id="main-search"
       >
 
-      <div class="input-group-append">
-        <button @click="search" class="btn btn-success" type="button">Search</button>
-      </div>
     </div>
 
     <div v-if="results.length > 0" class="card" style="width: 18rem;">
@@ -24,7 +22,10 @@
         <p>Open: {{this.results[0]['02. open']}}</p>
         <p class="infoRight">High: {{this.results[0]['03. high']}}</p>
         <p class="infoRight">Low: {{this.results[0]['04. low']}}</p>
-
+        <p> Volume: {{this.results[0]['06. volume']}}</p>
+        <p> Previous close: {{this.results[0]['08. previous close']}}</p>
+        <p>Change: {{this.results[0]['09. change']}}</p>
+        <p>Change%: {{this.results[0]['10. change percent']}}</p>
 
         <!-- bug- Input allows the enter of 'e' when only shouldbe number. Result in empty string quantity-->
         <input
@@ -34,8 +35,6 @@
           placeholder="Enter Quantity"
           aria-describedby="basic-addon2"
           v-model="quantity"
-Rating: 5/5 (10 cast)
-Run time: 35
         >
         <div>
           <button class ="btn btn-outline-success" @click="buyStock">Buy</button>
@@ -130,12 +129,16 @@ export default {
 
 <style>
 .container{
-font-family: 'Roboto', sans-serif; */
-width:1000px; 
-margin: 300px auto;
+font-family: 'Roboto', sans-serif;
+width: 1000px;
+margin: 210px auto;
+
 
 }
-.input-group {
+.main-header{
+  font-weight: 600;
+}
+input-group {
   margin-top: 25px;
 }
 .input-groupmb-3{
@@ -144,10 +147,20 @@ margin: 300px auto;
 .infoRight {
   margin-left: 140px;
 }
-.form-control {
-  width: 90%;
+#main-search {
+  margin-left: 120px;
+  width: 60%;
 }
 .card {
-  margin-top: 40px;
+  margin-top: 80px;
+  width: 60%;
+  font-family: 'Roboto', sans-serif;
+
+}
+.card-body{
+  box-shadow: 0 4px 6px 0  hsla( 0, 0%, 0%, 0.2);
+}
+.input-group-append{
+    width: 400px;
 }
 </style>
