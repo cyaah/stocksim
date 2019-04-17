@@ -24,8 +24,7 @@
         <p>Open: {{this.results[0]['02. open']}}</p>
         <p class="infoRight">High: {{this.results[0]['03. high']}}</p>
         <p class="infoRight">Low: {{this.results[0]['04. low']}}</p>
-
-
+        
         <!-- bug- Input allows the enter of 'e' when only shouldbe number. Result in empty string quantity-->
         <input
           v-on:keyup.enter="buyStock"
