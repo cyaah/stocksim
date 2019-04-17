@@ -8,24 +8,27 @@ const mutations = {
         console.log("stock bought ")
         console.log(name);
         //console.log(state.stocks[0]);
-        const record = state.stocks.find(element => {
-            console.log(element);
-            return element.name === name});
-            //console.log("check")
-            console.log(record);
-        if(record){
-            record.quantity =  parseFloat(quantity) + parseFloat(record.quantity);
-            console.log(record.quantity);
-            console.log('if stock exists')
-        } else {
-            state.stocks.push({name : name,
-            quantity: quantity, price: price });
-            console.log("adding new stock")
-            console.log(state.stocks);
-
+        if(quantity >0){
+            const record = state.stocks.find(element => {
+                console.log(element);
+                return element.name === name});
+                //console.log("check")
+                console.log(record);
+            if(record){
+                record.quantity =  parseFloat(quantity) + parseFloat(record.quantity);
+                console.log(record.quantity);
+                console.log('if stock exists')
+            } else {
+                state.stocks.push({name : name,
+                quantity: quantity, price: price });
+                console.log("adding new stock")
+                console.log(state.stocks);
+    
+            }
+            state.funds -= quantity * price;
+            //console.log(state.stocks);
         }
-        state.funds -= quantity * price;
-        //console.log(state.stocks);
+        
     },
     'SET_PORTFOLIO' (state, portfolio) {
         state.funds = funds,

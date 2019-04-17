@@ -12,6 +12,7 @@
 <script>
 import Header from "./components/Header.vue";
 //import { mapState } from 'vuex';
+import Chart from 'chart.js';
 
 export default {
   components: {

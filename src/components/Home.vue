@@ -1,7 +1,8 @@
 <template>
   <div class="container">
-    <h1>Trade Stocks and Manage your own Portfolio</h1>
-   
+    <canvas id="myChart" width="300" height="300"></canvas>
+    <!-- <h1 class="main-header">Trade Stocks and Manage your own Portfolio</h1>
+
     <div class="input-groupmb-3">
       <input
         v-on:keyup.enter="search"
@@ -10,53 +11,55 @@
         placeholder="Enter Stock Ticker"
         aria-label="Recipient's username"
         v-model="searchTerm"
+        id="main-search"
       >
-
-      <div class="input-group-append">
-        <button @click="search" class="btn btn-success" type="button">Search</button>
-      </div>
     </div>
+    <div class="card-body" v-if="results.length > 0">
+      <p class="card-info">Symbol: {{this.results[0]['01. symbol']}}</p>
+      <p class="card-info">Price: ${{this.results[0]['05. price']}}</p>
+      <p class="card-info">Open: {{this.results[0]['02. open']}}</p>
+      <p class="card-info">High: {{this.results[0]['03. high']}}</p>
+      <p class="card-info">Low: {{this.results[0]['04. low']}}</p>
+      <div class="card-info-right">
+        <p>Volume: {{this.results[0]['06. volume']}}</p>
+        <p>Previous close: {{this.results[0]['08. previous close']}}</p>
+        <p>Change: {{this.results[0]['09. change']}}</p>
+        <p>Change%: {{this.results[0]['10. change percent']}}</p>
+      </div>  -->
 
-    <div v-if="results.length > 0" class="card" style="width: 18rem;">
-      <div class="card-body">
-        <h5 class="card-title">Symbol: {{this.results[0]['01. symbol']}}</h5>
-        <h6 class="card-subtitle mb-2">Price: ${{this.results[0]['05. price']}}</h6>
-        <p>Open: {{this.results[0]['02. open']}}</p>
-        <p class="infoRight">High: {{this.results[0]['03. high']}}</p>
-        <p class="infoRight">Low: {{this.results[0]['04. low']}}</p>
-        
-        <!-- bug- Input allows the enter of 'e' when only shouldbe number. Result in empty string quantity-->
-        <input
-          v-on:keyup.enter="buyStock"
-          type="number"
-          class="form-control"
-          placeholder="Enter Quantity"
-          aria-describedby="basic-addon2"
-          v-model="quantity"
-Rating: 5/5 (10 cast)
-Run time: 35
-        >
-        <div>
-          <button class ="btn btn-outline-success" @click="buyStock">Buy</button>
-        </div>
+      <!-- bug- Input allows the enter of 'e' when only shouldbe number. Result in empty string quantity-->
+      <!-- <input
+        v-on:keyup.enter="buyStock"
+        type="number"
+        class="form-control"
+        placeholder="Enter Quantity"
+        aria-describedby="basic-addon2"
+        v-model="quantity"
+      >
+      <div>
+        <button class="btn btn-outline-success" @click="buyStock">Buy</button>
       </div>
     </div>
 
     <div v-if="noResults">
       <H2>Sorry no results</H2>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import Chart from "chart.js";
+import planetChartData from "./data.js";
+
 export default {
   data() {
     return {
       searchTerm: "",
       results: [],
       noResults: false,
-      quantity: 0
+      quantity: 0,
+      planetChartData: planetChartData
     };
   },
   methods: {
@@ -122,31 +125,61 @@ export default {
 
       this.quantity = 0;
       //console.log(order);
+    },
+    createChart(chartId, chartData) {
+      const ctx = document.getElementById(chartId);
+      const myChart = new Chart(ctx, {
+        type: chartData.type,
+        data: chartData.data,
+        options: chartData.options
+      });
+    },
+    created() {
+      console.log("calvin");
+      this.createChart("planet-chart", this.planetChartData);
     }
   }
 };
 </script>
 
 <style>
-.container{
-font-family: 'Roboto', sans-serif; */
-width:1000px; 
-margin: 300px auto;
-
+.container {
+  font-family: "Roboto", sans-serif;
+  width: 1000px;
+  margin: 210px auto;
 }
-.input-group {
+.main-header {
+  font-weight: 600;
+}
+input-group {
   margin-top: 25px;
 }
-.input-groupmb-3{
+.input-groupmb-3 {
   margin-top: 25px;
 }
 .infoRight {
   margin-left: 140px;
 }
-.form-control {
-  width: 90%;
+#main-search {
+  margin-left: 120px;
+  width: 60%;
 }
-.card {
-  margin-top: 40px;
+.card-info {
+  font-weight: 300;
+  font-family: "Roboto", sans-serif;
+}
+.card-body {
+  margin-top: 80px;
+  margin-left: -30px;
+  width: 90%;
+  box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.5);
+  font-family: "Roboto", sans-serif;
+}
+.card-info-right {
+  margin-left: 650px;
+  margin-top: -160px;
+}
+.input-group-append {
+  width: 400px;
 }
 </style>
