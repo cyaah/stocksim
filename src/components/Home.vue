@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <canvas id="myChart" width="300" height="300"></canvas>
-    <!-- <h1 class="main-header">Trade Stocks and Manage your own Portfolio</h1>
+    <h1 class="main-header">Trade Stocks and Manage your own Portfolio</h1>
+    <button @click="canvas">canvas</button>
 
     <div class="input-groupmb-3">
       <input
@@ -25,10 +26,10 @@
         <p>Previous close: {{this.results[0]['08. previous close']}}</p>
         <p>Change: {{this.results[0]['09. change']}}</p>
         <p>Change%: {{this.results[0]['10. change percent']}}</p>
-      </div>  -->
+      </div>
 
       <!-- bug- Input allows the enter of 'e' when only shouldbe number. Result in empty string quantity-->
-      <!-- <input
+      <input
         v-on:keyup.enter="buyStock"
         type="number"
         class="form-control"
@@ -43,7 +44,7 @@
 
     <div v-if="noResults">
       <H2>Sorry no results</H2>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -59,19 +60,28 @@ export default {
       results: [],
       noResults: false,
       quantity: 0,
-      planetChartData: planetChartData
+      planetChartData: planetChartData,
+      timeSeries: []
     };
   },
+
   methods: {
+    canvas() {
+      console.log("calvin");
+      this.createChart("planet-chart", this.planetChartData);
+    },
     search: function() {
       var term = this.searchTerm;
       console.log(term);
       console.log("term");
       axios
+        // .get(
+        //   `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${encodeURIComponent(
+        //     term
+        //   )}&apikey=030CF83Z0LHP1H0B`
+        // )
         .get(
-          `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${encodeURIComponent(
-            term
-          )}&apikey=030CF83Z0LHP1H0B`
+          `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=ACB&apikey=030CF83Z0LHP1H0B`
         )
         //.then(res => res.json())
         .then(res => {
@@ -100,6 +110,35 @@ export default {
           console.log(error);
         });
 
+      axios
+        // .get(
+        //   `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${encodeURIComponent(
+        //     term
+        //   )}&apikey=030CF83Z0LHP1H0B`
+        // )
+        .get(
+          `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=ACB&&interval=5min&apikey=030CF83Z0LHP1H0B`
+        )
+
+        .then(res => {
+          if (res) {
+            console.log(res.data["Time Series (5min)"]);
+            //console.log("123");
+            var date = res.data["Time Series (5min)"];
+            for (var time in date){
+              let stock_info = date[time];
+              this.timeSeries.push(
+                time,
+                Number(stock_info["1. open"])
+              );
+            }
+            console.log(this.timeSeries);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
       var isEmpty = obj => {
         for (var key in obj) {
           if (obj.hasOwnProperty(key)) {
@@ -113,30 +152,26 @@ export default {
 
     buyStock() {
       console.log("stock buy button");
-      console.log(this.quantity);
       const order = {
         name: this.results[0]["01. symbol"],
         price: this.results[0]["05. price"],
         quantity: this.quantity
       };
-      console.log("order");
-      console.log(order);
+      console.log("order" + order);
       this.$store.dispatch("buyStock", order);
 
       this.quantity = 0;
       //console.log(order);
     },
     createChart(chartId, chartData) {
-      const ctx = document.getElementById(chartId);
+      console.log(chartData.type);
+      const ctx = document.getElementById("myChart").getContext("2d");
+      console.log(ctx);
       const myChart = new Chart(ctx, {
         type: chartData.type,
         data: chartData.data,
         options: chartData.options
       });
-    },
-    created() {
-      console.log("calvin");
-      this.createChart("planet-chart", this.planetChartData);
     }
   }
 };
