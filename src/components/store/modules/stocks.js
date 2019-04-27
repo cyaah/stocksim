@@ -1,6 +1,7 @@
 import axios from 'axios';
 const state = {
-    stocks: [{name: 'a'}]
+    stocks: [{name: 'a'}],
+    timeSeries:{}
 };
 
 
@@ -9,38 +10,18 @@ const mutations = {
         //state.stocks = stocks;
         state.stocks.push(s);
         console.log(s['01. symbol']);
-        console.log("stocks loaded");
+        console.log("stocks loaded")
+    },
+    'LOAD_STOCK_DATA'(state, timeSeries){
+        state.timeSeries.intraDay = timeSeries
+        console.log(state.timeSeries);
+        console.log("Checking time series state");
+        console.log(state.timeSeries.intraDay[0]);
     }
 
 };
 
 const actions = {
-    // loadStocks: ({commit}) => {
-    //     axios.get('https://stocksim-f8101.firebaseio.com/data.json')
-    //      //.then(response => response.json())
-    //      .then( response => {
-    //          if(response){
-    //           console.log(response.data.stocks);                  
-    //           //const stocks = response.data.stocks
-    //           const arr = response.data.stocks
-    //           for(let stock in arr){
-    //               const a = arr[stock]
-    //               //console.log(stock);
-    //               //console.log("==+=")
-    //               //console.log(a);
-    //               commit('SET_STOCKS', a);
-    //         }
-
-    //           //commit('SET_STOCKS', a);
-    //         }
-
-    //      })
-    //      .catch (error => {
-    //          console.log(error);
-    //      });
-
-    // },
-
     // loadStocks: ({
     //     commit
     // }) => {
@@ -60,8 +41,8 @@ const actions = {
 
     loadStocks: ({
         commit
-    }) => {
-
+    },timeSeries) => {
+        commit('LOAD_STOCK_DATA', timeSeries)
     },
 
     buyStock: ({

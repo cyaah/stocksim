@@ -1,9 +1,8 @@
 <template>
   <div class="container">
-    <canvas id="myChart" width="300" height="300"></canvas>
+    <canvas id="myChart" width="30" height="30"></canvas>
     <h1 class="main-header">Trade Stocks and Manage your own Portfolio</h1>
     <button @click="canvas">canvas</button>
-
     <div class="input-groupmb-3">
       <input
         v-on:keyup.enter="search"
@@ -51,7 +50,7 @@
 <script>
 import axios from "axios";
 import Chart from "chart.js";
-import planetChartData from "./data.js";
+import planetChartData from "./chart-data.js";
 
 export default {
   data() {
@@ -61,13 +60,59 @@ export default {
       noResults: false,
       quantity: 0,
       planetChartData: planetChartData,
-      timeSeries: []
+      timeSeriesData: [],
+      cavasData: {
+        type: "line",
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: "price",
+              backgroundColor: [
+                "rgba(54,73,93,.5)", // Blue
+                "rgba(54,73,93,.5)",
+                "rgba(54,73,93,.5)",
+                "rgba(54,73,93,.5)",
+                "rgba(54,73,93,.5)",
+                "rgba(54,73,93,.5)",
+                "rgba(54,73,93,.5)",
+                "rgba(54,73,93,.5)"
+              ],
+              borderColor: [
+                "#36495d",
+                "#36495d",
+                "#36495d",
+                "#36495d",
+                "#36495d",
+                "#36495d",
+                "#36495d",
+                "#36495d"
+              ],
+              borderWidth: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          lineTension: 1,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                  padding: 25
+                }
+              }
+            ]
+          }
+        }
+      }
     };
   },
 
   methods: {
     canvas() {
-      console.log("calvin");
+      console.log("canvas");
       this.createChart("planet-chart", this.planetChartData);
     },
     search: function() {
@@ -80,6 +125,7 @@ export default {
         //     term
         //   )}&apikey=030CF83Z0LHP1H0B`
         // )
+        //fetching stock data
         .get(
           `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=ACB&apikey=030CF83Z0LHP1H0B`
         )
@@ -109,7 +155,7 @@ export default {
         .catch(error => {
           console.log(error);
         });
-
+      // Fetching time series from API
       axios
         // .get(
         //   `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${encodeURIComponent(
@@ -125,14 +171,17 @@ export default {
             console.log(res.data["Time Series (5min)"]);
             //console.log("123");
             var date = res.data["Time Series (5min)"];
-            for (var time in date){
+            var timeSeries;
+            for (var time in date) {
               let stock_info = date[time];
-              this.timeSeries.push(
-                time,
-                Number(stock_info["1. open"])
-              );
+              this.timeSeriesData.push({
+                time: time,
+                price: Number(stock_info["1. open"])
+              });
             }
-            console.log(this.timeSeries);
+            timeSeries = this.timeSeriesData;
+            console.log("time series", timeSeries);
+            this.$store.dispatch("loadStocks", timeSeries);
           }
         })
         .catch(error => {
