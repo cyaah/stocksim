@@ -66,7 +66,7 @@ const actions = {
 const getters = {
     stockPortfolio (state,getters) {
         //console.log(state.stocks);
-        console.log("inside getters stockPOrtfolio");
+        console.log("inside getters stockPortfolio");
         // console.log(getters);
         // console.log(state.stocks);
          console.log(getters.stocks)

@@ -1,11 +1,10 @@
 <template>
   <div class="container">
-    <canvas id="myChart" width="30" height="30"></canvas>
     <h1 class="main-header">Trade Stocks and Manage your own Portfolio</h1>
-    <button @click="canvas">canvas</button>
     <div class="input-groupmb-3">
       <input
         v-on:keyup.enter="search"
+        v-on:keyyp.enter="canvas"
         type="search"
         class="form-control"
         placeholder="Enter Stock Ticker"
@@ -15,6 +14,10 @@
       >
     </div>
     <div class="card-body" v-if="results.length > 0">
+      <!-- <div class="chart-container" style="position: relative; height:40vh; width:80vw"> -->
+        <canvas id="myChart" width="300" height="300"></canvas>
+      <!-- </div> -->
+
       <p class="card-info">Symbol: {{this.results[0]['01. symbol']}}</p>
       <p class="card-info">Price: ${{this.results[0]['05. price']}}</p>
       <p class="card-info">Open: {{this.results[0]['02. open']}}</p>
@@ -61,33 +64,20 @@ export default {
       quantity: 0,
       planetChartData: planetChartData,
       timeSeriesData: [],
-      cavasData: {
+      canvasData: {
         type: "line",
         data: {
           labels: [],
+
           datasets: [
             {
+              fill: false,
               label: "price",
-              backgroundColor: [
-                "rgba(54,73,93,.5)", // Blue
-                "rgba(54,73,93,.5)",
-                "rgba(54,73,93,.5)",
-                "rgba(54,73,93,.5)",
-                "rgba(54,73,93,.5)",
-                "rgba(54,73,93,.5)",
-                "rgba(54,73,93,.5)",
-                "rgba(54,73,93,.5)"
-              ],
-              borderColor: [
-                "#36495d",
-                "#36495d",
-                "#36495d",
-                "#36495d",
-                "#36495d",
-                "#36495d",
-                "#36495d",
-                "#36495d"
-              ],
+              data: [],
+              backgroundColor: "rgb(34,139,34)",
+
+              borderColor: "rgb(34,139,34)",
+
               borderWidth: 3
             }
           ]
@@ -96,11 +86,26 @@ export default {
           responsive: true,
           lineTension: 1,
           scales: {
+            xAxes: [
+              {
+                type: "time",
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labalString: "Date"
+                }
+              }
+            ],
             yAxes: [
               {
                 ticks: {
-                  beginAtZero: true,
+                  beginAtZero: false,
                   padding: 25
+                },
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: "Price"
                 }
               }
             ]
@@ -113,22 +118,22 @@ export default {
   methods: {
     canvas() {
       console.log("canvas");
-      this.createChart("planet-chart", this.planetChartData);
+      this.createChart("Intra Day Chart", this.canvasData);
     },
     search: function() {
       var term = this.searchTerm;
       console.log(term);
       console.log("term");
       axios
-        // .get(
-        //   `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${encodeURIComponent(
-        //     term
-        //   )}&apikey=030CF83Z0LHP1H0B`
-        // )
-        //fetching stock data
         .get(
-          `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=ACB&apikey=030CF83Z0LHP1H0B`
+          `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${encodeURIComponent(
+            term
+          )}&apikey=030CF83Z0LHP1H0B`
         )
+        //fetching stock data
+        // .get(
+        //   `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=ACB&apikey=030CF83Z0LHP1H0B`
+        // )
         //.then(res => res.json())
         .then(res => {
           if (res) {
@@ -157,14 +162,14 @@ export default {
         });
       // Fetching time series from API
       axios
-        // .get(
-        //   `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${encodeURIComponent(
-        //     term
-        //   )}&apikey=030CF83Z0LHP1H0B`
-        // )
         .get(
-          `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=ACB&&interval=5min&apikey=030CF83Z0LHP1H0B`
+          `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${encodeURIComponent(
+            term
+          )}&interval=5min&apikey=030CF83Z0LHP1H0B`
         )
+        // .get(
+        //   `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=ACB&&interval=5min&apikey=030CF83Z0LHP1H0B`
+        // )
 
         .then(res => {
           if (res) {
@@ -180,8 +185,24 @@ export default {
               });
             }
             timeSeries = this.timeSeriesData;
-            console.log("time series", timeSeries);
+
+            for (var i = 0; i < timeSeries.length - 22; i++) {
+              this.canvasData.data.labels.push(new Date(timeSeries[i].time));
+              this.canvasData.data.datasets[0].data.push(timeSeries[i].price);
+            }
+            this.canvasData.data.labels.reverse();
+            console.log("time series", this.canvasData.data.labels[0]);
+            console.log("time series1", this.canvasData.data.labels[1]);
+            console.log("time series2", this.canvasData.data.labels[2]);
             this.$store.dispatch("loadStocks", timeSeries);
+            return this.canvasData.data.labels;
+          }
+        })
+        .then(res => {
+          if (res) {
+            console.log("inside promise");
+            this.createChart("Intra Day Chart", this.canvasData);
+            this.canvasData.data.labels = [];
           }
         })
         .catch(error => {
