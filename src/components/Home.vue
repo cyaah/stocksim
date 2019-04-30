@@ -14,9 +14,9 @@
       >
     </div>
     <div class="card-body" v-if="results.length > 0">
-      <!-- <div class="chart-container" style="position: relative; height:40vh; width:80vw"> -->
-        <canvas id="myChart" width="300" height="300"></canvas>
-      <!-- </div> -->
+      <div class="chart-container">
+        <canvas id="myChart" width="300px" height="300px"></canvas>
+      </div>
 
       <p class="card-info">Symbol: {{this.results[0]['01. symbol']}}</p>
       <p class="card-info">Price: ${{this.results[0]['05. price']}}</p>
@@ -54,7 +54,7 @@
 import axios from "axios";
 import Chart from "chart.js";
 import planetChartData from "./chart-data.js";
-
+var myChart;
 export default {
   data() {
     return {
@@ -64,6 +64,7 @@ export default {
       quantity: 0,
       planetChartData: planetChartData,
       timeSeriesData: [],
+      canvasCreated: false,
       canvasData: {
         type: "line",
         data: {
@@ -85,6 +86,8 @@ export default {
         options: {
           responsive: true,
           lineTension: 1,
+          maintainAspectRatio: false,
+
           scales: {
             xAxes: [
               {
@@ -139,7 +142,6 @@ export default {
           if (res) {
             this.results = [];
             this.noResults = false;
-            //console.log(res.data["Global Quote"]);
             const s = res.data["Global Quote"];
             //this.resutls = s;
             console.log(s);
@@ -147,7 +149,6 @@ export default {
             if (isEmpty(s)) {
               this.noResults = true;
               //this;
-
               console.log("results");
             } else {
               this.results.push(s);
@@ -191,18 +192,25 @@ export default {
               this.canvasData.data.datasets[0].data.push(timeSeries[i].price);
             }
             this.canvasData.data.labels.reverse();
-            console.log("time series", this.canvasData.data.labels[0]);
-            console.log("time series1", this.canvasData.data.labels[1]);
-            console.log("time series2", this.canvasData.data.labels[2]);
+
             this.$store.dispatch("loadStocks", timeSeries);
             return this.canvasData.data.labels;
           }
         })
         .then(res => {
           if (res) {
+            console.log();
             console.log("inside promise");
+            //console.log("prices", this.canvasData.data.datasets[0].data);
+            //console.log("time series1", this.canvasData.data.labels[1]);
+            //console.log("time series2", this.canvasData.data.labels[2]);
+            console.log(this.maychart);
             this.createChart("Intra Day Chart", this.canvasData);
-            this.canvasData.data.labels = [];
+            //this.canvasData.data.labels = [];
+            this.canvasData.data.datasets[0].data = [];
+
+            console.log(this.canvasData.data.labels);
+            console.log("checking if empty", this.canvasData.data.datasets);
           }
         })
         .catch(error => {
@@ -218,6 +226,10 @@ export default {
         return true;
       };
       this.term = "";
+      this.noResults = false;
+      this.canvasData.data.labels = [];
+      this.canvasData.data.datasets[0].data.length = 0;
+      console.log("checking if empty", this.canvasData.data.datasets[0].data);
     },
 
     buyStock() {
@@ -233,15 +245,31 @@ export default {
       this.quantity = 0;
       //console.log(order);
     },
+
     createChart(chartId, chartData) {
-      console.log(chartData.type);
+      //console.log("ctx" + myChart);
+
+      if (myChart) {
+        console.log("09");
+        document.getElementById("myChart").remove();
+        let canvas = document.createElement("canvas");
+        canvas.setAttribute("id", "myChart");
+        canvas.setAttribute("width", "300px");
+        canvas.setAttribute("height", "300px");
+        console.log(canvas);
+        document.getElementById("chart-container").innerHTML(canvas);
+
+        myChart.destroy();
+      }
+      console.log("ctx" + myChart);
       const ctx = document.getElementById("myChart").getContext("2d");
-      console.log(ctx);
-      const myChart = new Chart(ctx, {
+
+      myChart = new Chart(ctx, {
         type: chartData.type,
         data: chartData.data,
         options: chartData.options
       });
+      this.canvasCreated = true;
     }
   }
 };
@@ -287,4 +315,12 @@ input-group {
 .input-group-append {
   width: 400px;
 }
+.chart-container {
+  width: 800px;
+  height: 500px;
+}
+/* canvas {
+    width:800px !important;
+    height:700px !important;
+} */
 </style>
