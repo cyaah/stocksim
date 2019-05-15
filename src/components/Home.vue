@@ -14,7 +14,7 @@
       >
     </div>
     <div class="card-body" v-if="results.length > 0">
-      <div class="chart-container">
+      <div id="chart-container">
         <canvas id="myChart" width="300px" height="300px"></canvas>
       </div>
 
@@ -144,8 +144,8 @@ export default {
             this.noResults = false;
             const s = res.data["Global Quote"];
             //this.resutls = s;
-            console.log(s);
-            console.log("0000");
+            //console.log(s);
+            //console.log("0000");
             if (isEmpty(s)) {
               this.noResults = true;
               //this;
@@ -174,8 +174,8 @@ export default {
 
         .then(res => {
           if (res) {
-            console.log(res.data["Time Series (5min)"]);
-            //console.log("123");
+            //console.log(res.data["Time Series (5min)"]);
+            console.log("123");
             var date = res.data["Time Series (5min)"];
             var timeSeries;
             for (var time in date) {
@@ -209,7 +209,7 @@ export default {
             //this.canvasData.data.labels = [];
             this.canvasData.data.datasets[0].data = [];
 
-            console.log(this.canvasData.data.labels);
+            console.log(this.canvasData.data.datasets);
             console.log("checking if empty", this.canvasData.data.datasets);
           }
         })
@@ -247,17 +247,18 @@ export default {
     },
 
     createChart(chartId, chartData) {
-      //console.log("ctx" + myChart);
+      console.log("chartData" + chartData);
 
       if (myChart) {
         console.log("09");
         document.getElementById("myChart").remove();
+        console.log(document.getElementById("myChart"));  
         let canvas = document.createElement("canvas");
         canvas.setAttribute("id", "myChart");
         canvas.setAttribute("width", "300px");
         canvas.setAttribute("height", "300px");
-        console.log(canvas);
-        document.getElementById("chart-container").innerHTML(canvas);
+        console.log(document.getElementById("chart-container"));
+        document.getElementById("chart-container").appendChild(canvas);
 
         myChart.destroy();
       }
