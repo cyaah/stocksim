@@ -41,6 +41,7 @@
       >
       <div>
         <button class="btn btn-outline-success" @click="buyStock">Buy</button>
+        <button @click="save">Save</button>
       </div>
     </div>
 
@@ -125,8 +126,8 @@ export default {
     },
     search: function() {
       var term = this.searchTerm;
-      console.log(term);
-      console.log("term");
+      //console.log(term);
+      //console.log("term");
       axios
         .get(
           `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${encodeURIComponent(
@@ -239,13 +240,33 @@ export default {
         price: this.results[0]["05. price"],
         quantity: this.quantity
       };
-      console.log("order" + order);
+      //console.log("order" + order);
       this.$store.dispatch("buyStock", order);
 
       this.quantity = 0;
       //console.log(order);
     },
+    save(){
+       console.log("save method");
+       const order = {
+        name: this.results[0]["01. symbol"],
+        price: this.results[0]["05. price"],
+        quantity: this.quantity
+       }
+       console.log("order" + order);
 
+       axios.post('https://stocksim-f8101.firebaseio.com/', {
+         test: "test",
+       })
+       .then(res =>{
+         if(res){
+           console.log("entering firebase promise");
+
+         }
+       }).catch(err =>{
+        console.log(err);
+       });
+    },
     createChart(chartId, chartData) {
       console.log("chartData" + chartData);
 

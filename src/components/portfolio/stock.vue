@@ -24,6 +24,8 @@
               </div>
             </div>
           </div>
+          <button
+          @click="save">Store</button>
     </div>
   </div>
 </template>
@@ -52,6 +54,9 @@ export default {
       console.log("sell order"+order);
       this.placeSellOrder(order);
       this.quantity = 0;
+    },
+    save(){
+      
     }
   }
 

@@ -56,7 +56,8 @@ const mutations = {
         }
         state.funds += price * quantity;
         console.log(state.stocks);
-    }
+    },
+
 };
 
 const actions = {

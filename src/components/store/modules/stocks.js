@@ -55,6 +55,12 @@ const actions = {
         commit
     }, order) => {
         commit('SELL_STOCK', order);
+    },
+
+    saveorder: ({
+        commit
+    }, order) => {
+        commit('SAVE_ORDER', order);
     }
 
 
