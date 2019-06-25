@@ -55,6 +55,10 @@
 import axios from "axios";
 import Chart from "chart.js";
 import planetChartData from "./chart-data.js";
+import { db } from '@/main'
+
+
+
 var myChart;
 export default {
   data() {
