@@ -55,15 +55,13 @@
 import axios from "axios";
 import Chart from "chart.js";
 import planetChartData from "./chart-data.js";
-<<<<<<< HEAD
-//var myChart;
-=======
-import { db } from '@/main'
+import  {db, increment}  from '../main.js';
+import firebase from 'firebase';
 
 
 
 var myChart;
->>>>>>> b2bf95ddd7893d2c9e1aa7ac3a31ca72a5b22f6d
+
 export default {
   data() {
     return {
@@ -134,17 +132,12 @@ export default {
     },
     search: function() {
       var term = this.searchTerm;
-<<<<<<< HEAD
       if(this.myChart != null){
-        console.log("checking if chart is null")
+        console.log("checking if chart is null");
         this.myChart.destroy();
         this.canvasData.data.datasets[0].data = [];
         console.log(this.myChart);
       }
-=======
-      //console.log(term);
-      //console.log("term");
->>>>>>> b2bf95ddd7893d2c9e1aa7ac3a31ca72a5b22f6d
       axios
         .get(
           `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${encodeURIComponent(
@@ -160,14 +153,8 @@ export default {
           if (res) {
             this.results = [];
             this.noResults = false;
-<<<<<<< HEAD
             var s = res.data["Global Quote"];
-=======
-            const s = res.data["Global Quote"];
-            //this.resutls = s;
-            //console.log(s);
-            //console.log("0000");
->>>>>>> b2bf95ddd7893d2c9e1aa7ac3a31ca72a5b22f6d
+
             if (isEmpty(s)) {
               this.noResults = true;
 
@@ -194,12 +181,6 @@ export default {
         // )
         .then(res => {
           if (res) {
-<<<<<<< HEAD
-            console.log("about to GET time series data");
-=======
-            //console.log(res.data["Time Series (5min)"]);
-            console.log("123");
->>>>>>> b2bf95ddd7893d2c9e1aa7ac3a31ca72a5b22f6d
             var date = res.data["Time Series (5min)"];
 
             var timeSeries;
@@ -231,10 +212,6 @@ export default {
         })
         .then(res => {
           if (res) {
-
-<<<<<<< HEAD
-            console.log("Time series retrieved about to create chart");
-
             //this.createChart("Intra Day Chart", this.canvasData);
             //this.canvasData.data.labels = [];
             //console.log(this.canvasData.data.labels);
@@ -246,11 +223,6 @@ export default {
               options: this.canvasData.options
             });
             this.canvasCreated = true;
-            console.log("checking data points after creating chart to see if it resets to empty", this.canvasData.data.datasets.data);
-=======
-            console.log(this.canvasData.data.datasets);
-            console.log("checking if empty", this.canvasData.data.datasets);
->>>>>>> b2bf95ddd7893d2c9e1aa7ac3a31ca72a5b22f6d
           }
         })
         .catch(error => {
@@ -282,10 +254,24 @@ export default {
       //console.log("order" + order);
       this.$store.dispatch("buyStock", order);
 
+      var quan = parseInt(order.quantity, 10);
+      var increment = firebase.firestore.FieldValue.increment(quan);
+      var stockRef = db.collection('test-user').doc(order.name);
+
+      stockRef.get().then(doc => {
+        if(!doc.exists){
+          stockRef.set(order).then(resp =>{
+            console.log("New stock added");
+          })
+        } else {
+          stockRef.update({quantity: increment}).then(resp =>{
+            console.log("Stock updated");
+          });
+        }
+      });
+
+
       this.quantity = 0;
-      //console.log(order);
-<<<<<<< HEAD
-=======
     },
     save(){
        console.log("save method");
@@ -293,7 +279,7 @@ export default {
         name: this.results[0]["01. symbol"],
         price: this.results[0]["05. price"],
         quantity: this.quantity
-       }
+       };
        console.log("order" + order);
 
        axios.post('https://stocksim-f8101.firebaseio.com/', {
@@ -333,7 +319,6 @@ export default {
         options: chartData.options
       });
       this.canvasCreated = true;
->>>>>>> b2bf95ddd7893d2c9e1aa7ac3a31ca72a5b22f6d
     }
 
     // createChart(chartId, chartData) {
