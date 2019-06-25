@@ -10,6 +10,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "chart.js": "^2.8.0",
+    "firebase": "^6.2.2",
+    "firebase-admin": "^8.2.0",
     "vue": "^2.5.21",
     "vue-axios": "^2.1.4",
     "vue-router": "^3.0.3",

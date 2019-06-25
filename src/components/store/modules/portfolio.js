@@ -5,7 +5,7 @@ const state = {
 
 const mutations = {
     'BUY_STOCK'(state, {name, price, quantity}) {
-        console.log("stock bought ")
+        console.log("stock bought ");
         console.log(name);
         //console.log(state.stocks[0]);
         if(quantity >0){
@@ -31,13 +31,13 @@ const mutations = {
         
     },
     'SET_PORTFOLIO' (state, portfolio) {
-        state.funds = funds,
-        console.log("stock portfolio")
+        state.funds = funds;
+        console.log("stock portfolio");
         state.stocks = portfolio.stockPortfolio ? portfolio.stockPortfolio : [];
         console.log(state.stocks);
     },
     'SELL_STOCK' (state, {price, name, quantity}){
-        console.log("stock sold")
+        console.log("stock sold");
         //console.log(name);
         //console.log(state.stocks[0].name);
         const record = state.stocks.find(element => {
