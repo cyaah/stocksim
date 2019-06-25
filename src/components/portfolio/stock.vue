@@ -17,11 +17,15 @@
                 placeholder="Enter Quantity" 
                 v-model = "quantity">
                 <div class="input-group-append">
-                  <button @click="sellStock"> Sell </button>
+                  <button 
+                  @click="sellStock"
+                  :disabled="quantity <= 0 || !Number.isInteger(quantity)"> Sell </button>
                 </div>
               </div>
             </div>
           </div>
+          <button
+          @click="save">Store</button>
     </div>
   </div>
 </template>
@@ -47,9 +51,12 @@ export default {
         price : this.stock.price,
         quantity : this.quantity
       };
-      console.log("sell order "+order);
+      console.log("sell order"+order);
       this.placeSellOrder(order);
       this.quantity = 0;
+    },
+    save(){
+      
     }
   }
 
