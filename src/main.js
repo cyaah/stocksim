@@ -20,10 +20,11 @@ var firebaseConfig = {
   appId: "1:704433915147:web:bbd2c35df8239e5b"
 };
 
-export const db = firebase.firestore()
 
-export constdb = firebase.initializeApp
+firebase.initializeApp
 (firebaseConfig)
+
+export const db = firebase.firestore()
 
 const router = new VueRouter({
   mode: 'history',

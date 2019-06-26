@@ -244,6 +244,16 @@ export default {
         price: this.results[0]["05. price"],
         quantity: this.quantity
       };
+      db.collection('portfolio').add({
+        title: "check"
+      }).then ((resp)=>{
+        if(resp){
+          console.log("yes");
+          console.log(resp);
+        }
+      }).catch((error)=>{
+        console.log(error);
+      })
       //console.log("order" + order);
       this.$store.dispatch("buyStock", order);
 
