@@ -10,21 +10,11 @@ import {mapGetters} from 'vuex';
 import firebase from 'firebase';
 
 export default {
-  data (){
-    stockList: {}
-  },
-
-  firestore(){
-    console.log("getting from firestore");
-    return {
-      stockList: db.collection('test-user')
-    }
-  },
 
 
       computed: {
         stocks(){
-            var stock = this.$store.getters.stockPortfolio
+            var stock = this.$store.getters.stockPortfolio;
             // console.log(stock);
             // console.log("check");
             // return stock;

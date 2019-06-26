@@ -57,6 +57,10 @@ import Chart from "chart.js";
 import planetChartData from "./chart-data.js";
 import  {db, increment}  from '../main.js';
 import firebase from 'firebase';
+import firestore from 'firebase';
+const FieldValue = require('firebase').firestore.FieldValue;
+
+
 
 
 
@@ -252,25 +256,37 @@ export default {
         quantity: this.quantity
       };
       //console.log("order" + order);
-      this.$store.dispatch("buyStock", order);
+
 
       var quan = parseInt(order.quantity, 10);
       var increment = firebase.firestore.FieldValue.increment(quan);
-      var stockRef = db.collection('test-user').doc(order.name);
+      var stockRef = db.collection('test-user').doc('Portfolio');
+      var name = order.name;
+
 
       stockRef.get().then(doc => {
-        if(!doc.exists){
-          stockRef.set(order).then(resp =>{
-            console.log("New stock added");
-          })
-        } else {
-          stockRef.update({quantity: increment}).then(resp =>{
-            console.log("Stock updated");
-          });
-        }
+          console.log("doc does not exist");
+          let currentStock=(doc.data().stock[order.name]);
+          console.log(currentStock);
+
+          if(currentStock[order.name] !== order.name){
+            console.log("does not exist");
+            stockRef.set({'stock':{[order.name] : order}}, {merge: true}).then(resp =>{
+              console.log("New stock added");
+              //stockRef.FieldValue('stock').add({ [order.name]: order})
+            });
+          } else {
+            console.log('does exist');
+          }
       });
 
 
+
+
+
+
+
+      this.$store.dispatch("buyStock", order);
       this.quantity = 0;
     },
     save(){
