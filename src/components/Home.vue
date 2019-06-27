@@ -260,11 +260,12 @@ export default {
 
       stockRef.get().then(doc => {
         console.log("doc does not exist");
-        var currentStock = doc.data().stock[order.name];
-        console.log(currentStock);
+        console.log(doc.data);
+        var currentStock = doc.data.stock[order.name];
 
-        if (currentStock[order.name] !== order.name) {
-          console.log("does not exist");
+        //console.log(currentStock);
+        if (currentStock.name !== order.name) {
+          console.log("stockdoes not exist");
           stockRef
             .set({ stock: { [order.name]: order } }, { merge: true })
             .then(resp => {
@@ -272,21 +273,25 @@ export default {
               //stockRef.FieldValue('stock').add({ [order.name]: order})
             });
         } else {
-          var quantity = currentStock.quantity + order.quantity;
+          var quantity =
+            parseInt(currentStock.quantity) + parseInt(order.quantity);
+          console.log(currentStock.quantity + " currentStock quant");
+          console.log(order.quantity + " order.quantity");
           var totalPrice =
-            currentStock.quantity * currentStock.price +
-            order.quantity * order.price;
-          var average = totalPrice / quantity;
+            parseFloat(currentStock.quantity) * parseFloat(currentStock.price) +
+            parseFloat(order.quantity) * parseFloat(order.price);
+          var average = parseFLoat(totalPrice) / parseFloat(quantity);
+
+          console.log(quantity);
+          console.log(average);
           var newOrder = {
             name: currentStock.name,
             price: average,
             quantity: quantity
           };
-          stockRef.update(
-            { stock: { [order.name]: newOrder } },
-            { merge: true }
-          );
           console.log("does exist");
+          console.log(newOrder);
+          stockRef.update({ stock: { [order.name]: newOrder } });
         }
       });
 
