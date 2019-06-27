@@ -55,10 +55,10 @@
 import axios from "axios";
 import Chart from "chart.js";
 import planetChartData from "./chart-data.js";
-import  {db, increment}  from '../main.js';
-import firebase from 'firebase';
-
-
+import { db, increment } from "../main.js";
+import firebase from "firebase";
+import firestore from "firebase";
+const FieldValue = require("firebase").firestore.FieldValue;
 
 var myChart;
 
@@ -132,7 +132,7 @@ export default {
     },
     search: function() {
       var term = this.searchTerm;
-      if(this.myChart != null){
+      if (this.myChart != null) {
         console.log("checking if chart is null");
         this.myChart.destroy();
         this.canvasData.data.datasets[0].data = [];
@@ -157,7 +157,6 @@ export default {
 
             if (isEmpty(s)) {
               this.noResults = true;
-
             } else {
               this.results.push(s);
 
@@ -194,20 +193,20 @@ export default {
             }
             timeSeries = this.timeSeriesData;
             //console.log(timeSeries);
-                this.canvasData.data.labels =  timeSeries.map(x => x.time);
-                this.canvasData.data.datasets[0].data = timeSeries.map(x=>x.price);
-              // for (var i = 0; i < timeSeries.length - 22; i++) {
-              //   //this.canvasData.data.labels.push(new Date(timeSeries[i].time));
-              //   this.canvasData.data.datasets[0].data.push(timeSeries[i].price);
-              // }
-              this.canvasData.data.labels.reverse();
+            this.canvasData.data.labels = timeSeries.map(x => x.time);
+            this.canvasData.data.datasets[0].data = timeSeries.map(
+              x => x.price
+            );
+            // for (var i = 0; i < timeSeries.length - 22; i++) {
+            //   //this.canvasData.data.labels.push(new Date(timeSeries[i].time));
+            //   this.canvasData.data.datasets[0].data.push(timeSeries[i].price);
+            // }
+            this.canvasData.data.labels.reverse();
 
-              this.$store.dispatch("loadStocks", timeSeries);
-              console.log("dataPoints" + this.canvasData.data.datasets[0].data);
-              return this.canvasData.data.labels;
-              return this.canvasData.data.datasets[0].data
-
-
+            this.$store.dispatch("loadStocks", timeSeries);
+            console.log("dataPoints" + this.canvasData.data.datasets[0].data);
+            return this.canvasData.data.labels;
+            return this.canvasData.data.datasets[0].data;
           }
         })
         .then(res => {
@@ -217,7 +216,7 @@ export default {
             //console.log(this.canvasData.data.labels);
             //console.log(this.canvasData.data.datasets[0].data);
             var ctx = document.getElementById("myChart");
-            this.myChart = new Chart(ctx,{
+            this.myChart = new Chart(ctx, {
               type: this.canvasData.type,
               data: this.canvasData.data,
               options: this.canvasData.options
@@ -251,28 +250,47 @@ export default {
         price: this.results[0]["05. price"],
         quantity: this.quantity
       };
-    
+
       //console.log("order" + order);
-      this.$store.dispatch("buyStock", order);
 
       //var quan = parseInt(order.quantity, 10);
-      var increment = firebase.firestore.FieldValue.increment(quan);
-      var stockRef = db.collection('test-user').doc(order.name);
+      //var increment = firebase.firestore.FieldValue.increment(quan);
+      var stockRef = db.collection("test-user").doc("Portfolio");
+      var name = order.name;
 
       stockRef.get().then(doc => {
-        console.log("checking firestore");
-        if(!doc.exists){
-          stockRef.set(order).then(resp =>{
-            console.log("New stock added");
-          })
+        console.log("doc does not exist");
+        var currentStock = doc.data().stock[order.name];
+        console.log(currentStock);
+
+        if (currentStock[order.name] !== order.name) {
+          console.log("does not exist");
+          stockRef
+            .set({ stock: { [order.name]: order } }, { merge: true })
+            .then(resp => {
+              console.log("New stock added");
+              //stockRef.FieldValue('stock').add({ [order.name]: order})
+            });
         } else {
-          stockRef.update({quantity: increment}).then(resp =>{
-            console.log("Stock updated");
-          });
+          var quantity = currentStock.quantity + order.quantity;
+          var totalPrice =
+            currentStock.quantity * currentStock.price +
+            order.quantity * order.price;
+          var average = totalPrice / quantity;
+          var newOrder = {
+            name: currentStock.name,
+            price: average,
+            quantity: quantity
+          };
+          stockRef.update(
+            { stock: { [order.name]: newOrder } },
+            { merge: true }
+          );
+          console.log("does exist");
         }
       });
 
-
+      this.$store.dispatch("buyStock", order);
       this.quantity = 0;
     },
     createChart(chartId, chartData) {
@@ -281,7 +299,7 @@ export default {
       if (myChart) {
         console.log("09");
         document.getElementById("myChart").remove();
-        console.log(document.getElementById("myChart"));  
+        console.log(document.getElementById("myChart"));
         let canvas = document.createElement("canvas");
         canvas.setAttribute("id", "myChart");
         canvas.setAttribute("width", "300px");
@@ -327,7 +345,7 @@ export default {
     //   this.canvasCreated = true;
     // }
   }
- };
+};
 </script>
 
 <style>
