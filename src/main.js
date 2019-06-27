@@ -1,11 +1,16 @@
 import Vue from 'vue'
+import './plugins/vuetify'
 import App from './App.vue'
 import firebase from 'firebase';
 import VueRouter from 'vue-router';
 import { routes } from './routes';
 import store from './components/store/store';
+//import Vuetify from 'vuetify';
+//import 'vuetify/dist/vuetify.min.css' 
+
 
 Vue.use(VueRouter);
+//Vue.use(Vuetify);
 
 
 Vue.config.productionTip = false;

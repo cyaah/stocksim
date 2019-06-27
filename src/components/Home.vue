@@ -38,10 +38,10 @@
         placeholder="Enter Quantity"
         aria-describedby="basic-addon2"
         v-model="quantity"
+        min="1"
       >
       <div>
         <button class="btn btn-outline-success" @click="buyStock">Buy</button>
-        <button @click="save">Save</button>
       </div>
     </div>
 
@@ -245,10 +245,10 @@ export default {
 
     buyStock() {
       console.log("stock buy button");
-      const order = {
+      var order = {
         name: this.results[0]["01. symbol"],
-        price: this.results[0]["05. price"],
-        quantity: this.quantity
+        price: parseFloat(this.results[0]["05. price"]).toFixed(2),
+        quantity: parseInt(this.quantity)
       };
 
       //console.log("order" + order);
@@ -260,11 +260,10 @@ export default {
 
       stockRef.get().then(doc => {
         console.log("doc does not exist");
-        console.log(doc.data);
-        var currentStock = doc.data.stock[order.name];
 
-        //console.log(currentStock);
-        if (currentStock.name !== order.name) {
+        var currentStock = doc.data().stock[order.name];
+       
+        if (!currentStock) {
           console.log("stockdoes not exist");
           stockRef
             .set({ stock: { [order.name]: order } }, { merge: true })
@@ -275,23 +274,25 @@ export default {
         } else {
           var quantity =
             parseInt(currentStock.quantity) + parseInt(order.quantity);
-          console.log(currentStock.quantity + " currentStock quant");
-          console.log(order.quantity + " order.quantity");
-          var totalPrice =
-            parseFloat(currentStock.quantity) * parseFloat(currentStock.price) +
-            parseFloat(order.quantity) * parseFloat(order.price);
-          var average = parseFLoat(totalPrice) / parseFloat(quantity);
 
+          var totalPrice =
+            parseFloat(currentStock.quantity).toFixed(2) * parseFloat(currentStock.price).toFixed(2) +
+            parseInt(order.quantity) * parseInt(order.price);
+          var average = parseFloat(totalPrice).toFixed(2) / parseInt(quantity).toFixed(2);
+          var name = currentStock.name;
           console.log(quantity);
           console.log(average);
+
           var newOrder = {
             name: currentStock.name,
             price: average,
             quantity: quantity
           };
+          var update = {};
+          update[`stock.${name}`] = newOrder;
           console.log("does exist");
           console.log(newOrder);
-          stockRef.update({ stock: { [order.name]: newOrder } });
+          stockRef.update(update);
         }
       });
 

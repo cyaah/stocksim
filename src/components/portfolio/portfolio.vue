@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="row">
         <app-stock v-for="stock in stocks"  :stock="stock"></app-stock>
     </div>
 </template>
@@ -14,9 +14,6 @@ export default {
       computed: {
         stocks(){
             var stock = this.$store.getters.stockPortfolio;
-            // console.log(stock);
-            // console.log("check");
-            // return stock;
             return this.$store.getters.stockPortfolio;
         },
     },

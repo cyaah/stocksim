@@ -2,9 +2,6 @@
       <!-- <div class="col-sm-6 col-md-4">
          
       </div> -->
-
-
-  <div class="row">
     <div class="col">
        <div class="card text-right" style="width: 18rem;">
             <div class="card-body">
@@ -27,7 +24,6 @@
           <button
           @click="save">Store</button>
     </div>
-  </div>
 </template>
 <script>
 import { mapActions } from 'vuex';
@@ -62,3 +58,6 @@ export default {
 
 }
 </script>
+<style>
+
+</style>
