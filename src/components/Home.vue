@@ -55,14 +55,17 @@
 import axios from "axios";
 import Chart from "chart.js";
 import planetChartData from "./chart-data.js";
-import { db } from '@/main'
+import  {db, increment}  from '../main.js';
+import firebase from 'firebase';
 
 
 
 var myChart;
+
 export default {
   data() {
     return {
+      myChart: null,
       searchTerm: "",
       results: [],
       noResults: false,
@@ -74,7 +77,6 @@ export default {
         type: "line",
         data: {
           labels: [],
-
           datasets: [
             {
               fill: false,
@@ -130,8 +132,12 @@ export default {
     },
     search: function() {
       var term = this.searchTerm;
-      //console.log(term);
-      //console.log("term");
+      if(this.myChart != null){
+        console.log("checking if chart is null");
+        this.myChart.destroy();
+        this.canvasData.data.datasets[0].data = [];
+        console.log(this.myChart);
+      }
       axios
         .get(
           `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${encodeURIComponent(
@@ -147,25 +153,22 @@ export default {
           if (res) {
             this.results = [];
             this.noResults = false;
-            const s = res.data["Global Quote"];
-            //this.resutls = s;
-            //console.log(s);
-            //console.log("0000");
+            var s = res.data["Global Quote"];
+
             if (isEmpty(s)) {
               this.noResults = true;
-              //this;
-              console.log("results");
+
             } else {
               this.results.push(s);
 
-              //console.log(this.results[0]['01. symbol']);
-              console.log(this.results);
+              //console.log(this.results);
             }
           }
         })
         .catch(error => {
           console.log(error);
         });
+
       // Fetching time series from API
       axios
         .get(
@@ -176,46 +179,50 @@ export default {
         // .get(
         //   `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=ACB&&interval=5min&apikey=030CF83Z0LHP1H0B`
         // )
-
         .then(res => {
           if (res) {
-            //console.log(res.data["Time Series (5min)"]);
-            console.log("123");
             var date = res.data["Time Series (5min)"];
+
             var timeSeries;
             for (var time in date) {
               let stock_info = date[time];
+
               this.timeSeriesData.push({
                 time: time,
                 price: Number(stock_info["1. open"])
               });
             }
             timeSeries = this.timeSeriesData;
+            //console.log(timeSeries);
+                this.canvasData.data.labels =  timeSeries.map(x => x.time);
+                this.canvasData.data.datasets[0].data = timeSeries.map(x=>x.price);
+              // for (var i = 0; i < timeSeries.length - 22; i++) {
+              //   //this.canvasData.data.labels.push(new Date(timeSeries[i].time));
+              //   this.canvasData.data.datasets[0].data.push(timeSeries[i].price);
+              // }
+              this.canvasData.data.labels.reverse();
 
-            for (var i = 0; i < timeSeries.length - 22; i++) {
-              this.canvasData.data.labels.push(new Date(timeSeries[i].time));
-              this.canvasData.data.datasets[0].data.push(timeSeries[i].price);
-            }
-            this.canvasData.data.labels.reverse();
+              this.$store.dispatch("loadStocks", timeSeries);
+              console.log("dataPoints" + this.canvasData.data.datasets[0].data);
+              return this.canvasData.data.labels;
+              return this.canvasData.data.datasets[0].data
 
-            this.$store.dispatch("loadStocks", timeSeries);
-            return this.canvasData.data.labels;
+
           }
         })
         .then(res => {
           if (res) {
-            console.log();
-            console.log("inside promise");
-            //console.log("prices", this.canvasData.data.datasets[0].data);
-            //console.log("time series1", this.canvasData.data.labels[1]);
-            //console.log("time series2", this.canvasData.data.labels[2]);
-            console.log(this.maychart);
-            this.createChart("Intra Day Chart", this.canvasData);
+            //this.createChart("Intra Day Chart", this.canvasData);
             //this.canvasData.data.labels = [];
-            this.canvasData.data.datasets[0].data = [];
-
-            console.log(this.canvasData.data.datasets);
-            console.log("checking if empty", this.canvasData.data.datasets);
+            //console.log(this.canvasData.data.labels);
+            //console.log(this.canvasData.data.datasets[0].data);
+            var ctx = document.getElementById("myChart");
+            this.myChart = new Chart(ctx,{
+              type: this.canvasData.type,
+              data: this.canvasData.data,
+              options: this.canvasData.options
+            });
+            this.canvasCreated = true;
           }
         })
         .catch(error => {
@@ -244,42 +251,29 @@ export default {
         price: this.results[0]["05. price"],
         quantity: this.quantity
       };
-      db.collection('portfolio').add({
-        title: "check"
-      }).then ((resp)=>{
-        if(resp){
-          console.log("yes");
-          console.log(resp);
-        }
-      }).catch((error)=>{
-        console.log(error);
-      })
+    
       //console.log("order" + order);
       this.$store.dispatch("buyStock", order);
 
+      //var quan = parseInt(order.quantity, 10);
+      var increment = firebase.firestore.FieldValue.increment(quan);
+      var stockRef = db.collection('test-user').doc(order.name);
+
+      stockRef.get().then(doc => {
+        console.log("checking firestore");
+        if(!doc.exists){
+          stockRef.set(order).then(resp =>{
+            console.log("New stock added");
+          })
+        } else {
+          stockRef.update({quantity: increment}).then(resp =>{
+            console.log("Stock updated");
+          });
+        }
+      });
+
+
       this.quantity = 0;
-      //console.log(order);
-    },
-    save(){
-       console.log("save method");
-       const order = {
-        name: this.results[0]["01. symbol"],
-        price: this.results[0]["05. price"],
-        quantity: this.quantity
-       }
-       console.log("order" + order);
-
-       axios.post('https://stocksim-f8101.firebaseio.com/', {
-         test: "test",
-       })
-       .then(res =>{
-         if(res){
-           console.log("entering firebase promise");
-
-         }
-       }).catch(err =>{
-        console.log(err);
-       });
     },
     createChart(chartId, chartData) {
       console.log("chartData" + chartData);
@@ -307,8 +301,33 @@ export default {
       });
       this.canvasCreated = true;
     }
+
+    // createChart(chartId, chartData) {
+    //   //console.log("ctx" + myChart);
+    //
+    //   // if (this.myChart) {
+    //   //    console.log("inside myChart if statement");
+    //   //   // document.getElementById("myChart").remove();
+    //   //   // let canvas = document.createElement("canvas");
+    //   //   // canvas.setAttribute("id", "myChart");
+    //   //   // canvas.setAttribute("width", "300px");
+    //   //   // canvas.setAttribute("height", "300px");
+    //   //   // document.getElementById("chart-container").appendChild(canvas);
+    //   //   // console.log(document.getElementById("myChart"));
+    //   //   this.myChart.destroy();
+    //   // }
+    //   // //console.log("ctx" + myChart);
+    //   var ctx = document.getElementById("myChart").getContext("2d");
+    //
+    //   this.myChart = new Chart(ctx, {
+    //     type: chartData.type,
+    //     data: chartData.data,
+    //     options: chartData.options
+    //   });
+    //   this.canvasCreated = true;
+    // }
   }
-};
+ };
 </script>
 
 <style>

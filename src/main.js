@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import App from './App.vue'
 import firebase from 'firebase';
-
 import VueRouter from 'vue-router';
 import { routes } from './routes';
 import store from './components/store/store';
 
 Vue.use(VueRouter);
 
-Vue.config.productionTip = false
+
+Vue.config.productionTip = false;
 
 var firebaseConfig = {
   apiKey: "AIzaSyA8saY_c4QiZLXXKYnPbjub2bIqP0E4oAY",
@@ -20,11 +20,14 @@ var firebaseConfig = {
   appId: "1:704433915147:web:bbd2c35df8239e5b"
 };
 
+firebase.initializeApp(firebaseConfig);
 
-firebase.initializeApp
-(firebaseConfig)
+export const db  = firebase.firestore();
 
-export const db = firebase.firestore()
+
+
+
+
 
 const router = new VueRouter({
   mode: 'history',
