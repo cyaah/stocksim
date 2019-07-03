@@ -1,31 +1,56 @@
 <template>
-    <div class="row">
-        <app-stock v-for="stock in stocks"  :stock="stock"></app-stock>
-    </div>
+  <div class="row">
+    <ul>
+      <li v-for="stock in portfolio">{{stock}}</li>
+    </ul>
+  </div>
 </template>
 
 <script>
-import stock from './stock.vue';
-import {mapGetters} from 'vuex';
-// import firebase from 'firebase';
+import stock from "./stock.vue";
+import { mapGetters } from "vuex";
+import { db, increment } from "../../main.js";
+import firebase from "firebase";
+import firestore from "firebase";
+const FieldValue = require("firebase").firestore.FieldValue;
 
 export default {
+  data() {
+    return {
+      portfolio: []
+    };
+  },
 
-      computed: {
-        stocks(){
-            var stock = this.$store.getters.stockPortfolio;
-            return this.$store.getters.stockPortfolio;
-        },
-    },
-
-
-    components: {
-        appStock: stock
+  computed: {
+    stocks() {
+      var stock = this.$store.getters.stockPortfolio;
+      return this.$store.getters.stockPortfolio;
     }
-}
+  },
+  components: {
+    appStock: stock
+  },
+  created() {
+    var stockRef = db.collection("test-user").doc("Portfolio");
+
+    stockRef.get().then(doc => {
+      if (doc.exists) {
+        console.log("document exists on created");
+        var arr = Object.values(doc.data().stock);
+
+        for (var i = 0; i < arr.length; i++) {
+          this.portfolio.push(arr[i]);
+        }
+        console.log("portfolio");
+        console.log(this.portfolio);
+      } else {
+        console.log("document was not created an retrieved ");
+      }
+    });
+  }
+};
 //}
 </script>
 
 <style>
-
 </style>

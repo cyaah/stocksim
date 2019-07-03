@@ -2,6 +2,7 @@
   <div>
     <!-- <h1 v-for="(stock,index) in stocks" :key="index"> {{ stock.name }} </h1> -->
     <appstock v-for="(stock,index) in stocks" :key="index" :stock="stock"></appstock>
+    <h1>asc</h1>
   </div>
 </template>
 
