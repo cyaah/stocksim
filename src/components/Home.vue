@@ -18,16 +18,16 @@
         <canvas id="myChart" width="300px" height="300px"></canvas>
       </div>
 
-      <p class="card-info">Symbol: {{this.results[0]['01. symbol']}}</p>
-      <p class="card-info">Price: ${{this.results[0]['05. price']}}</p>
-      <p class="card-info">Open: {{this.results[0]['02. open']}}</p>
-      <p class="card-info">High: {{this.results[0]['03. high']}}</p>
-      <p class="card-info">Low: {{this.results[0]['04. low']}}</p>
+      <p class="card-info">Symbol: {{this.results[0]['symbol']}}</p>
+      <p class="card-info">Price: ${{this.results[0]['latestPrice']}}</p>
+      <p class="card-info">Open: {{this.results[0]['open']}}</p>
+      <p class="card-info">High: {{this.results[0]['high']}}</p>
+      <p class="card-info">Low: {{this.results[0]['low']}}</p>
       <div class="card-info-right">
         <p>Volume: {{this.results[0]['06. volume']}}</p>
-        <p>Previous close: {{this.results[0]['08. previous close']}}</p>
-        <p>Change: {{this.results[0]['09. change']}}</p>
-        <p>Change%: {{this.results[0]['10. change percent']}}</p>
+        <p>Previous close: {{this.results[0]['previousClose']}}</p>
+        <p>Change: {{this.results[0]['change']}}</p>
+        <p>Change%: {{this.results[0]['changePercent']}}</p>
       </div>
 
       <!-- bug- Input allows the enter of 'e' when only shouldbe number. Result in empty string quantity-->
@@ -58,6 +58,7 @@ import planetChartData from "./chart-data.js";
 import { db, increment } from "../main.js";
 import firebase from "firebase";
 import firestore from "firebase";
+import { isError } from "util";
 const FieldValue = require("firebase").firestore.FieldValue;
 
 var myChart;
@@ -138,90 +139,117 @@ export default {
         this.canvasData.data.datasets[0].data = [];
         console.log(this.myChart);
       }
-      axios
-        .get(
-          `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${encodeURIComponent(
-            term
-          )}&apikey=030CF83Z0LHP1H0B`
-        )
-        //fetching stock data
-        // .get(
-        //   `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=ACB&apikey=030CF83Z0LHP1H0B`
-        // )
-        //.then(res => res.json())
-        .then(res => {
-          if (res) {
-            this.results = [];
-            this.noResults = false;
-            var s = res.data["Global Quote"];
+      // axios
+      //   .get(
+      //     `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${encodeURIComponent(
+      //       term
+      //     )}&apikey=030CF83Z0LHP1H0B`
+      //   )
+      //   //fetching stock data
+      //   // .get(
+      //   //   `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=ACB&apikey=030CF83Z0LHP1H0B`
+      //   // )
+      //   //.then(res => res.json())
+      //   .then(res => {
+      //     if (res) {
+      //       this.results = [];
+      //       this.noResults = false;
+      //       var s = res.data["Global Quote"];
 
-            if (isEmpty(s)) {
-              this.noResults = true;
-            } else {
-              this.results.push(s);
+      //       if (isEmpty(s)) {
+      //         this.noResults = true;
+      //       } else {
+      //         this.results.push(s);
 
-              //console.log(this.results);
-            }
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      //         //console.log(this.results);
+      //       }
+      //     }
+      //   })
+      //   .catch(error => {
+      //     console.log(error);
+      //   });
 
       // Fetching time series from API
+      // axios
+      //   .get(
+      //     `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${encodeURIComponent(
+      //       term
+      //     )}&interval=5min&apikey=030CF83Z0LHP1H0B`
+      //   )
+      //   .then(res => {
+      //     if (res) {
+      //       var date = res.data["Time Series (5min)"];
+
+      //       var timeSeries;
+      //       for (var time in date) {
+      //         let stock_info = date[time];
+
+      //         this.timeSeriesData.push({
+      //           time: time,
+      //           price: Number(stock_info["1. open"])
+      //         });
+      //       }
+      //       timeSeries = this.timeSeriesData;
+      //       //console.log(timeSeries);
+      //       this.canvasData.data.labels = timeSeries.map(x => x.time);
+      //       this.canvasData.data.datasets[0].data = timeSeries.map(
+      //         x => x.price
+      //       );
+      //       // for (var i = 0; i < timeSeries.length - 22; i++) {
+      //       //   //this.canvasData.data.labels.push(new Date(timeSeries[i].time));
+      //       //   this.canvasData.data.datasets[0].data.push(timeSeries[i].price);
+      //       // }
+      //       this.canvasData.data.labels.reverse();
+
+      //       this.$store.dispatch("loadStocks", timeSeries);
+      //       console.log("dataPoints" + this.canvasData.data.datasets[0].data);
+      //       return this.canvasData.data.labels;
+      //       return this.canvasData.data.datasets[0].data;
+      //     }
+      //   })
+      //   .then(res => {
+      //     if (res) {
+      //       //this.createChart("Intra Day Chart", this.canvasData);
+      //       //this.canvasData.data.labels = [];
+      //       //console.log(this.canvasData.data.labels);
+      //       //console.log(this.canvasData.data.datasets[0].data);
+      //       var ctx = document.getElementById("myChart");
+      //       this.myChart = new Chart(ctx, {
+      //         type: this.canvasData.type,
+      //         data: this.canvasData.data,
+      //         options: this.canvasData.options
+      //       });
+      //       this.canvasCreated = true;
+      //     }
+      //   })
+      //   .catch(error => {
+      //     console.log(error);
+      //   });
+
       axios
         .get(
-          `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${encodeURIComponent(
+          `https://cloud.iexapis.com/stable/stock/${encodeURIComponent(
             term
-          )}&interval=5min&apikey=030CF83Z0LHP1H0B`
+          )}/quote?token=pk_f606ae9814ec4d9e991aa1def338e260`
         )
-        // .get(
-        //   `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=ACB&&interval=5min&apikey=030CF83Z0LHP1H0B`
-        // )
         .then(res => {
           if (res) {
-            var date = res.data["Time Series (5min)"];
-
-            var timeSeries;
-            for (var time in date) {
-              let stock_info = date[time];
-
-              this.timeSeriesData.push({
-                time: time,
-                price: Number(stock_info["1. open"])
-              });
+            console.log(res.data);
+            console.log("res");
+            this.results = [];
+            this.noResults = false;
+            var s = res.data;
+            console.log(s);
+            //fix this logic
+            if (isEmpty(s)) {
+              this.noResults = true;
+              console.log("is empty");
+              console.log(this.noResults);
+            } else {
+              this.results.push(s);
+              console.log("124555");
+              console.log(this.results);
             }
-            timeSeries = this.timeSeriesData;
-            //console.log(timeSeries);
-            this.canvasData.data.labels = timeSeries.map(x => x.time);
-            this.canvasData.data.datasets[0].data = timeSeries.map(
-              x => x.price
-            );
-            // for (var i = 0; i < timeSeries.length - 22; i++) {
-            //   //this.canvasData.data.labels.push(new Date(timeSeries[i].time));
-            //   this.canvasData.data.datasets[0].data.push(timeSeries[i].price);
-            // }
-            this.canvasData.data.labels.reverse();
-
-            this.$store.dispatch("loadStocks", timeSeries);
-            console.log("dataPoints" + this.canvasData.data.datasets[0].data);
-            return this.canvasData.data.labels;
-            return this.canvasData.data.datasets[0].data;
-          }
-        })
-        .then(res => {
-          if (res) {
-            //this.createChart("Intra Day Chart", this.canvasData);
-            //this.canvasData.data.labels = [];
-            //console.log(this.canvasData.data.labels);
-            //console.log(this.canvasData.data.datasets[0].data);
-            var ctx = document.getElementById("myChart");
-            this.myChart = new Chart(ctx, {
-              type: this.canvasData.type,
-              data: this.canvasData.data,
-              options: this.canvasData.options
-            });
-            this.canvasCreated = true;
           }
         })
         .catch(error => {

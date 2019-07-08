@@ -35,6 +35,9 @@ export default {
       quantity: 0
     };
   },
+  created(){
+    
+  },
   methods: {
     ...mapActions({
       placeSellOrder: "sellStock"
@@ -58,7 +61,7 @@ export default {
             quan = 0;
           }
 
-          
+
         }
       })
 
