@@ -1,8 +1,6 @@
 <template>
   <div class="row">
-    <ul>
-      <li v-for="stock in portfolio">{{stock}}</li>
-    </ul>
+    <app-stock v-for="stock in portfolio" :stock="stock"></app-stock>
   </div>
 </template>
 
@@ -21,12 +19,12 @@ export default {
     };
   },
 
-  computed: {
-    stocks() {
-      var stock = this.$store.getters.stockPortfolio;
-      return this.$store.getters.stockPortfolio;
-    }
-  },
+  //   computed: {
+  //     stocks() {
+  //       var stock = this.$store.getters.stockPortfolio;
+  //       return this.$store.getters.stockPortfolio;
+  //     }
+  //   },
   components: {
     appStock: stock
   },
@@ -45,6 +43,7 @@ export default {
         console.log(this.portfolio);
       } else {
         console.log("document was not created an retrieved ");
+        console.log(this.portfolio);
       }
     });
   }

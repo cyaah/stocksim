@@ -11,7 +11,7 @@
         aria-label="Recipient's username"
         v-model="searchTerm"
         id="main-search"
-      >
+      />
     </div>
     <div class="card-body" v-if="results.length > 0">
       <div id="chart-container">
@@ -39,8 +39,8 @@
         aria-describedby="basic-addon2"
         v-model="quantity"
         min="1"
-      >
-      <div>
+      />
+      <div class="input-group-append">
         <button class="btn btn-outline-success" @click="buyStock">Buy</button>
       </div>
     </div>
@@ -262,7 +262,7 @@ export default {
         console.log("doc does not exist");
 
         var currentStock = doc.data().stock[order.name];
-       
+
         if (!currentStock) {
           console.log("stockdoes not exist");
           stockRef
@@ -276,9 +276,11 @@ export default {
             parseInt(currentStock.quantity) + parseInt(order.quantity);
 
           var totalPrice =
-            parseFloat(currentStock.quantity).toFixed(2) * parseFloat(currentStock.price).toFixed(2) +
+            parseFloat(currentStock.quantity).toFixed(2) *
+              parseFloat(currentStock.price).toFixed(2) +
             parseInt(order.quantity) * parseInt(order.price);
-          var average = parseFloat(totalPrice).toFixed(2) / parseInt(quantity).toFixed(2);
+          var average =
+            parseFloat(totalPrice).toFixed(2) / parseInt(quantity).toFixed(2);
           var name = currentStock.name;
           console.log(quantity);
           console.log(average);
@@ -354,7 +356,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .container {
   font-family: "Roboto", sans-serif;
   width: 1000px;
