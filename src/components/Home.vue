@@ -62,7 +62,7 @@ import { isError } from "util";
 const FieldValue = require("firebase").firestore.FieldValue;
 
 var myChart;
-
+ 
 export default {
   data() {
     return {

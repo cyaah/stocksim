@@ -82,7 +82,7 @@ export default {
       const order = {
         name: this.stock.name,
         price: this.stock.price,
-        quantity: this.quantity
+        quantity: parseInt(this.quantity)
       };
       console.log("sell order" + order);
       var stockRef = db.collection("test-user").doc("Portfolio");
@@ -95,6 +95,13 @@ export default {
           if (quan < 0) {
             quan = 0;
           }
+          var currentStock = doc.data().stock[this.stock.name];
+          console.log(currentStock);
+          console.log("currentStocK");
+          //Fix currently completely wiping db
+          const decrement = firebase.firestore.FieldValue.increment(order.quantity);
+          stockRef.update({stock: {[order.name.quantity]: decrement}})
+          console.log("Check DB")
         }
       });
 
