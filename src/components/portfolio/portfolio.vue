@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <app-stock v-for="stock in portfolio" :stock="stock"></app-stock>
+    <app-stock v-for="stock in portfolio" :stock="stock" :portfolio="portfolio"></app-stock>
   </div>
 </template>
 
@@ -33,17 +33,14 @@ export default {
 
     stockRef.get().then(doc => {
       if (doc.exists) {
-        console.log("document exists on created");
+        //console.log("document exists on created");
         var arr = Object.values(doc.data().stock);
 
         for (var i = 0; i < arr.length; i++) {
           this.portfolio.push(arr[i]);
         }
-        console.log("portfolio");
-        console.log(this.portfolio);
-      } else {
-        console.log("document was not created an retrieved ");
-        console.log(this.portfolio);
+        //console.log("portfolio");
+        //console.log(this.portfolio);
       }
     });
   }

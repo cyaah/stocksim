@@ -274,8 +274,8 @@ export default {
     buyStock() {
       console.log("stock buy button");
       var order = {
-        name: this.results[0]["01. symbol"],
-        price: parseFloat(this.results[0]["05. price"]).toFixed(2),
+        name: this.results[0]["symbol"],
+        price: parseFloat(this.results[0]["latestPrice"]).toFixed(2),
         quantity: parseInt(this.quantity)
       };
 
@@ -285,7 +285,8 @@ export default {
       //var increment = firebase.firestore.FieldValue.increment(quan);
       var stockRef = db.collection("test-user").doc("Portfolio");
       var name = order.name;
-
+      console.log("order");
+      console.log(order);
       stockRef.get().then(doc => {
         console.log("doc does not exist");
 
