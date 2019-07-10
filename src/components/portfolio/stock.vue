@@ -88,24 +88,32 @@ export default {
       var stockRef = db.collection("test-user").doc("Portfolio");
 
       stockRef.get().then(doc => {
-        var currentStock = doc.data().stock[order.name];
+        var currentStock = doc.data().stock[this.stockInfo.symbol];
 
+        var quan = parseInt(currentStock.quantity) - parseInt(order.quantity);
         if (currentStock) {
-          var quan = parseInt(currentStock.quantity) - parseInt(order.quantity);
           if (quan < 0) {
             quan = 0;
           }
-          var currentStock = doc.data().stock[this.stock.name];
-          console.log(currentStock);
-          console.log("currentStocK");
           //Fix currently completely wiping db
-          const decrement = firebase.firestore.FieldValue.increment(order.quantity);
-          stockRef.update({stock: {[order.name.quantity]: decrement}})
-          console.log("Check DB")
+
+          const order = {
+            name: this.stock.name,
+            price: this.stock.price,
+            quantity: quan
+          };
+          console.log("order");
+          console.log(order);
+          var update = {};
+          update[`stock.${this.stock.name}`] = order;
+          // const decrement = firebase.firestore.FieldValue.increment(order.quantity);
+          // stockRef.update({stock: {[order.name]: {[order.name.quantity] : decrement}})
+          stockRef.update(update);
+          console.log("Check DB");
         }
       });
 
-      this.placeSellOrder(order);
+      //this.placeSellOrder(order);
       this.quantity = 0;
     }
   }
