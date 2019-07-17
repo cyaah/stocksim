@@ -20,6 +20,7 @@
         </div>
       </div>
     </div>
+    <button @click="timeSeries" class="btn btn-outline-success"> ABC</button>
   </div>
 </template>
 <script>
@@ -89,6 +90,15 @@ export default {
     ...mapActions({
       placeSellOrder: "sellStock"
     }),
+    timeSeries(){
+      axios
+      .get(
+        `https://cloud.iexapis.com/stable/stock/AAPL/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
+      ).then(res => {
+        console.log("timeseries")
+        console.log(res);
+      })
+    },
     sellStock() {
       console.log("sell button pressed");
       console.log(this.portfolio);
