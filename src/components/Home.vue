@@ -48,6 +48,31 @@
     <div v-if="noResults">
       <H2>Sorry no results</H2>
     </div>
+
+    <div
+      v-if="error"
+      class="modalfade"
+      id="exampleModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">No symbol provided.</div>
+          <div class="modal-footer">
+            <button @click="resetError"type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -62,7 +87,7 @@ import { isError } from "util";
 const FieldValue = require("firebase").firestore.FieldValue;
 
 var myChart;
- 
+
 export default {
   data() {
     return {
@@ -70,6 +95,7 @@ export default {
       searchTerm: "",
       results: [],
       noResults: false,
+      error: false,
       quantity: 0,
       planetChartData: planetChartData,
       timeSeriesData: [],
@@ -139,93 +165,6 @@ export default {
         this.canvasData.data.datasets[0].data = [];
         console.log(this.myChart);
       }
-      // axios
-      //   .get(
-      //     `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${encodeURIComponent(
-      //       term
-      //     )}&apikey=030CF83Z0LHP1H0B`
-      //   )
-      //   //fetching stock data
-      //   // .get(
-      //   //   `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=ACB&apikey=030CF83Z0LHP1H0B`
-      //   // )
-      //   //.then(res => res.json())
-      //   .then(res => {
-      //     if (res) {
-      //       this.results = [];
-      //       this.noResults = false;
-      //       var s = res.data["Global Quote"];
-
-      //       if (isEmpty(s)) {
-      //         this.noResults = true;
-      //       } else {
-      //         this.results.push(s);
-
-      //         //console.log(this.results);
-      //       }
-      //     }
-      //   })
-      //   .catch(error => {
-      //     console.log(error);
-      //   });
-
-      // Fetching time series from API
-      // axios
-      //   .get(
-      //     `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${encodeURIComponent(
-      //       term
-      //     )}&interval=5min&apikey=030CF83Z0LHP1H0B`
-      //   )
-      //   .then(res => {
-      //     if (res) {
-      //       var date = res.data["Time Series (5min)"];
-
-      //       var timeSeries;
-      //       for (var time in date) {
-      //         let stock_info = date[time];
-
-      //         this.timeSeriesData.push({
-      //           time: time,
-      //           price: Number(stock_info["1. open"])
-      //         });
-      //       }
-      //       timeSeries = this.timeSeriesData;
-      //       //console.log(timeSeries);
-      //       this.canvasData.data.labels = timeSeries.map(x => x.time);
-      //       this.canvasData.data.datasets[0].data = timeSeries.map(
-      //         x => x.price
-      //       );
-      //       // for (var i = 0; i < timeSeries.length - 22; i++) {
-      //       //   //this.canvasData.data.labels.push(new Date(timeSeries[i].time));
-      //       //   this.canvasData.data.datasets[0].data.push(timeSeries[i].price);
-      //       // }
-      //       this.canvasData.data.labels.reverse();
-
-      //       this.$store.dispatch("loadStocks", timeSeries);
-      //       console.log("dataPoints" + this.canvasData.data.datasets[0].data);
-      //       return this.canvasData.data.labels;
-      //       return this.canvasData.data.datasets[0].data;
-      //     }
-      //   })
-      //   .then(res => {
-      //     if (res) {
-      //       //this.createChart("Intra Day Chart", this.canvasData);
-      //       //this.canvasData.data.labels = [];
-      //       //console.log(this.canvasData.data.labels);
-      //       //console.log(this.canvasData.data.datasets[0].data);
-      //       var ctx = document.getElementById("myChart");
-      //       this.myChart = new Chart(ctx, {
-      //         type: this.canvasData.type,
-      //         data: this.canvasData.data,
-      //         options: this.canvasData.options
-      //       });
-      //       this.canvasCreated = true;
-      //     }
-      //   })
-      //   .catch(error => {
-      //     console.log(error);
-      //   });
-
       axios
         .get(
           `https://cloud.iexapis.com/stable/stock/${encodeURIComponent(
@@ -253,6 +192,9 @@ export default {
           }
         })
         .catch(error => {
+          this.error = true;
+          console.log("error");
+          console.log(this.error);
           console.log(error);
         });
 
@@ -355,7 +297,7 @@ export default {
         options: chartData.options
       });
       this.canvasCreated = true;
-    }
+    },
 
     // createChart(chartId, chartData) {
     //   //console.log("ctx" + myChart);
@@ -381,6 +323,10 @@ export default {
     //   });
     //   this.canvasCreated = true;
     // }
+
+    resetError() {
+      this.error= false;
+    }
   }
 };
 </script>

@@ -118,7 +118,7 @@ export default {
             price: this.stock.price,
             quantity: quan
           };
-         
+
           var update = {};
           update[`stock.${this.stock.name}`] = order;
           // const decrement = firebase.firestore.FieldValue.increment(order.quantity);
@@ -129,15 +129,8 @@ export default {
         }
       });
 
-   
       //this.placeSellOrder(order);
       this.quantity = 0;
-    }
-  },
-
-  watch: {
-    dbQuantity: function() {
-      console.log("watched for change");
     }
   }
 };
