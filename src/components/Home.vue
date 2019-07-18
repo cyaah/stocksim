@@ -45,7 +45,7 @@
       </div>
     </div>
 
-     <div
+    <div
       v-if="noResults"
       class="modalfade"
       id="exampleModal"
@@ -58,13 +58,24 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-            <button  @click="resetError" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button
+              @click="resetError"
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">No symbol provided.</div>
           <div class="modal-footer">
-            <button @click="resetError"type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button
+              @click="resetError"
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >Close</button>
           </div>
         </div>
       </div>
@@ -83,13 +94,24 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-            <button  @click="resetError" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button
+              @click="resetError"
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">Could not find stock.</div>
           <div class="modal-footer">
-            <button @click="resetError"type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button
+              @click="resetError"
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >Close</button>
           </div>
         </div>
       </div>
@@ -219,6 +241,18 @@ export default {
           console.log(error);
         });
 
+      //Getting time series data
+      axios
+        .get(
+          `https://cloud.iexapis.com/stable/stock/AAPL/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
+        )
+        .then(res => {
+          
+          this.timeSeriesData = res.data;
+          console.log(this.timeSeriesData)
+          console.log("timeseries");
+        });
+
       var isEmpty = obj => {
         for (var key in obj) {
           if (obj.hasOwnProperty(key)) {
@@ -252,33 +286,36 @@ export default {
       console.log(order);
       stockRef.get().then(doc => {
         console.log("doc does not exist");
-
-        var currentStock = doc.data().stock[order.name];
-
+        
+        var currentStock = doc.data().stock;
+        //var currentStock = doc.data()[order.name];
+        console.log(currentStock)
         if (!currentStock) {
           console.log("stockdoes not exist");
           stockRef
             .set({ stock: { [order.name]: order } }, { merge: true })
+            //Tried to change db scheme but this only make it into an array by default. Look into inserting straight object instead of object
+            //.set({[order.name]: [order]},  { merge: true })
             .then(resp => {
               console.log("New stock added");
               //stockRef.FieldValue('stock').add({ [order.name]: order})
             });
         } else {
           var quantity =
-            parseInt(currentStock.quantity) + parseInt(order.quantity);
+            parseInt(currentStock[order.name].quantity) + parseInt(order.quantity);
 
           var totalPrice =
-            parseFloat(currentStock.quantity).toFixed(2) *
-              parseFloat(currentStock.price).toFixed(2) +
+            parseFloat(currentStock[order.name].quantity).toFixed(2) *
+              parseFloat(currentStock[order.name].price).toFixed(2) +
             parseInt(order.quantity) * parseInt(order.price);
           var average =
             parseFloat(totalPrice).toFixed(2) / parseInt(quantity).toFixed(2);
-          var name = currentStock.name;
+          var name = currentStock[order.name].name;
           console.log(quantity);
           console.log(average);
 
           var newOrder = {
-            name: currentStock.name,
+            name: name,
             price: average,
             quantity: quantity
           };
@@ -346,7 +383,7 @@ export default {
     // }
 
     resetError() {
-      this.error= false;
+      this.error = false;
       this.noResults = fasle;
     }
   }

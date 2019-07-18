@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <button @click="timeSeries" class="btn btn-outline-success"> ABC</button>
+    <button @click="timeSeries" class="btn btn-outline-success">ABC</button>
   </div>
 </template>
 <script>
@@ -90,14 +90,15 @@ export default {
     ...mapActions({
       placeSellOrder: "sellStock"
     }),
-    timeSeries(){
+    timeSeries() {
       axios
-      .get(
-        `https://cloud.iexapis.com/stable/stock/AAPL/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
-      ).then(res => {
-        console.log("timeseries")
-        console.log(res);
-      })
+        .get(
+          `https://cloud.iexapis.com/stable/stock/AAPL/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
+        )
+        .then(res => {
+          console.log("timeseries");
+          console.log(res);
+        });
     },
     sellStock() {
       console.log("sell button pressed");
@@ -115,26 +116,40 @@ export default {
       //Retrieving stock info from firebase
       stockRef.get().then(doc => {
         var currentStock = doc.data().stock[this.stockInfo.symbol];
-
+        
         var quan = parseInt(currentStock.quantity) - parseInt(order.quantity);
+        console.log("quan");
+        console.log(quan);
         if (currentStock) {
           if (quan < 0) {
             quan = 0;
+            console.log(currentStock);
+            let name = currentStock.name;
+            // let update = stockRef.update({
+            //   name: firebase.firestore.FieldValue.delete()
+            // });
+            //stockRef.update({ 'stock': {[order.name]: firebase.firestore.FieldValue.delete() }});
+            stockRef.update(stock[name]: firebase.firestore.FieldValue.delete())
+              // var update = {};
+              // update[`stock.${name}`] = newOrder;
+              //  stockRef.update(update);           
+              console.log("check delete");
+            
+          } else {
+            console.log("when the quan is below 0");
+            //Fix currently completely wiping db
+            const order = {
+              name: this.stock.name,
+              price: this.stock.price,
+              quantity: quan
+            };
+
+            var update = {};
+            update[`stock.${this.stock.name}`] = order;
+            // const decrement = firebase.firestore.FieldValue.increment(order.quantity);
+            // stockRef.update({stock: {[order.name]: {[order.name.quantity] : decrement}})
+            stockRef.update(update);
           }
-          //Fix currently completely wiping db
-
-          const order = {
-            name: this.stock.name,
-            price: this.stock.price,
-            quantity: quan
-          };
-
-          var update = {};
-          update[`stock.${this.stock.name}`] = order;
-          // const decrement = firebase.firestore.FieldValue.increment(order.quantity);
-          // stockRef.update({stock: {[order.name]: {[order.name.quantity] : decrement}})
-          stockRef.update(update);
-
           this.dbQuantity = quan;
         }
       });
