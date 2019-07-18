@@ -129,7 +129,7 @@ export default {
             //   name: firebase.firestore.FieldValue.delete()
             // });
             //stockRef.update({ 'stock': {[order.name]: firebase.firestore.FieldValue.delete() }});
-            stockRef.update(stock[name]: firebase.firestore.FieldValue.delete())
+            stockRef.update({['stock.'+name] : firebase.firestore.FieldValue.delete()})
               // var update = {};
               // update[`stock.${name}`] = newOrder;
               //  stockRef.update(update);           
