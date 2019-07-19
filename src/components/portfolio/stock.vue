@@ -39,7 +39,8 @@ export default {
   //   },
   props: {
     stock: Object,
-    portfolio: Array
+    portfolio: Array,
+    index: Number
   },
   data() {
     return {
@@ -58,6 +59,7 @@ export default {
       )
       .then(res => {
         if (res) {
+          console.log(this.index);
           console.log(res.data);
           console.log("data for each stock");
           this.stockInfo = res.data;
@@ -118,12 +120,10 @@ export default {
         var currentStock = doc.data().stock[this.stockInfo.symbol];
         
         var quan = parseInt(currentStock.quantity) - parseInt(order.quantity);
-        console.log("quan");
-        console.log(quan);
+        
         if (currentStock) {
           if (quan < 0) {
             quan = 0;
-            console.log(currentStock);
             let name = currentStock.name;
             // let update = stockRef.update({
             //   name: firebase.firestore.FieldValue.delete()
@@ -134,9 +134,9 @@ export default {
               // update[`stock.${name}`] = newOrder;
               //  stockRef.update(update);           
               console.log("check delete");
-            
+              this.$emit('deleteStock',name )
           } else {
-            console.log("when the quan is below 0");
+            
             //Fix currently completely wiping db
             const order = {
               name: this.stock.name,

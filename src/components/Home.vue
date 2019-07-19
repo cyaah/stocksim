@@ -247,9 +247,8 @@ export default {
           `https://cloud.iexapis.com/stable/stock/AAPL/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
         )
         .then(res => {
-          
           this.timeSeriesData = res.data;
-          console.log(this.timeSeriesData)
+          console.log(this.timeSeriesData);
           console.log("timeseries");
         });
 
@@ -286,12 +285,13 @@ export default {
       console.log(order);
       stockRef.get().then(doc => {
         console.log("doc does not exist");
-        
+
         var currentStock = doc.data().stock;
         //var currentStock = doc.data()[order.name];
-        console.log(currentStock)
-        if (!currentStock) {
-          console.log("stockdoes not exist");
+        console.log("stockdoes not exist");
+        console.log(currentStock);
+        if (!currentStock || !Object.keys({}).length) {
+          console.log("inside if")
           stockRef
             .set({ stock: { [order.name]: order } }, { merge: true })
             //Tried to change db scheme but this only make it into an array by default. Look into inserting straight object instead of object
@@ -301,8 +301,10 @@ export default {
               //stockRef.FieldValue('stock').add({ [order.name]: order})
             });
         } else {
+          console.log("else");
           var quantity =
-            parseInt(currentStock[order.name].quantity) + parseInt(order.quantity);
+            parseInt(currentStock[order.name].quantity) +
+            parseInt(order.quantity);
 
           var totalPrice =
             parseFloat(currentStock[order.name].quantity).toFixed(2) *

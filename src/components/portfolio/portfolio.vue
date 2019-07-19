@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <app-stock v-for="stock in portfolio" :stock="stock" :portfolio="portfolio"></app-stock>
+    <app-stock v-for="(stock,index) in portfolio" :stock="stock" :portfolio="portfolio" v-on:deleteStock="deleteThisStock"></app-stock>
   </div>
 </template>
 
@@ -43,6 +43,12 @@ export default {
         //console.log(this.portfolio);
       }
     });
+  },
+  methods: {
+    deleteThisStock: function(index){
+      console.log("DELETE STOCK");
+      this.portfolio.splice(index,1);
+    }
   }
 };
 //}
