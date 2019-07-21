@@ -1,6 +1,15 @@
 <template>
-  <div class="row">
-    <app-stock v-for="(stock,index) in portfolio" :stock="stock" :portfolio="portfolio" v-on:deleteStock="deleteThisStock"></app-stock>
+  <div class="column">
+    <!-- <transition-group tag="div" name="portfolio"> -->
+      <app-stock
+        v-for="(stock,index) in portfolio"
+        :stock="stock"
+        :portfolio="portfolio"
+        v-on:deleteStock="deleteThisStock"
+        v-on:updateStock="updateStock"
+        :key="stock.id"
+      ></app-stock>
+    <!-- </transition-group> -->
   </div>
 </template>
 
@@ -10,6 +19,7 @@ import { mapGetters } from "vuex";
 import { db, increment } from "../../main.js";
 import firebase from "firebase";
 import firestore from "firebase";
+import portfolio from "../store/modules/portfolio";
 const FieldValue = require("firebase").firestore.FieldValue;
 
 export default {
@@ -45,9 +55,20 @@ export default {
     });
   },
   methods: {
-    deleteThisStock: function(index){
+    deleteThisStock: function(index) {
       console.log("DELETE STOCK");
-      this.portfolio.splice(index,1);
+      this.portfolio.splice(index, 1);
+    },
+    updateStock: function(order) {
+      console.log("UPDATE STOCK");
+      console.log(order.name);
+      for (var i = 0; i < this.portfolio.length; i++) {
+        console.log(this.portfolio[i].name);
+        if (this.portfolio[i].name === order.name) {
+          this.portfolio[i].quanity = order.quantity;
+          console.log(this.portfolio[i]);
+        }
+      }
     }
   }
 };
@@ -55,4 +76,31 @@ export default {
 </script>
 
 <style>
+
+.stock-enter-active,
+.stock-leave-active,
+.stock-move {
+  transition: 500ms cubic-bezier(0.59, 0.12, 0.34, 0.95);
+  transition-property: opacity, transform;
+}
+
+.stock-enter {
+  opacity: 0;
+  transform: translateX(50px) scaleY(0.5);
+}
+
+.stock-enter-to {
+  opacity: 1;
+  transform: translateX(0) scaleY(1);
+}
+
+.stock-leave-active {
+  position: absolute;
+}
+
+.stock-leave-to {
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: center top;
+}
 </style>

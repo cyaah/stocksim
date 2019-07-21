@@ -3,11 +3,11 @@
          
   </div>-->
   <div class="col">
-    <div class="card text-right" style="width: 18rem;">
+    <div class="card text-left" style="width: 18rem;">
       <div class="card-body">
         <p class="card-info">Name: {{stock.name}}</p>
         <p class="card-info">Price: {{stock.price}}</p>
-        <p class="card-info">Quantity: {{this.dbQuantity}}</p>
+        <p class="card-info">Quantity: {{this.stock.quantity}}</p>
         <p class="card-info">Current Price: {{this.stockInfo.latestPrice}}</p>
         <p class="card-info">Total Change: {{this.totalChange}}</p>
         <!-- <p class="card-text">Quantity: {{stock}} Price: {{stock}</p> -->
@@ -18,9 +18,9 @@
             <button class="btn btn-outline-success" @click="sellStock">Sell</button>
           </div>
         </div>
+        <button @click="timeSeries" class="btn btn-outline-success">Chart</button>
       </div>
     </div>
-    <button @click="timeSeries" class="btn btn-outline-success">ABC</button>
   </div>
 </template>
 <script>
@@ -32,11 +32,6 @@ const FieldValue = require("firebase").firestore.FieldValue;
 import axios from "axios";
 
 export default {
-  //  watch: {
-  //   dbQuantity: funtion(){
-  //     console.log(this.dbQuantity);
-  //     }
-  //   },
   props: {
     stock: Object,
     portfolio: Array,
@@ -59,8 +54,6 @@ export default {
       )
       .then(res => {
         if (res) {
-          console.log(this.index);
-          console.log(res.data);
           console.log("data for each stock");
           this.stockInfo = res.data;
           this.totalChange = (
@@ -68,21 +61,12 @@ export default {
               parseFloat(this.stock.quantity) -
             parseFloat(this.stock.price) * parseFloat(this.stock.quantity)
           ).toFixed(2);
-
-          console.log(
-            parseFloat(this.stockInfo.latestPrice) *
-              parseFloat(this.stock.quantity)
-          );
-          console.log(
-            parseFloat(this.stockInfo.latestPrice) *
-              parseFloat(this.stock.quantity) -
-              parseFloat(this.stock.price) * parseFloat(this.stock.quantity)
-          );
         }
       })
       .then(con => {
         let q = this.stock.quantity;
         this.dbQuantity += q;
+        console.log(this.stock.name);
         console.log("db");
         console.log(this.dbQuantity);
         console.log(this.stock.quantity);
@@ -104,7 +88,7 @@ export default {
     },
     sellStock() {
       console.log("sell button pressed");
-      console.log(this.portfolio);
+      //console.log(this.portfolio);
 
       //Building the order
       const order = {
@@ -112,31 +96,30 @@ export default {
         price: this.stock.price,
         quantity: parseInt(this.quantity)
       };
-      //console.log("sell order" + order);
       var stockRef = db.collection("test-user").doc("Portfolio");
 
       //Retrieving stock info from firebase
       stockRef.get().then(doc => {
         var currentStock = doc.data().stock[this.stockInfo.symbol];
-        
+
         var quan = parseInt(currentStock.quantity) - parseInt(order.quantity);
-        
+
         if (currentStock) {
-          if (quan < 0) {
-            quan = 0;
+          if (quan <= 0) {
             let name = currentStock.name;
             // let update = stockRef.update({
             //   name: firebase.firestore.FieldValue.delete()
             // });
             //stockRef.update({ 'stock': {[order.name]: firebase.firestore.FieldValue.delete() }});
-            stockRef.update({['stock.'+name] : firebase.firestore.FieldValue.delete()})
-              // var update = {};
-              // update[`stock.${name}`] = newOrder;
-              //  stockRef.update(update);           
-              console.log("check delete");
-              this.$emit('deleteStock',name )
+            stockRef.update({
+              ["stock." + name]: firebase.firestore.FieldValue.delete()
+            });
+            // var update = {};
+            // update[`stock.${name}`] = newOrder;
+            //  stockRef.update(update);
+            console.log("check delete");
+            this.$emit("deleteStock", name);
           } else {
-            
             //Fix currently completely wiping db
             const order = {
               name: this.stock.name,
@@ -144,21 +127,30 @@ export default {
               quantity: quan
             };
 
+            //Updating firestore with the change in quanity
             var update = {};
             update[`stock.${this.stock.name}`] = order;
-            // const decrement = firebase.firestore.FieldValue.increment(order.quantity);
             // stockRef.update({stock: {[order.name]: {[order.name.quantity] : decrement}})
             stockRef.update(update);
+
+            this.$emit("updateStock", order);
+
+            this.dbQuantity = quan;
           }
-          this.dbQuantity = quan;
+
+          quan = 0;
         }
       });
 
       //this.placeSellOrder(order);
-      this.quantity = 0;
+      //this.dbQuantity = 0;
     }
   }
 };
 </script>
 <style>
+.col{
+  margin-left: 10px;
+  margin-top: 17px;
+}
 </style>

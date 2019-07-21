@@ -286,12 +286,13 @@ export default {
       stockRef.get().then(doc => {
         console.log("doc does not exist");
 
-        var currentStock = doc.data().stock;
-        //var currentStock = doc.data()[order.name];
+        //var currentStock = doc.data().stock;
+        var currentStock = doc.data()[order.name];
         console.log("stockdoes not exist");
         console.log(currentStock);
-        if (!currentStock || !Object.keys({}).length) {
-          console.log("inside if")
+        //Creating new stock
+        if (!currentStock && !Object.keys({}).length) {
+          console.log("inside if");
           stockRef
             .set({ stock: { [order.name]: order } }, { merge: true })
             //Tried to change db scheme but this only make it into an array by default. Look into inserting straight object instead of object
@@ -302,6 +303,9 @@ export default {
             });
         } else {
           console.log("else");
+          console.log(currentStock);
+          console.log("order");
+          console.log(order);
           var quantity =
             parseInt(currentStock[order.name].quantity) +
             parseInt(order.quantity);
