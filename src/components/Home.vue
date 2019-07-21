@@ -285,13 +285,13 @@ export default {
       console.log(order);
       stockRef.get().then(doc => {
         console.log("doc does not exist");
-
-        //var currentStock = doc.data().stock;
-        var currentStock = doc.data()[order.name];
+        console.log(doc.data().stock);
+        var currentStock = doc.data().stock;
+        //var currentStock = doc.data()[order.name];
         console.log("stockdoes not exist");
         console.log(currentStock);
         //Creating new stock
-        if (!currentStock && !Object.keys({}).length) {
+        if (!currentStock[order.name] && !Object.keys({}).length) {
           console.log("inside if");
           stockRef
             .set({ stock: { [order.name]: order } }, { merge: true })
@@ -303,7 +303,7 @@ export default {
             });
         } else {
           console.log("else");
-          console.log(currentStock);
+          console.log(currentStock[order.name]);
           console.log("order");
           console.log(order);
           var quantity =
