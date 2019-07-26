@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page">
     <app-header></app-header>
     <router-view></router-view>
   </div>
@@ -11,8 +11,8 @@
 
 <script>
 import Header from "./components/Header.vue";
-import { mapState } from 'vuex';
-import Chart from 'chart.js';
+import { mapState } from "vuex";
+import Chart from "chart.js";
 export default {
   components: {
     appHeader: Header
@@ -25,7 +25,7 @@ export default {
     };
   },
   created() {
-    console.log("at create")
+    console.log("at create");
     //this.$store.dispatch("loadStocks");
   }
 };
@@ -35,4 +35,8 @@ export default {
 /* .container{
   font-family: 'Taviraj', serif;
 } */
+body {
+  background-image: url(../images/NYSE.jpg);
+  background-size: 100%;
+}
 </style>

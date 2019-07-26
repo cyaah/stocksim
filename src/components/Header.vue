@@ -1,24 +1,19 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-toggleable-sm navbar-trans navbar-inverse">
     <router-link to="/">Home</router-link>
     <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
     </button>-->
 
-    <div class="collapse navbar-collapse">
-      <ul class="navbar-nav mr-auto">
-        <!-- <li class="nav-item active">
+    <ul class="navbar-nav mr-auto">
+      <!-- <li class="nav-item active">
         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>-->
-        <li class="nav-item">
-          <router-link to="/portfolio" class="nav-link">Portfolio</router-link>
-        </li>
-      </ul>
-      <!-- <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form>-->
-    </div>
+      </li>-->
+      <li class="nav-item">
+        <router-link to="/portfolio" class="nav-link">Portfolio</router-link>
+      </li>
+    </ul>
+
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
       <button @searchStock class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -71,5 +66,6 @@ export default {
   margin-right: 25px;
   margin-left: 25px;
   font-family: "Roboto";
+  color: #e5e5e5;
 }
 </style>

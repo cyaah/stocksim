@@ -7,7 +7,7 @@
       <div class="card-body">
         <p class="card-info">Name: {{stock.name}}</p>
         <p class="card-info">Price: {{stock.price}}</p>
-        <p class="card-info">Quantity: {{this.stock.quantity}}</p>
+        <p class="card-info">Quantity: {{this.dbQuantity}}</p>
         <p class="card-info">Current Price: {{this.stockInfo.latestPrice}}</p>
         <p class="card-info">Total Change: {{this.totalChange}}</p>
         <!-- <p class="card-text">Quantity: {{stock}} Price: {{stock}</p> -->
@@ -22,7 +22,7 @@
       </div>
     </div>
   </div>
-</template>
+</template>   
 <script>
 import { mapActions } from "vuex";
 import { db, increment } from "../../main.js";
@@ -135,7 +135,7 @@ export default {
 
             this.$emit("updateStock", order);
 
-            this.dbQuantity = quan;
+            this.quantity = quan;
           }
 
           quan = 0;
@@ -149,7 +149,7 @@ export default {
 };
 </script>
 <style>
-.col{
+.col {
   margin-left: 10px;
   margin-top: 17px;
 }

@@ -1,17 +1,19 @@
 <template>
   <div class="container">
-    <h1 class="main-header">Trade Stocks and Manage your own Portfolio</h1>
-    <div class="input-groupmb-3">
-      <input
-        v-on:keyup.enter="search"
-        v-on:keyyp.enter="canvas"
-        type="search"
-        class="form-control"
-        placeholder="Enter Stock Ticker"
-        aria-label="Recipient's username"
-        v-model="searchTerm"
-        id="main-search"
-      />
+    <div class="main-box">
+      <h1 class="main-header">Trade Stocks and Manage your own Portfolio</h1>
+      <div class="input-groupmb-3">
+        <input
+          v-on:keyup.enter="search"
+          v-on:keyyp.enter="canvas"
+          type="search"
+          class="form-control"
+          placeholder="Enter Stock Ticker"
+          aria-label="Recipient's username"
+          v-model="searchTerm"
+          id="main-search"
+        />
+      </div>
     </div>
     <div class="card-body" v-if="results.length > 0">
       <div id="chart-container">
@@ -401,6 +403,13 @@ export default {
   font-family: "Roboto", sans-serif;
   width: 1000px;
   margin: 210px auto;
+  color: #e5e5e5;
+}
+.main-box {
+  position: absolute;
+  top: 47%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 .main-header {
   font-weight: 600;

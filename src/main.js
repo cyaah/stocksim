@@ -3,7 +3,9 @@ import './plugins/vuetify'
 import App from './App.vue'
 import firebase from 'firebase';
 import VueRouter from 'vue-router';
-import { routes } from './routes';
+import {
+  routes
+} from './routes';
 import store from './components/store/store';
 //import Vuetify from 'vuetify';
 //import 'vuetify/dist/vuetify.min.css' 
@@ -27,7 +29,7 @@ var firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-export const db  = firebase.firestore();
+export const db = firebase.firestore();
 
 
 
@@ -44,4 +46,5 @@ new Vue({
   router,
   store,
   render: h => h(App),
+ 
 })
