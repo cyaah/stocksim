@@ -20,15 +20,16 @@
       </h1>
     </div>
     <div class="card-body" v-if="results.length > 0">
-      <div id="chart-container">
+      <!-- <div id="chart-container">
         <canvas id="myChart" width="300px" height="300px"></canvas>
+      </div>-->
+      <div class="card-info-left">
+        <h3 class="card-info">{{this.results[0]['symbol']}}</h3>
+        <p class="card-info">Price: ${{this.results[0]['latestPrice']}}</p>
+        <p class="card-info">Open: {{this.results[0]['open']}}</p>
+        <p class="card-info">High: {{this.results[0]['high']}}</p>
+        <p class="card-info">Low: {{this.results[0]['low']}}</p>
       </div>
-
-      <p class="card-info">Symbol: {{this.results[0]['symbol']}}</p>
-      <p class="card-info">Price: ${{this.results[0]['latestPrice']}}</p>
-      <p class="card-info">Open: {{this.results[0]['open']}}</p>
-      <p class="card-info">High: {{this.results[0]['high']}}</p>
-      <p class="card-info">Low: {{this.results[0]['low']}}</p>
       <div class="card-info-right">
         <p>Volume: {{this.results[0]['06. volume']}}</p>
         <p>Previous close: {{this.results[0]['previousClose']}}</p>
@@ -41,6 +42,7 @@
         v-on:keyup.enter="buyStock"
         type="number"
         class="form-control"
+        id="searchBuy"
         placeholder="Enter Quantity"
         aria-describedby="basic-addon2"
         v-model="quantity"
@@ -232,7 +234,6 @@ export default {
             console.log(s);
             //fix this logic
             if (isEmpty(s)) {
-              
               this.noResults = true;
               console.log("is empty");
               console.log(this.noResults);
@@ -426,6 +427,11 @@ export default {
   border-radius: 100px;
   width: 400px;
 }
+
+#searchBuy {
+  border-radius: 5px;
+  width: 80px;
+}
 .main-box {
   position: absolute;
   top: 47%;
@@ -456,17 +462,32 @@ input-group {
 .card-info {
   font-weight: 300;
   font-family: "Roboto", sans-serif;
+  letter-spacing: 4px;
+  font-weight: 400;
 }
 .card-body {
-  margin-top: 80px;
-  margin-left: -30px;
   width: 90%;
-  box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.5);
+  box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5);
   font-family: "Roboto", sans-serif;
+  border-radius: 15px;
+  border: black;
+}
+
+.card-info-left {
+  position: relative;
+  left: 25px;
+  /* background-color: black; */
+  width: 50%;
+  float: left;
 }
 .card-info-right {
-  margin-left: 650px;
-  margin-top: -160px;
+  position: relative;
+  /* background-color: red; */
+  width: 50%;
+  top: 50%;
+  float: right;
+  letter-spacing: 4px;
+  font-weight: 400;
 }
 .input-group-append {
   width: 400px;
