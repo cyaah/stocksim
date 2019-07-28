@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-toggleable-sm navbar-trans navbar-inverse">
+  <nav class="navbar navbar-dark bg-transparent">
     <router-link to="/">Home</router-link>
     <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -66,6 +66,12 @@ export default {
   margin-right: 25px;
   margin-left: 25px;
   font-family: "Roboto";
-  color: #e5e5e5;
+  /* color: #e5e5e5; */
+}
+
+.nav-item {
+  padding-left: 25px;
+  /* color: #e5e5e5; */
+
 }
 </style>

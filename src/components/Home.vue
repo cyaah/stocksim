@@ -1,7 +1,6 @@
 <template>
   <div class="container">
-    <div class="main-box">
-      <h1 class="main-header">Trade Stocks and Manage your own Portfolio</h1>
+    <div class="search-box">
       <div class="input-groupmb-3">
         <input
           v-on:keyup.enter="search"
@@ -14,6 +13,11 @@
           id="main-search"
         />
       </div>
+    </div>
+    <div v-if="notSearched" class="main-box">
+      <h1 class="main-header">
+        <span class="primary-header">TRADE STOCKS</span>
+      </h1>
     </div>
     <div class="card-body" v-if="results.length > 0">
       <div id="chart-container">
@@ -140,6 +144,7 @@ export default {
       searchTerm: "",
       results: [],
       noResults: false,
+      notSearched: true,
       error: false,
       quantity: 0,
       planetChartData: planetChartData,
@@ -221,15 +226,18 @@ export default {
             console.log(res.data);
             console.log("res");
             this.results = [];
+
             this.noResults = false;
             var s = res.data;
             console.log(s);
             //fix this logic
             if (isEmpty(s)) {
+              
               this.noResults = true;
               console.log("is empty");
               console.log(this.noResults);
             } else {
+              this.notSearched = false;
               this.results.push(s);
               console.log("124555");
               console.log(this.results);
@@ -264,6 +272,7 @@ export default {
       };
       this.term = "";
       this.noResults = false;
+      this.searchTerm = true;
       this.canvasData.data.labels = [];
       this.canvasData.data.datasets[0].data.length = 0;
       console.log("checking if empty", this.canvasData.data.datasets[0].data);
@@ -403,7 +412,19 @@ export default {
   font-family: "Roboto", sans-serif;
   width: 1000px;
   margin: 210px auto;
-  color: #e5e5e5;
+
+  background: #e5e5e517;
+}
+.search-box {
+  position: absolute;
+  width: 50%;
+  left: 1%;
+  top: 65px;
+}
+
+.form-control {
+  border-radius: 100px;
+  width: 400px;
 }
 .main-box {
   position: absolute;
@@ -412,7 +433,12 @@ export default {
   transform: translate(-50%, -50%);
 }
 .main-header {
-  font-weight: 600;
+  font-weight: 500;
+  font-size: 40px;
+  letter-spacing: 25px;
+  animation-name: moveInLeft;
+  animation-duration: 1.7s;
+  animation-timing-function: ease-out;
 }
 input-group {
   margin-top: 25px;
@@ -423,10 +449,10 @@ input-group {
 .infoRight {
   margin-left: 140px;
 }
-#main-search {
+/* .main-search {
   margin-left: 120px;
   width: 60%;
-}
+} */
 .card-info {
   font-weight: 300;
   font-family: "Roboto", sans-serif;
@@ -453,4 +479,22 @@ input-group {
     width:800px !important;
     height:700px !important;
 } */
+
+@keyframes moveInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+
+  80% {
+    transform: translateX(15px);
+  }
+
+  100% {
+    opacity: 1;
+
+    /* We use tranlate 0 since it just renders it to how it actually is */
+    transform: translate(0);
+  }
+}
 </style>

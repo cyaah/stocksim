@@ -36,7 +36,8 @@ export default {
   font-family: 'Taviraj', serif;
 } */
 body {
-  background-image: url(../images/NYSE.jpg);
+  /* background-image: url(../images/NYSE.jpg);
   background-size: 100%;
+  background-size: cover; */
 }
 </style>
