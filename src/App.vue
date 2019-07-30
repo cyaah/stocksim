@@ -1,9 +1,10 @@
 <template>
-  <div class="page">
+  <div class="header">
     <app-header></app-header>
-    <router-view></router-view>
+    <div class="page">
+      <router-view></router-view>
+    </div>
   </div>
-
   <!-- <div class="container">
     //Put div container in the body 
   </div>-->
@@ -39,5 +40,13 @@ body {
   /* background-image: url(../images/NYSE.jpg);
   background-size: 100%;
   background-size: cover; */
+}
+
+.header {
+  background-color: yellow;
+}
+.page {
+  top: 100px;
+  position: absolute;
 }
 </style>

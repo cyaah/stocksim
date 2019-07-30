@@ -1,6 +1,7 @@
 <template>
-  <div class="column">
-    <!-- <transition-group tag="div" name="portfolio"> -->
+  <div class="portfolioPage">
+    <div class="column">
+      <!-- <transition-group tag="div" name="portfolio"> -->
       <app-stock
         v-for="(stock,index) in portfolio"
         :stock="stock"
@@ -9,7 +10,8 @@
         v-on:updateStock="updateStock"
         :key="stock.id"
       ></app-stock>
-    <!-- </transition-group> -->
+      <!-- </transition-group> -->
+    </div>
   </div>
 </template>
 
@@ -53,6 +55,8 @@ export default {
         //console.log(this.portfolio);
       }
     });
+    console.log("PORTFOLIO");
+    console.log(this.portfolio);
   },
   methods: {
     deleteThisStock: function(index) {
@@ -76,6 +80,13 @@ export default {
 </script>
 
 <style>
+.portfolioPage {
+  top: 60px;
+  
+}
+.column {
+  background-color: blue;
+}
 
 .stock-enter-active,
 .stock-leave-active,

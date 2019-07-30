@@ -120,6 +120,7 @@ export default {
             console.log("check delete");
             this.$emit("deleteStock", name);
           } else {
+            console.log("ELSE");
             //Fix currently completely wiping db
             const order = {
               name: this.stock.name,
@@ -135,7 +136,7 @@ export default {
 
             this.$emit("updateStock", order);
 
-            this.quantity = quan;
+            this.dbQuantity = quan;
           }
 
           quan = 0;
