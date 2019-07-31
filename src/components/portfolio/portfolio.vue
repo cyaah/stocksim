@@ -8,7 +8,8 @@
         :portfolio="portfolio"
         v-on:deleteStock="deleteThisStock"
         v-on:updateStock="updateStock"
-        :key="stock.id"
+        :key="stock.name"
+        :index="index"
       ></app-stock>
       <!-- </transition-group> -->
     </div>
@@ -57,11 +58,14 @@ export default {
     });
     console.log("PORTFOLIO");
     console.log(this.portfolio);
+
   },
   methods: {
     deleteThisStock: function(index) {
       console.log("DELETE STOCK");
-      this.portfolio.splice(index, 1);
+       this.portfolio.splice(index,1);
+       console.log(this.portfolio);
+
     },
     updateStock: function(order) {
       console.log("UPDATE STOCK");
@@ -82,7 +86,7 @@ export default {
 <style>
 .portfolioPage {
   top: 60px;
-  
+
 }
 .column {
   background-color: blue;

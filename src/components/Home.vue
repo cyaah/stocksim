@@ -273,7 +273,7 @@ export default {
       };
       this.term = "";
       this.noResults = false;
-      this.searchTerm = true;
+      this.searchTerm = "";
       this.canvasData.data.labels = [];
       this.canvasData.data.datasets[0].data.length = 0;
       console.log("checking if empty", this.canvasData.data.datasets[0].data);
@@ -466,7 +466,7 @@ input-group {
   font-weight: 400;
 }
 .card-body {
-  width: 90%;
+  width: 60%;
   box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5);
   font-family: "Roboto", sans-serif;
   border-radius: 15px;
