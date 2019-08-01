@@ -9,6 +9,7 @@
         v-on:deleteStock="deleteThisStock"
         v-on:updateStock="updateStock"
         :key="stock.id"
+        :index="index"
       ></app-stock>
       <!-- </transition-group> -->
     </div>
@@ -82,7 +83,6 @@ export default {
 <style>
 .portfolioPage {
   top: 60px;
-  
 }
 .column {
   background-color: blue;

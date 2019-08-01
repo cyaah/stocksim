@@ -118,7 +118,8 @@ export default {
             // update[`stock.${name}`] = newOrder;
             //  stockRef.update(update);
             console.log("check delete");
-            this.$emit("deleteStock", name);
+            console.log(this.index);
+            this.$emit("deleteStock", this.index);
           } else {
             console.log("ELSE");
             //Fix currently completely wiping db
