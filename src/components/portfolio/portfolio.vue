@@ -8,7 +8,7 @@
         :portfolio="portfolio"
         v-on:deleteStock="deleteThisStock"
         v-on:updateStock="updateStock"
-        :key="stock.id"
+        :key="stock.name"
         :index="index"
       ></app-stock>
       <!-- </transition-group> -->
@@ -63,6 +63,7 @@ export default {
     deleteThisStock: function(index) {
       console.log("DELETE STOCK");
       this.portfolio.splice(index, 1);
+      console.log(this.portfolio);
     },
     updateStock: function(order) {
       console.log("UPDATE STOCK");

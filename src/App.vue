@@ -1,13 +1,15 @@
 <template>
+  <div>
   <div class="header">
     <app-header></app-header>
+  </div>
     <div class="page">
       <router-view></router-view>
     </div>
-  </div>
   <!-- <div class="container">
-    //Put div container in the body 
+    //Put div container in the body
   </div>-->
+  </div>
 </template>
 
 <script>
@@ -43,10 +45,10 @@ body {
 }
 
 .header {
-  background-color: yellow;
+  /*background-color: yellow;*/
 }
-.page {
-  top: 100px;
-  position: absolute;
-}
+/*.page {*/
+  /*top: 100px;*/
+  /*position: absolute;*/
+/*}*/
 </style>

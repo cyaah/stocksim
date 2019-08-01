@@ -1,6 +1,6 @@
 <template>
   <!-- <div class="col-sm-6 col-md-4">
-         
+
   </div>-->
   <div class="col">
     <div class="card text-left" style="width: 18rem;">
@@ -22,7 +22,7 @@
       </div>
     </div>
   </div>
-</template>   
+</template>
 <script>
 import { mapActions } from "vuex";
 import { db, increment } from "../../main.js";
@@ -103,7 +103,8 @@ export default {
         var currentStock = doc.data().stock[this.stockInfo.symbol];
 
         var quan = parseInt(currentStock.quantity) - parseInt(order.quantity);
-
+        console.log(quan);
+        console.log("quan");
         if (currentStock) {
           if (quan <= 0) {
             let name = currentStock.name;
@@ -118,7 +119,7 @@ export default {
             // update[`stock.${name}`] = newOrder;
             //  stockRef.update(update);
             console.log("check delete");
-            console.log(this.index);
+            console.log("index" + this.index);
             this.$emit("deleteStock", this.index);
           } else {
             console.log("ELSE");
@@ -140,7 +141,7 @@ export default {
             this.dbQuantity = quan;
           }
 
-          quan = 0;
+          this.quantity = 0;
         }
       });
 

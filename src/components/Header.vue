@@ -1,6 +1,6 @@
 <template>
   <div class="navbarHeader">
-    <nav class="navbar navbar-dark bg-transparent">
+    <nav class="navbar-navbar-dark-bg-transparent">
       <router-link class="homeLink" to="/">Home</router-link>
       <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -48,12 +48,19 @@ export default {
 </script>
 
 <style>
-.navbar {
+  .navbarHeader{
+    height:40px;
+  }
+
+
+
+.navbar-navbar-dark-bg-transparent {
   margin-right: 25px;
   margin-left: 25px;
   font-family: "Roboto";
   display: block;
-  /* background-color: yellow; */
+  background-color: black;
+
 
   /* color: #e5e5e5; */
 }
