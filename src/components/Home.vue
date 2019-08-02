@@ -19,40 +19,47 @@
         <span class="primary-header">TRADE STOCKS</span>
       </h1>
     </div>
-    <div class="card-body" v-if="results.length > 0">
-      <!-- <div id="chart-container">
+    <div class="search-results">
+      <div class="card-body-stock" v-if="results.length > 0">
+        <!-- <div id="chart-container">
         <canvas id="myChart" width="300px" height="300px"></canvas>
-      </div>-->
-      <div class="card-info-left">
-        <h3 class="card-info">{{this.results[0]['symbol']}}</h3>
-        <p class="card-info">Price: ${{this.results[0]['latestPrice']}}</p>
-        <p class="card-info">Open: {{this.results[0]['open']}}</p>
-        <p class="card-info">High: {{this.results[0]['high']}}</p>
-        <p class="card-info">Low: {{this.results[0]['low']}}</p>
-      </div>
-      <div class="card-info-right">
-        <p>Volume: {{this.results[0]['06. volume']}}</p>
-        <p>Previous close: {{this.results[0]['previousClose']}}</p>
-        <p>Change: {{this.results[0]['change']}}</p>
-        <p>Change%: {{this.results[0]['changePercent']}}</p>
-      </div>
-
-      <!-- bug- Input allows the enter of 'e' when only shouldbe number. Result in empty string quantity-->
-      <input
-        v-on:keyup.enter="buyStock"
-        type="number"
-        class="form-control"
-        id="searchBuy"
-        placeholder="Enter Quantity"
-        aria-describedby="basic-addon2"
-        v-model="quantity"
-        min="1"
-      />
-      <div class="input-group-append">
-        <button class="btn btn-outline-success" @click="buyStock">Buy</button>
+        </div>-->
+        <div class="card" style="width: 38rem;">
+          <div class="card-body">
+            <div id="chart-container">
+              <canvas id="myChart" width="300px" height="300px"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="card-info-left">
+          <h3 class="card-info">{{this.results[0]['symbol']}}</h3>
+          <p class="card-info">Price: ${{this.results[0]['latestPrice']}}</p>
+          <p class="card-info">Open: {{this.results[0]['open']}}</p>
+          <p class="card-info">High: {{this.results[0]['high']}}</p>
+          <p class="card-info">Low: {{this.results[0]['low']}}</p>
+        </div>
+        <div class="card-info-right">
+          <p>Volume: {{this.results[0]['06. volume']}}</p>
+          <p>Previous close: {{this.results[0]['previousClose']}}</p>
+          <p>Change: {{this.results[0]['change']}}</p>
+          <p>Change%: {{this.results[0]['changePercent']}}</p>
+        </div>
+        <!-- bug- Input allows the enter of 'e' when only shouldbe number. Result in empty string quantity-->
+        <input
+          v-on:keyup.enter="buyStock"
+          type="number"
+          class="form-control"
+          id="searchBuy"
+          placeholder="Enter Quantity"
+          aria-describedby="basic-addon2"
+          v-model="quantity"
+          min="1"
+        />
+        <div class="input-group-append">
+          <button class="btn btn-outline-success" @click="buyStock">Buy</button>
+        </div>
       </div>
     </div>
-
     <div
       v-if="noResults"
       class="modalfade"
@@ -149,7 +156,7 @@ export default {
       notSearched: true,
       error: false,
       quantity: 0,
-      planetChartData: planetChartData,
+      planetChartDaisEmptyta: planetChartData,
       timeSeriesData: [],
       canvasCreated: false,
       canvasData: {
@@ -217,6 +224,8 @@ export default {
         this.canvasData.data.datasets[0].data = [];
         console.log(this.myChart);
       }
+
+      //Getting stock price info
       axios
         .get(
           `https://cloud.iexapis.com/stable/stock/${encodeURIComponent(
@@ -255,15 +264,25 @@ export default {
       //Getting time series data
       axios
         .get(
-          `https://cloud.iexapis.com/stable/stock/AAPL/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
+          `https://cloud.iexapis.com/stable/stock/${encodeURIComponent(
+            term
+          )}/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
         )
         .then(res => {
           this.timeSeriesData = res.data;
-          console.log(this.timeSeriesData);
-          console.log("timeseries");
+          //this.canvasData.labels = res.data;
+          for(var i = 0; i < this.timeSeriesData.length; i ++){
+            this.canvasData.data.labels.push(new Date (this.timeSeriesData[i].date))
+            this.canvasData.data.datasets[0].data.push(this.timeSeriesData[i].close);
+          }
+          console.log(this.canvasData.data.labels);
+          console.log(this.canvasData.data.datasets[0].data);
+          console.log("canvas data");
+          this.canvas();
         });
 
       var isEmpty = obj => {
+        console.log("isEMpty");
         for (var key in obj) {
           if (obj.hasOwnProperty(key)) {
             return false;
@@ -271,6 +290,7 @@ export default {
         }
         return true;
       };
+      console.log("timeseries123");
       this.term = "";
       this.noResults = false;
       this.searchTerm = "";
@@ -373,38 +393,24 @@ export default {
         options: chartData.options
       });
       this.canvasCreated = true;
-    },
-
-    // createChart(chartId, chartData) {
-    //   //console.log("ctx" + myChart);
-    //
-    //   // if (this.myChart) {
-    //   //    console.log("inside myChart if statement");
-    //   //   // document.getElementById("myChart").remove();
-    //   //   // let canvas = document.createElement("canvas");
-    //   //   // canvas.setAttribute("id", "myChart");
-    //   //   // canvas.setAttribute("width", "300px");
-    //   //   // canvas.setAttribute("height", "300px");
-    //   //   // document.getElementById("chart-container").appendChild(canvas);
-    //   //   // console.log(document.getElementById("myChart"));
-    //   //   this.myChart.destroy();
-    //   // }
-    //   // //console.log("ctx" + myChart);
-    //   var ctx = document.getElementById("myChart").getContext("2d");
-    //
-    //   this.myChart = new Chart(ctx, {
-    //     type: chartData.type,
-    //     data: chartData.data,
-    //     options: chartData.options
-    //   });
-    //   this.canvasCreated = true;
-    // }
-
-    resetError() {
-      this.error = false;
-      this.noResults = fasle;
     }
+
+    //console.log("ctx" + myChart);
+    // var ctx = document.getElementById("myChart").getContext("2d");
+
+    // this.myChart = new Chart(ctx, {
+    //   type: chartData.type,
+    //   data: chartData.data,
+    //   options: chartData.options
+    // });
+    // this.canvasCreated = true;
+  },
+
+  resetError() {
+    this.error = false;
+    this.noResults = fasle;
   }
+  // }
 };
 </script>
 
@@ -423,6 +429,10 @@ export default {
   top: 65px;
 }
 
+.card {
+  position: absolute;
+  left: 800px;
+}
 .form-control {
   border-radius: 100px;
   width: 400px;
@@ -465,12 +475,17 @@ input-group {
   letter-spacing: 4px;
   font-weight: 400;
 }
-.card-body {
-  width: 60%;
+.card-body-stock {
+  /* width: 60%; */
+  width: 30rem;
+  height: 20rem;
   box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5);
   font-family: "Roboto", sans-serif;
   border-radius: 15px;
   border: black;
+  position: absolute;
+  top: 200px;
+  left: 15px;
 }
 
 .card-info-left {
@@ -484,7 +499,6 @@ input-group {
   position: relative;
   /* background-color: red; */
   width: 50%;
-  top: 50%;
   float: right;
   letter-spacing: 4px;
   font-weight: 400;
