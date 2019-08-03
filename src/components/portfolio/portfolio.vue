@@ -1,5 +1,8 @@
 <template>
   <div class="portfolioPage">
+    <div class="funds-div">
+      <h3>Funds: {{this.funds}}</h3>
+    </div>
     <div class="column">
       <!-- <transition-group tag="div" name="portfolio"> -->
       <app-stock
@@ -28,7 +31,8 @@ const FieldValue = require("firebase").firestore.FieldValue;
 export default {
   data() {
     return {
-      portfolio: []
+      portfolio: [],
+      funds: 0
     };
   },
 
@@ -56,25 +60,40 @@ export default {
         //console.log(this.portfolio);
       }
     });
-    console.log("PORTFOLIO");
-    console.log(this.portfolio);
+
+    stockRef.get().then(doc => {
+      if (doc.exists) {
+        console.log("funds exists on created");
+        //var arr = Object.values(doc.data().stock);
+        this.funds = doc.data().Funds;
+        console.log(this.funds);
+        //console.log("portfolio");
+        //console.log(this.portfolio);
+      }
+    });
   },
   methods: {
-    deleteThisStock: function(index) {
+    deleteThisStock: function(payload) {
       console.log("DELETE STOCK");
+      let index = payload.index;
       this.portfolio.splice(index, 1);
-      console.log(this.portfolio);
+      console.log(payload);
+      this.funds += payload.sellingPrice;
     },
     updateStock: function(order) {
       console.log("UPDATE STOCK");
       console.log(order.name);
       for (var i = 0; i < this.portfolio.length; i++) {
-        console.log(this.portfolio[i].name);
         if (this.portfolio[i].name === order.name) {
-          this.portfolio[i].quanity = order.quantity;
+          this.portfolio[i].quantity = order.quantity;
+          console.log("found");
           console.log(this.portfolio[i]);
         }
       }
+      console.log(order.sellingPrice);
+      let funds = this.funds;
+      this.funds += order.sellingPrice;
+      console.log(this.funds);
     }
   }
 };
@@ -85,8 +104,13 @@ export default {
 .portfolioPage {
   top: 60px;
 }
+
+/* .funds-div {
+  position: absolute;
+  left: 80px;
+} */
 .column {
-  background-color: blue;
+  /* background-color: blue; */
 }
 
 .stock-enter-active,

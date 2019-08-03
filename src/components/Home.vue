@@ -264,16 +264,18 @@ export default {
       //Getting time series data
       axios
         .get(
-          `https://cloud.iexapis.com/stable/stock/${encodeURIComponent(
-            term
-          )}/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
+          `https://cloud.iexapis.com/stable/stock//time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
         )
         .then(res => {
           this.timeSeriesData = res.data;
           //this.canvasData.labels = res.data;
-          for(var i = 0; i < this.timeSeriesData.length; i ++){
-            this.canvasData.data.labels.push(new Date (this.timeSeriesData[i].date))
-            this.canvasData.data.datasets[0].data.push(this.timeSeriesData[i].close);
+          for (var i = 0; i < this.timeSeriesData.length; i++) {
+            this.canvasData.data.labels.push(
+              new Date(this.timeSeriesData[i].date)
+            );
+            this.canvasData.data.datasets[0].data.push(
+              this.timeSeriesData[i].close
+            );
           }
           console.log(this.canvasData.data.labels);
           console.log(this.canvasData.data.datasets[0].data);
@@ -393,7 +395,7 @@ export default {
         options: chartData.options
       });
       this.canvasCreated = true;
-    }
+    },
 
     //console.log("ctx" + myChart);
     // var ctx = document.getElementById("myChart").getContext("2d");
@@ -404,12 +406,13 @@ export default {
     //   options: chartData.options
     // });
     // this.canvasCreated = true;
-  },
-
-  resetError() {
-    this.error = false;
-    this.noResults = fasle;
+    resetError() {
+      console.log("reset");
+      this.error = false;
+      this.noResults = fasle;
+    }
   }
+
   // }
 };
 </script>

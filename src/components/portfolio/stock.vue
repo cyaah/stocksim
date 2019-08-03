@@ -66,10 +66,10 @@ export default {
       .then(con => {
         let q = this.stock.quantity;
         this.dbQuantity += q;
-        console.log(this.stock.name);
-        console.log("db");
-        console.log(this.dbQuantity);
-        console.log(this.stock.quantity);
+        // console.log(this.stock.name);
+        // console.log("db");
+        // console.log(this.dbQuantity);
+        // console.log(this.stock.quantity);
       });
   },
   methods: {
@@ -82,18 +82,18 @@ export default {
           `https://cloud.iexapis.com/stable/stock/AAPL/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
         )
         .then(res => {
-          console.log("timeseries");
-          console.log(res);
+          // console.log("timeseries");
+          // console.log(res);
         });
     },
     sellStock() {
-      console.log("sell button pressed");
+      // console.log("sell button pressed");
       //console.log(this.portfolio);
 
       //Building the order
-      const order = {
+      var order = {
         name: this.stock.name,
-        price: this.stock.price,
+        price: parseFloat(this.stock.price).toFixed(2),
         quantity: parseInt(this.quantity)
       };
       var stockRef = db.collection("test-user").doc("Portfolio");
@@ -101,10 +101,17 @@ export default {
       //Retrieving stock info from firebase
       stockRef.get().then(doc => {
         var currentStock = doc.data().stock[this.stockInfo.symbol];
-
+        var funds = doc.data().Funds;
         var quan = parseInt(currentStock.quantity) - parseInt(order.quantity);
-        console.log(quan);
-        console.log("quan");
+        console.log(parseInt(funds) + 70);
+        var sellingPrice =
+          parseFloat(this.stock.price).toFixed(2) * parseInt(order.quantity);
+        var newFunds = parseFloat(funds) + sellingPrice;
+
+        var increaseBy = firebase.firestore.FieldValue.increment(sellingPrice);
+
+        stockRef.update({ Funds: increaseBy });
+
         if (currentStock) {
           if (quan <= 0) {
             let name = currentStock.name;
@@ -118,24 +125,28 @@ export default {
             // var update = {};
             // update[`stock.${name}`] = newOrder;
             //  stockRef.update(update);
-            console.log("check delete");
-            console.log("index" + this.index);
-            this.$emit("deleteStock", this.index);
+            // console.log("check delete");
+            // console.log("index" + this.index);
+            var payload = {
+              index: this.index,
+              sellingPrice: sellingPrice
+            };
+            this.$emit("deleteStock", payload);
           } else {
-            console.log("ELSE");
+            // console.log("ELSE");
             //Fix currently completely wiping db
-            const order = {
+            order = {
               name: this.stock.name,
               price: this.stock.price,
               quantity: quan
             };
 
-            //Updating firestore with the change in quanity
+            //Updating firestore with the change in quantity
             var update = {};
             update[`stock.${this.stock.name}`] = order;
             // stockRef.update({stock: {[order.name]: {[order.name.quantity] : decrement}})
             stockRef.update(update);
-
+            order.sellingPrice = sellingPrice;
             this.$emit("updateStock", order);
 
             this.dbQuantity = quan;
