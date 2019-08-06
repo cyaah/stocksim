@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <div class="funds-div">
+      <h3>Funds: {{this.funds}}</h3>
+    </div>
     <div class="search-box">
       <div class="input-groupmb-3">
         <input
@@ -32,7 +35,7 @@
           </div>
         </div>
         <div class="card-info-left">
-          <h3 class="card-info">{{this.results[0]['symbol']}}</h3>
+          <h4 class="card-info">{{this.results[0]['symbol']}}</h4>
           <p class="card-info">Price: ${{this.results[0]['latestPrice']}}</p>
           <p class="card-info">Open: {{this.results[0]['open']}}</p>
           <p class="card-info">High: {{this.results[0]['high']}}</p>
@@ -151,6 +154,7 @@ export default {
     return {
       myChart: null,
       searchTerm: "",
+      funds: 0,
       results: [],
       noResults: false,
       notSearched: true,
@@ -210,16 +214,26 @@ export default {
       }
     };
   },
-
+  created() {
+    var stockRef = db.collection("test-user").doc("Portfolio");
+    stockRef.get().then(doc => {
+      if (doc.exists) {
+        console.log("funds exists on created");
+        //var arr = Object.values(doc.data().stock);
+        this.funds = doc.data().Funds;
+        console.log(this.funds);
+        //console.log("portfolio");
+        //console.log(this.portfolio);
+      }
+    });
+  },
   methods: {
     canvas() {
-      console.log("canvas");
       this.createChart("Intra Day Chart", this.canvasData);
     },
     search: function() {
       var term = this.searchTerm;
       if (this.myChart != null) {
-        console.log("checking if chart is null");
         this.myChart.destroy();
         this.canvasData.data.datasets[0].data = [];
         console.log(this.myChart);
@@ -264,9 +278,12 @@ export default {
       //Getting time series data
       axios
         .get(
-          `https://cloud.iexapis.com/stable/stock//time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
+          `https://cloud.iexapis.com/stable/stock/${encodeURIComponent(
+            term
+          )}/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
         )
         .then(res => {
+          console.log("TIME SERIES");
           this.timeSeriesData = res.data;
           //this.canvasData.labels = res.data;
           for (var i = 0; i < this.timeSeriesData.length; i++) {
@@ -321,6 +338,7 @@ export default {
         console.log("doc does not exist");
         console.log(doc.data().stock);
         var currentStock = doc.data().stock;
+        var funds = doc.data().Funds;
         //var currentStock = doc.data()[order.name];
         console.log("stockdoes not exist");
         console.log(currentStock);
@@ -338,8 +356,7 @@ export default {
         } else {
           console.log("else");
           console.log(currentStock[order.name]);
-          console.log("order");
-          console.log(order);
+
           var quantity =
             parseInt(currentStock[order.name].quantity) +
             parseInt(order.quantity);
@@ -351,8 +368,6 @@ export default {
           var average =
             parseFloat(totalPrice).toFixed(2) / parseInt(quantity).toFixed(2);
           var name = currentStock[order.name].name;
-          console.log(quantity);
-          console.log(average);
 
           var newOrder = {
             name: name,
@@ -365,6 +380,16 @@ export default {
           console.log(newOrder);
           stockRef.update(update);
         }
+        console.log("order");
+        console.log(order.price);
+        var buyingPrice =
+          parseFloat(order.price).toFixed(2) * parseInt(order.quantity) * -1;
+        var newFunds = parseFloat(this.funds) + buyingPrice;
+        console.log(newFunds);
+        console.log(buyingPrice);
+        var decreseBy = firebase.firestore.FieldValue.increment(buyingPrice);
+        stockRef.update({ Funds: decreseBy });
+        this.funds += buyingPrice;
       });
 
       this.$store.dispatch("buyStock", order);
@@ -424,6 +449,11 @@ export default {
   margin: 210px auto;
 
   background: #e5e5e517;
+}
+.funds-div {
+  position: absolute;
+  left: 90%;
+  top: 40px;
 }
 .search-box {
   position: absolute;

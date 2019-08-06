@@ -105,10 +105,10 @@ export default {
   top: 60px;
 }
 
-/* .funds-div {
+.funds-div {
   position: absolute;
-  left: 80px;
-} */
+  left: 90%;
+}
 .column {
   /* background-color: blue; */
 }
