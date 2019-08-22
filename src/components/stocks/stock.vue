@@ -11,18 +11,17 @@
           <p class="card-text">High: ${{stock['03. high']}}</p>
           <p class="card-text">Low: ${{stock['04. low']}}</p>
           <p class="card-text">Prev Close: ${{stock['08. previous close']}}</p>
-          <div class="input-group mb-3"> -->
-            <input
-              type="number"
-              v-model="quantity"
-              class="form-control"
-              placeholder="Enter Quantity"
-              aria-describedby="basic-addon2"
-            >
-            <!-- <div class="input-group-append">
+          <div class="input-group mb-3">-->
+          <input
+            type="number"
+            v-model="quantity"
+            class="form-control"
+            placeholder="Enter Quantity"
+            aria-describedby="basic-addon2"
+          />
+          <!-- <div class="input-group-append">
               <button @click="buyStock">Buy</button>
-            </div> -->
-          </div>
+          </div>-->
         </div>
       </div>
     </div>
@@ -36,7 +35,7 @@
 <script>
 export default {
   props: {
-      stock: Object
+    stock: Object
   },
 
   data() {

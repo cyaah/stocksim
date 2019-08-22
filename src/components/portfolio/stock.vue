@@ -13,7 +13,13 @@
         <!-- <p class="card-text">Quantity: {{stock}} Price: {{stock}</p> -->
         <!-- {{stock}} -->
         <div class="input-group mb-3">
-          <input type="number" class="form-control" placeholder="Enter Quantity" v-model="quantity" />
+          <input
+            type="number"
+            class="form-control"
+            placeholder="Enter Quantity"
+            v-model="quantity"
+            min="1"
+          />
           <div class="input-group-append">
             <button class="btn btn-outline-success" @click="sellStock">Sell</button>
           </div>

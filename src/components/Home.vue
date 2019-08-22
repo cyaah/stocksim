@@ -380,16 +380,19 @@ export default {
           console.log(newOrder);
           stockRef.update(update);
         }
-        console.log("order");
-        console.log(order.price);
+
         var buyingPrice =
           parseFloat(order.price).toFixed(2) * parseInt(order.quantity) * -1;
-        var newFunds = parseFloat(this.funds) + buyingPrice;
-        console.log(newFunds);
+        var newFunds = this.funds + buyingPrice;
+        console.log("order");
         console.log(buyingPrice);
-        var decreseBy = firebase.firestore.FieldValue.increment(buyingPrice);
-        stockRef.update({ Funds: decreseBy });
-        this.funds += buyingPrice;
+        console.log(newFunds);
+        if (buyingPrice > this.funds) {
+        } else {
+          var decreseBy = firebase.firestore.FieldValue.increment(buyingPrice);
+          stockRef.update({ Funds: decreseBy });
+          this.funds += buyingPrice;
+        }
       });
 
       this.$store.dispatch("buyStock", order);
