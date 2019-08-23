@@ -134,6 +134,12 @@
         </div>
       </div>
     </div>
+    <div>
+      <button @click="logout" class="logout">Logout</button>
+    </div>
+    <div>
+      <button @click="check" class="logout">Check</button>
+    </div>
   </div>
 </template>
 
@@ -153,6 +159,7 @@ export default {
   data() {
     return {
       myChart: null,
+      currentUser: null,
       searchTerm: "",
       funds: 0,
       results: [],
@@ -438,7 +445,44 @@ export default {
       console.log("reset");
       this.error = false;
       this.noResults = fasle;
+    },
+    logout() {
+      console.log("sign out");
+      firebase
+        .auth()
+        .signOut()
+        .then(resp => {
+          console.log("ssss");
+          console.log(resp);
+        });
+    },
+    check() {
+      // firebase.auth().onAuthStateChanged(function(user) {
+      //   if (user) {
+      //     // User is signed in.
+      //     console.log(user)
+      //   } else {
+      //     // No user is signed in.
+      //     console.log('not logged in')
+      //   }
+      // });
+      var user = firebase.auth().currentUser;
+      if (user) {
+        // User is signed in.
+        console.log(user);
+        console.log('signed in')
+      } else {
+        // No user is signed in.
+        console.log('signed out')
+        console.log(user);
+      }
     }
+  },
+  mounted() {
+    let user = firebase.auth().currentUser;
+    this.currentUser = user;
+    console.log(user.uid);
+    console.log("acb");
   }
 
   // }

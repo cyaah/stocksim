@@ -15,10 +15,7 @@
       <!-- </li> -->
       <!-- </ul> -->
 
-      <!-- <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
-      <button @searchStock class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form>-->
+      
     </nav>
   </div>
 </template>
@@ -48,11 +45,9 @@ export default {
 </script>
 
 <style>
-  .navbarHeader{
-    height:40px;
-  }
-
-
+.navbarHeader {
+  height: 40px;
+}
 
 .navbar-navbar-dark-bg-transparent {
   margin-right: 25px;
@@ -60,7 +55,6 @@ export default {
   font-family: "Roboto";
   display: block;
   background-color: black;
-
 
   /* color: #e5e5e5; */
 }
@@ -87,5 +81,9 @@ export default {
   font-weight: 500;
   letter-spacing: 1.5px;
   font-size: 20px;
+}
+
+.logout {
+  left: 50px;
 }
 </style>
