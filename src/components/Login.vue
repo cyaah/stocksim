@@ -51,7 +51,7 @@ export default {
 
   methods: {
     loginUser() {
-      
+
       console.log("asd");
       console.log(this.email);
       firebase
@@ -66,6 +66,10 @@ export default {
         }).catch(err => {
           console.log(err)
         })
+      if(isLocalStorage()){
+        console.log(isLocalStorage)  ;
+      }
+
     }
   }
 };

@@ -444,7 +444,7 @@ export default {
     resetError() {
       console.log("reset");
       this.error = false;
-      this.noResults = fasle;
+      this.noResults = false;
     },
     logout() {
       console.log("sign out");
@@ -479,10 +479,10 @@ export default {
     }
   },
   mounted() {
-    let user = firebase.auth().currentUser;
+    let user = firebase.auth().currentUser;//checking to see who the user is if logged in
     this.currentUser = user;
-    console.log(user.uid);
-    console.log("acb");
+    console.log(user);
+    console.log("who is user");
   }
 
   // }

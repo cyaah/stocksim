@@ -6,7 +6,12 @@ import Register from './components/Register.vue';
 
 
 
-export const routes = [{
+export const routes = [
+    {
+        path: '/login',
+        component: Login
+    },
+    {
         path: '/',
         component: Home
     },
@@ -17,10 +22,6 @@ export const routes = [{
     {
         path: '/stocks',
         component: Stocks
-    },
-    {
-        path: '/login',
-        component: Login
     },
     {
         path: '/Register',
