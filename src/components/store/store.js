@@ -18,7 +18,7 @@ Vue.use(VueAxios, axios);
 //     }
 // })
 
-export const store = new Vuex.Store({
+export  const store = new Vuex.Store({
     state: {
         funds: 100000000,
         stocks: [],

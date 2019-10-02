@@ -25,7 +25,9 @@
           />
         </div>
         <button @click.prevent="loginUser" class="btn btn-primary">Login</button>
+        <!-- <button class="btn btn-primary" >Register</button> -->
       </form>
+      <router-link class="registerLink" to="/register">Register</router-link>
     </div>
   </div>
 </template>
@@ -39,10 +41,8 @@ import firebase from "firebase";
 import firestore from "firebase";
 import { isError } from "util";
 const FieldValue = require("firebase").firestore.FieldValue;
-import { mapActions } from 'vuex';
-import { store } from './store/store.js'
-
-
+import { mapActions } from "vuex";
+import { store } from "./store/store.js";
 
 export default {
   data() {
@@ -63,13 +63,16 @@ export default {
         .then(cred => {
           console.log("login");
           console.log(cred);
-          this.$store.commit('LOGIN')
-        }).then( res => {
-          console.log(this.email)
-          console.log('email')
-        }).catch(err => {
-          console.log(err)
+          this.$store.commit("LOGIN");
         })
+        .then(res => {
+          console.log(this.email);
+          console.log("email");
+          this.$router.push({ path: '/' })
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };

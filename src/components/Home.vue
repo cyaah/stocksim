@@ -316,7 +316,7 @@ export default {
         }
         return true;
       };
-      console.log("timeseries123");
+      //console.log("timeseries123");
       this.term = "";
       this.noResults = false;
       this.searchTerm = "";
@@ -454,6 +454,8 @@ export default {
         .then(resp => {
           console.log("ssss");
           console.log(resp);
+          this.$router.push({ path: '/login' })
+
         });
     },
     check() {

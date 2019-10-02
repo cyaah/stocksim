@@ -3,23 +3,27 @@ import Portfolio from './components/portfolio/portfolio.vue';
 import Stocks from './components/stocks/stocks.vue';
 import Login from './components/Login.vue';
 import Register from './components/Register.vue';
-import { store } from './components/store/store.js';
+import {
+    store
+}
+from './components/store/store.js';
 
 
 
 export const routes = [{
-        path: '/home',
+        path: '/',
         component: Home,
         beforeEnter: (to, from, next) => {
-            if(!this.store.state.loggedIn){
+            console.log(store.state.loggedIn === true)
+            if (store.state.loggedIn) {
                 console.log("vue navguard")
                 console.log(store.state.loggedIn)
-                next('/login')
-            } else 
-            {
                 next()
+            } else {
+                console.log('not logged in')
+                next('/login')
             }
-          }
+        }
     },
     {
         path: '/portfolio',
@@ -32,19 +36,18 @@ export const routes = [{
     {
         path: '/login',
         component: Login,
-        beforeEnter: (to, from, next) => {
-            console.log(store.state.loggedIn)
-            console.log("navguard logged in")
-            if(store.state.loggedIn){
-                console.log(store.state.loggedIn)
-                next('/home')
-            } else {
-                next()
-            }
-        }
+        //beforeEnter: (to, from, next) => {
+           // console.log("navguard logged in")
+            // if(store.state.loggedIn){
+            //     console.log(store.state.loggedIn)
+            //     next('/')
+            // } else {
+            //     next('/login')
+            // }
+        //}
     },
     {
-        path: '/Register',
+        path: '/register',
         component: Register
     }
 ];
