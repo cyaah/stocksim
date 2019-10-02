@@ -1,6 +1,9 @@
 const state = {
     funds: 100000000,
-    stocks: []
+    stocks: [],
+    accessToken: null,
+    loggedIn: false,
+    loginError: null
 };
 
 const mutations = {
@@ -56,11 +59,21 @@ const mutations = {
         state.funds += price * quantity;
         console.log(state.stocks);
     },
+    'LOGIN' (accessToken) {
+        console.log("LOGIN_1_")
+        state.loggedIn = true,
+        state.accessToken = accessToken;
+    },
+    'LOGOUT' (){
+        state.loggedIn = false
+    }
 
 };
 
 const actions = {
-
+    doLogin({ commit }, loginData) {
+        commit('LOGIN')
+    }
 };
 
 const getters = {
