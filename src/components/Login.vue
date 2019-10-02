@@ -39,6 +39,10 @@ import firebase from "firebase";
 import firestore from "firebase";
 import { isError } from "util";
 const FieldValue = require("firebase").firestore.FieldValue;
+import { mapActions } from 'vuex';
+import { store } from './store/store.js'
+
+
 
 export default {
   data() {
@@ -51,7 +55,6 @@ export default {
 
   methods: {
     loginUser() {
-      
       console.log("asd");
       console.log(this.email);
       firebase
@@ -60,6 +63,7 @@ export default {
         .then(cred => {
           console.log("login");
           console.log(cred);
+          this.$store.commit('LOGIN')
         }).then( res => {
           console.log(this.email)
           console.log('email')

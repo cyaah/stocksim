@@ -153,6 +153,7 @@ import firestore from "firebase";
 import { isError } from "util";
 const FieldValue = require("firebase").firestore.FieldValue;
 
+
 var myChart;
 
 export default {
@@ -245,7 +246,6 @@ export default {
         this.canvasData.data.datasets[0].data = [];
         console.log(this.myChart);
       }
-
       //Getting stock price info
       axios
         .get(

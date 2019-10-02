@@ -1,18 +1,21 @@
 import Vue from 'vue'
-
+import Vuex from 'vuex'
 import App from './App.vue'
 import firebase from 'firebase';
 import VueRouter from 'vue-router';
 import {
   routes
 } from './routes';
-import store from './components/store/store';
-//import Vuetify from 'vuetify';
-//import 'vuetify/dist/vuetify.min.css' 
+//import store from './components/store/store';
+import { store } from './components/store/store.js';
+
+
+
+
 
 
 Vue.use(VueRouter);
-//Vue.use(Vuetify);
+Vue.use(Vuex);
 
 
 Vue.config.productionTip = false;
@@ -36,6 +39,8 @@ export const db = firebase.firestore();
 
 
 
+
+
 const router = new VueRouter({
   mode: 'history',
   routes
@@ -46,5 +51,5 @@ new Vue({
   router,
   store,
   render: h => h(App),
- 
+    
 })
