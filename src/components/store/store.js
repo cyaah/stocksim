@@ -70,7 +70,7 @@ export  const store = new Vuex.Store({
                 //element.name === name
                 console.log(name);
                 console.log(element.name);
-                
+
                 return element.name === name
             });
             console.log("=+=");
@@ -89,7 +89,8 @@ export  const store = new Vuex.Store({
             this.state.accessToken = accessToken;
         },
         LOGOUT() {
-            state.loggedIn = false
+            console.log('store logout');
+            this.state.loggedIn = false
         }
     },
     actions : {
@@ -97,6 +98,15 @@ export  const store = new Vuex.Store({
             commit
         }, loginData) {
             commit('LOGIN')
+        },
+        doLogout({
+            commit}) {
+          ('LOGOUT')
+        }
+    },
+    getters: {
+        CHECKLOGIN: state => {
+            return state.loggedIn
         }
     }
 })

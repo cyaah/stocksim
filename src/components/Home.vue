@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="funds-div">
-      <h3>Funds: {{this.funds}}</h3>
+      <p>Funds: {{this.funds}}</p>
     </div>
     <div class="search-box">
       <div class="input-groupmb-3">
@@ -134,12 +134,9 @@
         </div>
       </div>
     </div>
-    <div>
-      <button @click="logout" class="logout">Logout</button>
-    </div>
-    <div>
-      <button @click="check" class="logout">Check</button>
-    </div>
+    <!--<div>-->
+      <!--<button @click="check" class="logout">Check</button>-->
+    <!--</div>-->
   </div>
 </template>
 
@@ -163,6 +160,7 @@ export default {
       currentUser: null,
       searchTerm: "",
       funds: 0,
+      id: '',
       results: [],
       noResults: false,
       notSearched: true,
@@ -223,7 +221,14 @@ export default {
     };
   },
   created() {
-    var stockRef = db.collection("test-user").doc("Portfolio");
+    let user = firebase.auth().currentUser;//checking to see who the user is if logged in
+    this.currentUser = user;
+    this.id = user.uid;
+    console.log(user);
+    console.log("who is user");
+    console.log(this.id);
+    console.log('ID');
+    var stockRef = db.collection(this.id).doc("Portfolio");
     stockRef.get().then(doc => {
       if (doc.exists) {
         console.log("funds exists on created");
@@ -446,18 +451,6 @@ export default {
       this.error = false;
       this.noResults = false;
     },
-    logout() {
-      console.log("sign out");
-      firebase
-        .auth()
-        .signOut()
-        .then(resp => {
-          console.log("ssss");
-          console.log(resp);
-          this.$router.push({ path: '/login' })
-
-        });
-    },
     check() {
       // firebase.auth().onAuthStateChanged(function(user) {
       //   if (user) {
@@ -481,10 +474,7 @@ export default {
     }
   },
   mounted() {
-    let user = firebase.auth().currentUser;//checking to see who the user is if logged in
-    this.currentUser = user;
-    console.log(user);
-    console.log("who is user");
+
   }
 
   // }

@@ -1,7 +1,7 @@
 <template>
   <div class="navbarHeader">
     <nav class="navbar-navbar-dark-bg-transparent">
-      <router-link class="homeLink" to="/">Home</router-link>
+      <router-link class="homeLink" to="/">Dashboard</router-link>
       <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
       </button>-->
@@ -14,19 +14,29 @@
       <router-link to="/portfolio" class="nav-link">Portfolio</router-link>
       <!-- </li> -->
       <!-- </ul> -->
-
-      
+      <!--<div>-->
+       <!--<button @click="logout" >Logout</button>-->
+      <div v-if="CHECKLOGIN === true">
+      <a class = "logout" @click.prevent="logout">Logout</a>
+      <!--</div>-->
+        <!--<router-link to="/login" @click.prevent="logout" class="logout">Logout</router-link>-->
+      </div>
     </nav>
   </div>
 </template>
 
 <script>
 import { mapActions } from "vuex";
+import {mapGetters} from 'vuex';
+import firebase from "firebase";
+import firestore from "firebase";
+import { store } from "./store/store.js";
 
 export default {
   data() {
     return {
-      searchSymbol: ""
+      searchSymbol: "",
+      loggedIn: false
     };
   },
 
@@ -36,10 +46,32 @@ export default {
     }),
     loadData() {
       this.fetchData();
-    }
+    },
+    logout() {
+      console.log("sign out");
+      firebase
+        .auth()
+        .signOut()
+        .then(resp => {
+          console.log("ssss");
+          this.$store.commit('LOGOUT')
+
+
+        }).then(() => {
+          console.log('then');
+          this.$router.push({ path: '/login' })
+
+      });
+    },
   },
-  searchStock() {
-    this.$store.dispatch("searchStock", order);
+  computed: {
+      ...mapGetters(['CHECKLOGIN'])
+  },
+  beforeMount:function (){
+    console.log("before")
+
+  // searchStock() {
+    //this.$store.dispatch("searchStock", order);
   }
 };
 </script>
@@ -54,7 +86,7 @@ export default {
   margin-left: 25px;
   font-family: "Roboto";
   display: block;
-  background-color: black;
+  /*background-color: black;*/
 
   /* color: #e5e5e5; */
 }
@@ -76,7 +108,7 @@ export default {
   top: 3px;
   display: block;
   position: absolute;
-  left: 80px;
+  left: 130px;
   color: black;
   font-weight: 500;
   letter-spacing: 1.5px;
@@ -84,6 +116,12 @@ export default {
 }
 
 .logout {
-  left: 50px;
+  top: 10px;
+  position: absolute;
+  color: black;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  font-size: 20px;
+  right: 50px;
 }
 </style>
