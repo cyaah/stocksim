@@ -68,7 +68,7 @@ export default {
         .then(res => {
           console.log(this.email);
           console.log("email");
-          this.$router.push({ path: '/' })
+          this.$router.push({ path: "/" });
         })
         .catch(err => {
           console.log(err);
@@ -91,5 +91,8 @@ body {
   width: 35%;
   top: 20%;
   left: 80px;
+}
+.form-control {
+  width: 60%;
 }
 </style>

@@ -22,11 +22,12 @@
         <span class="primary-header">TRADE STOCKS</span>
       </h1>
     </div>
-    <div class="search-results">
+    <stockCard :results="results" v-if="this.results" > </stockCard>
+    <!-- <div class="search-results">
       <div class="card-body-stock" v-if="results.length > 0">
-        <!-- <div id="chart-container">
+        <div id="chart-container">
         <canvas id="myChart" width="300px" height="300px"></canvas>
-        </div>-->
+        </div>
         <div class="card" style="width: 38rem;">
           <div class="card-body">
             <div id="chart-container">
@@ -46,9 +47,9 @@
           <p>Previous close: {{this.results[0]['previousClose']}}</p>
           <p>Change: {{this.results[0]['change']}}</p>
           <p>Change%: {{this.results[0]['changePercent']}}</p>
-        </div>
+        </div> -->
         <!-- bug- Input allows the enter of 'e' when only shouldbe number. Result in empty string quantity-->
-        <input
+        <!-- <input
           v-on:keyup.enter="buyStock"
           type="number"
           class="form-control"
@@ -61,8 +62,8 @@
         <div class="input-group-append">
           <button class="btn btn-outline-success" @click="buyStock">Buy</button>
         </div>
-      </div>
-    </div>
+      </div> -->
+    <!-- </div> -->
     <div
       v-if="noResults"
       class="modalfade"
@@ -144,6 +145,7 @@
 import axios from "axios";
 import Chart from "chart.js";
 import planetChartData from "./chart-data.js";
+import stockCard from "./stockCard";
 import { db, increment } from "../main.js";
 import firebase from "firebase";
 import firestore from "firebase";
@@ -224,17 +226,17 @@ export default {
     let user = firebase.auth().currentUser;//checking to see who the user is if logged in
     this.currentUser = user;
     this.id = user.uid;
-    console.log(user);
-    console.log("who is user");
-    console.log(this.id);
-    console.log('ID');
+    // console.log(user);
+    // console.log("who is user");
+    // console.log(this.id);
+    // console.log('ID');
     var stockRef = db.collection(this.id).doc("Portfolio");
     stockRef.get().then(doc => {
       if (doc.exists) {
-        console.log("funds exists on created");
+        //console.log("funds exists on created");
         //var arr = Object.values(doc.data().stock);
         this.funds = doc.data().Funds;
-        console.log(this.funds);
+        //console.log(this.funds);
         //console.log("portfolio");
         //console.log(this.portfolio);
       }
@@ -414,7 +416,6 @@ export default {
       console.log("chartData" + chartData);
 
       if (myChart) {
-        console.log("09");
         document.getElementById("myChart").remove();
         console.log(document.getElementById("myChart"));
         let canvas = document.createElement("canvas");
@@ -475,8 +476,10 @@ export default {
   },
   mounted() {
 
+  },
+components: {
+    stockCard
   }
-
   // }
 };
 </script>
@@ -547,9 +550,9 @@ input-group {
   letter-spacing: 4px;
   font-weight: 400;
 }
-.card-body-stock {
+/* .card-body-stock { */
   /* width: 60%; */
-  width: 30rem;
+  /* width: 40rem;
   height: 20rem;
   box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5);
   font-family: "Roboto", sans-serif;
@@ -557,8 +560,8 @@ input-group {
   border: black;
   position: absolute;
   top: 200px;
-  left: 15px;
-}
+  left: 15px; */
+/* } */
 
 .card-info-left {
   position: relative;
