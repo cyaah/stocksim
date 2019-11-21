@@ -45,6 +45,11 @@
   </div>
 </template>
 <script>
+import {mapGetters} from 'vuex';
+import { db, increment } from "../main.js";
+import firebase from "firebase";
+import firestore from "firebase";
+
 export default {
   props: ["results"],
   data() {
@@ -53,7 +58,7 @@ export default {
       currentUser: null,
       searchTerm: "",
       funds: 0,
-      id: "",
+      userId: "",
       //results: [],
       noResults: false,
       notSearched: true,
@@ -113,9 +118,99 @@ export default {
       }
     };
   },
+  methods:{
+    
+    buyStock() {
+      console.log("stock buy button");
+      console.log(this.userId)
+      var order = {
+        name: this.results[0]["symbol"],
+        price: parseFloat(this.results[0]["latestPrice"]).toFixed(2),
+        quantity: parseInt(this.quantity)
+      };
+
+      //console.log("order" + order);
+
+      //var quan = parseInt(order.quantity, 10);
+      //var increment = firebase.firestore.FieldValue.increment(quan);
+      var stockRef = db.collection(this.userId).doc("Portfolio");
+      var name = order.name;
+      console.log("order");
+      console.log(order);
+      stockRef.get().then(doc => {
+        console.log("doc does not exist");
+        console.log(doc.data().stock);
+        var currentStock = doc.data().stock;
+        var funds = doc.data().Funds;
+        //var currentStock = doc.data()[order.name];
+        console.log("stockdoes not exist");
+        console.log(currentStock);
+        //Creating new stock
+        if (!currentStock[order.name] && !Object.keys({}).length) {
+          console.log("inside if");
+          stockRef
+            .set({ stock: { [order.name]: order } }, { merge: true })
+            //Tried to change db scheme but this only make it into an array by default. Look into inserting straight object instead of object
+            //.set({[order.name]: [order]},  { merge: true })
+            .then(resp => {
+              console.log("New stock added");
+              //stockRef.FieldValue('stock').add({ [order.name]: order})
+            });
+        } else {
+          console.log("else");
+          console.log(currentStock[order.name]);
+
+          var quantity =
+            parseInt(currentStock[order.name].quantity) +
+            parseInt(order.quantity);
+
+          var totalPrice =
+            parseFloat(currentStock[order.name].quantity).toFixed(2) *
+              parseFloat(currentStock[order.name].price).toFixed(2) +
+            parseInt(order.quantity) * parseInt(order.price);
+          var average =
+            parseFloat(totalPrice).toFixed(2) / parseInt(quantity).toFixed(2);
+          var name = currentStock[order.name].name;
+
+          var newOrder = {
+            name: name,
+            price: average,
+            quantity: quantity
+          };
+          var update = {};
+          update[`stock.${name}`] = newOrder;
+          console.log("does exist");
+          console.log(newOrder);
+          stockRef.update(update);
+        }
+
+        var buyingPrice =
+          parseFloat(order.price).toFixed(2) * parseInt(order.quantity) * -1;
+        var newFunds = this.funds + buyingPrice;
+        console.log("order");
+        console.log(buyingPrice);
+        console.log(newFunds);
+        if (buyingPrice > this.funds) {
+        } else {
+          var decreseBy = firebase.firestore.FieldValue.increment(buyingPrice);
+          stockRef.update({ Funds: decreseBy });
+          this.funds += buyingPrice;
+        }
+      });
+
+      this.$store.dispatch("buyStock", order);
+      this.quantity = 0;
+    },
+  },
+  computed: {
+      userId (){
+        return this.$store.state.user_id
+      }
+  },
   mounted() {
     console.log("resultsxoxo");
-    console.log(results);
+    console.log(this.$store.getters.GETUSERID);
+    this.userId = this.$store.getters.GETUSERID;
   }
 };
 </script>

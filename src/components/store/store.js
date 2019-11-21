@@ -20,9 +20,10 @@ Vue.use(VueAxios, axios);
 
 export  const store = new Vuex.Store({
     state: {
-        funds: 100000000,
+        funds: '',
         stocks: [],
         accessToken: null,
+        user_id: '',
         loggedIn: false,
         loginError: null
     },
@@ -83,10 +84,13 @@ export  const store = new Vuex.Store({
             state.funds += price * quantity;
             console.log(state.stocks);
         },
-        LOGIN(accessToken) {
-            console.log("LOGIN_1_")
+        LOGIN(accessToken, user) {
+            console.log("LOGIN_202022")
+            
             this.state.loggedIn = true,
             this.state.accessToken = accessToken;
+            this.state.user_id = user.uid
+            console.log(this.state.user_id)
         },
         LOGOUT() {
             console.log('store logout');
@@ -107,6 +111,11 @@ export  const store = new Vuex.Store({
     getters: {
         CHECKLOGIN: state => {
             return state.loggedIn
+        },
+        
+        GETUSERID: state => {
+            return state.user_id
         }
+
     }
 })

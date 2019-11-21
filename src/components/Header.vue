@@ -53,12 +53,12 @@ export default {
         .auth()
         .signOut()
         .then(resp => {
-          console.log("ssss");
+          // console.log("ssss");
           this.$store.commit('LOGOUT')
 
 
         }).then(() => {
-          console.log('then');
+          // console.log('then');
           this.$router.push({ path: '/login' })
 
       });

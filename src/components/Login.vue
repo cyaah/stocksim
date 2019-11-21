@@ -63,7 +63,7 @@ export default {
         .then(cred => {
           console.log("login");
           console.log(cred);
-          this.$store.commit("LOGIN");
+          this.$store.commit("LOGIN", cred.user);
         })
         .then(res => {
           console.log(this.email);
