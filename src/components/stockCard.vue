@@ -193,7 +193,7 @@ export default {
         if (buyingPrice > this.funds) {
         } else {
           var decreseBy = firebase.firestore.FieldValue.increment(buyingPrice);
-          stockRef.update({ Funds: decreseBy });
+          stockRef.update({ funds: decreseBy });
           this.funds += buyingPrice;
         }
       });

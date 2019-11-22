@@ -20,7 +20,7 @@ Vue.use(VueAxios, axios);
 
 export  const store = new Vuex.Store({
     state: {
-        funds: '',
+        funds: 0,
         stocks: [],
         accessToken: null,
         user_id: '',
@@ -86,7 +86,7 @@ export  const store = new Vuex.Store({
         },
         LOGIN(accessToken, user) {
             console.log("LOGIN_202022")
-            
+            console.log(user)
             this.state.loggedIn = true,
             this.state.accessToken = accessToken;
             this.state.user_id = user.uid
@@ -95,6 +95,9 @@ export  const store = new Vuex.Store({
         LOGOUT() {
             console.log('store logout');
             this.state.loggedIn = false
+        },
+        updateFunds (state,funds){
+            state.funds = funds;
         }
     },
     actions : {
@@ -115,6 +118,10 @@ export  const store = new Vuex.Store({
         
         GETUSERID: state => {
             return state.user_id
+        },
+
+        getUserFunds: state =>{
+            return state.funds
         }
 
     }

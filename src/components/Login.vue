@@ -68,6 +68,7 @@ export default {
         .then(res => {
           console.log(this.email);
           console.log("email");
+          //this.$store.dispatch("buyStock", order);
           this.$router.push({ path: "/" });
         })
         .catch(err => {

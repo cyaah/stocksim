@@ -160,9 +160,9 @@ export default {
       myChart: null,
       currentUser: null,
       searchTerm: "",
-      portfolio:{},
+      portfolio: {},
       funds: 0,
-      id: "",
+      userId: "",
       results: [],
       noResults: false,
       notSearched: true,
@@ -225,13 +225,15 @@ export default {
   created() {
     let user = firebase.auth().currentUser; //checking to see who the user is if logged in
     this.currentUser = user;
-    this.id = user.uid;
-    var stockRef = db.collection(this.id).doc("Portfolio");
+    let id = this.$store.getters.GETUSERID;
 
+    var stockRef = db.collection(id).doc("Portfolio");
     stockRef.get().then(doc => {
       if (doc.exists) {
+        console.log("doc");
         this.funds = doc.data().funds;
-        this.portfolio = doc.data().portfolio;
+        this.portfolio = doc.data();
+        this.$store.commit("updateFunds", this.funds);
       }
     });
   },

@@ -32,7 +32,8 @@ export default {
   data() {
     return {
       portfolio: [],
-      funds: 0
+      funds: 0,
+      userId: ""
     };
   },
 
@@ -46,7 +47,12 @@ export default {
     appStock: stock
   },
   created() {
-    var stockRef = db.collection("test-user").doc("Portfolio");
+    this.userId = this.$store.getters.GETUSERID;
+    this.funds = this.$store.getters.getUserFunds;
+    console.log('asasxxx')
+    console.log(this.funds)
+    console.log(this.$store.getters.getUserFunds)
+    var stockRef = db.collection(this.userId).doc("Portfolio");
 
     stockRef.get().then(doc => {
       if (doc.exists) {
@@ -61,16 +67,16 @@ export default {
       }
     });
 
-    stockRef.get().then(doc => {
-      if (doc.exists) {
-        console.log("funds exists on created");
-        //var arr = Object.values(doc.data().stock);
-        this.funds = doc.data().Funds;
-        console.log(this.funds);
-        //console.log("portfolio");
-        //console.log(this.portfolio);
-      }
-    });
+    // stockRef.get().then(doc => {
+    //   if (doc.exists) {
+    //     console.log("funds exists on created");
+    //     //var arr = Object.values(doc.data().stock);
+    //     this.funds = doc.data().Funds;
+    //     console.log(this.funds);
+    //     //console.log("portfolio");
+    //     //console.log(this.portfolio);
+    //   }
+    // });
   },
   methods: {
     deleteThisStock: function(payload) {

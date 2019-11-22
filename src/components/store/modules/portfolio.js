@@ -1,5 +1,5 @@
 const state = {
-    funds: 100000000,
+    funds: 0,
     stocks: [],
     accessToken: null,
     loggedIn: false,

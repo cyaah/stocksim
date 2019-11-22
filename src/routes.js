@@ -10,8 +10,7 @@ from './components/store/store.js';
 
 
 
-export const routes = [
-    {
+export const routes = [{
         path: '/login',
         component: Login
     },
@@ -32,7 +31,18 @@ export const routes = [
     },
     {
         path: '/portfolio',
-        component: Portfolio
+        component: Portfolio,
+        beforeEnter: (to, from, next) => {
+            console.log(store.state.loggedIn === true)
+            if (store.state.loggedIn) {
+                console.log("vue navguard")
+                console.log(store.state.loggedIn)
+                next()
+            } else {
+                console.log('not logged in')
+                next('/login')
+            }
+        }
     },
     {
         path: '/stocks',
@@ -42,13 +52,13 @@ export const routes = [
         path: '/login',
         component: Login,
         //beforeEnter: (to, from, next) => {
-           // console.log("navguard logged in")
-            // if(store.state.loggedIn){
-            //     console.log(store.state.loggedIn)
-            //     next('/')
-            // } else {
-            //     next('/login')
-            // }
+        // console.log("navguard logged in")
+        // if(store.state.loggedIn){
+        //     console.log(store.state.loggedIn)
+        //     next('/')
+        // } else {
+        //     next('/login')
+        // }
         //}
     },
     {
