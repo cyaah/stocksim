@@ -93,17 +93,17 @@ export default {
         });
     },
     sellStock() {
-      // console.log("sell button pressed");
-      //console.log(this.portfolio);
-
+      let userId = this.$store.getters.GETUSERID;
       //Building the order
       var order = {
         name: this.stock.name,
         price: parseFloat(this.stock.price).toFixed(2),
         quantity: parseInt(this.quantity)
       };
-      var stockRef = db.collection("test-user").doc("Portfolio");
-
+      console.log(order);
+      var stockRef = db.collection(userId).doc("Portfolio");
+      console.log("stock");
+      console.log("axaxa");
       //Retrieving stock info from firebase
       stockRef.get().then(doc => {
         var currentStock = doc.data().stock[this.stockInfo.symbol];

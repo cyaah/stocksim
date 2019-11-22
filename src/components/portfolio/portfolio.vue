@@ -49,16 +49,12 @@ export default {
   created() {
     this.userId = this.$store.getters.GETUSERID;
     this.funds = this.$store.getters.getUserFunds;
-    console.log('asasxxx')
-    console.log(this.funds)
-    console.log(this.$store.getters.getUserFunds)
     var stockRef = db.collection(this.userId).doc("Portfolio");
 
     stockRef.get().then(doc => {
       if (doc.exists) {
         //console.log("document exists on created");
         var arr = Object.values(doc.data().stock);
-
         for (var i = 0; i < arr.length; i++) {
           this.portfolio.push(arr[i]);
         }
@@ -66,17 +62,6 @@ export default {
         //console.log(this.portfolio);
       }
     });
-
-    // stockRef.get().then(doc => {
-    //   if (doc.exists) {
-    //     console.log("funds exists on created");
-    //     //var arr = Object.values(doc.data().stock);
-    //     this.funds = doc.data().Funds;
-    //     console.log(this.funds);
-    //     //console.log("portfolio");
-    //     //console.log(this.portfolio);
-    //   }
-    // });
   },
   methods: {
     deleteThisStock: function(payload) {
