@@ -45,7 +45,7 @@
   </div>
 </template>
 <script>
-import {mapGetters} from 'vuex';
+import { mapGetters } from "vuex";
 import { db, increment } from "../main.js";
 import firebase from "firebase";
 import firestore from "firebase";
@@ -118,21 +118,20 @@ export default {
       }
     };
   },
-  methods:{
-    
+  methods: {
     buyStock() {
       console.log("stock buy button");
-      console.log(this.userId)
+      console.log(this.userId);
       var order = {
         name: this.results[0]["symbol"],
         price: parseFloat(this.results[0]["latestPrice"]).toFixed(2),
         quantity: parseInt(this.quantity)
       };
 
-      //console.log("order" + order);
-
       //var quan = parseInt(order.quantity, 10);
       //var increment = firebase.firestore.FieldValue.increment(quan);
+
+      //Updating portfolio funds to firestore
       var stockRef = db.collection(this.userId).doc("Portfolio");
       var name = order.name;
       console.log("order");
@@ -141,10 +140,11 @@ export default {
         console.log("doc does not exist");
         console.log(doc.data().stock);
         var currentStock = doc.data().stock;
-        var funds = doc.data().Funds;
+        var funds = doc.data().funds;
         //var currentStock = doc.data()[order.name];
         console.log("stockdoes not exist");
-        console.log(currentStock);
+        console.log(funds);
+        
         //Creating new stock
         if (!currentStock[order.name] && !Object.keys({}).length) {
           console.log("inside if");
@@ -183,29 +183,36 @@ export default {
           console.log(newOrder);
           stockRef.update(update);
         }
-
+        console.log(this.funds);
         var buyingPrice =
-          parseFloat(order.price).toFixed(2) * parseInt(order.quantity) * -1;
-        var newFunds = this.funds + buyingPrice;
+          parseFloat(order.price).toFixed(2) * parseInt(order.quantity) ;
         console.log("order");
         console.log(buyingPrice);
-        console.log(newFunds);
-        if (buyingPrice > this.funds) {
+        console.log(funds);
+
+        //Make sure you cant buy stocks
+        if (buyingPrice > funds) {
+          console.log('cant afford')
         } else {
-          var decreseBy = firebase.firestore.FieldValue.increment(buyingPrice);
-          stockRef.update({ funds: decreseBy });
-          this.funds += buyingPrice;
+          console.log("when buying price less than funds");
+          var newFunds = funds - buyingPrice;
+           console.log(newFunds);
+          var decreaseBy = firebase.firestore.FieldValue.increment(buyingPrice*-1);
+          stockRef.update({ funds: decreaseBy });
+          this.funds = newFunds;
+          console.log(this.funds);
+          this.$emit("boughtStock", newFunds);
         }
       });
 
-      this.$store.dispatch("buyStock", order);
+      this.$store.commit("BUY_STOCK", order);
       this.quantity = 0;
-    },
+    }
   },
   computed: {
-      userId (){
-        return this.$store.state.user_id
-      }
+    userId() {
+      return this.$store.state.user_id;
+    }
   },
   mounted() {
     console.log("resultsxoxo");

@@ -10,11 +10,13 @@ const mutations = {
     'BUY_STOCK'(state, {name, price, quantity}) {
 
         //console.log(state.stocks[0]);
+        console.log("check")
+
         if(quantity >0){
             const record = state.stocks.find(element => {
                 console.log(element);
                 return element.name === name});
-                console.log("check")
+                
                 console.log(record);
             if(record){
                 record.quantity =  parseFloat(quantity) + parseFloat(record.quantity);
@@ -74,6 +76,8 @@ const actions = {
     doLogin({ commit }, loginData) {
         commit('LOGIN')
     }
+
+    
 };
 
 const getters = {

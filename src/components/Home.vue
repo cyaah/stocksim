@@ -22,48 +22,11 @@
         <span class="primary-header">TRADE STOCKS</span>
       </h1>
     </div>
-    <stockCard :results="results" v-if="this.results"></stockCard>
-    <!-- <div class="search-results">
+    <stockCard v-on:boughtStock="boughtStock" :results="results" v-if="this.results"></stockCard>
+    <div class="search-results">
       <div class="card-body-stock" v-if="results.length > 0">
-        <div id="chart-container">
-        <canvas id="myChart" width="300px" height="300px"></canvas>
-        </div>
-        <div class="card" style="width: 38rem;">
-          <div class="card-body">
-            <div id="chart-container">
-              <canvas id="myChart" width="300px" height="300px"></canvas>
-            </div>
-          </div>
-        </div>
-        <div class="card-info-left">
-          <h4 class="card-info">{{this.results[0]['symbol']}}</h4>
-          <p class="card-info">Price: ${{this.results[0]['latestPrice']}}</p>
-          <p class="card-info">Open: {{this.results[0]['open']}}</p>
-          <p class="card-info">High: {{this.results[0]['high']}}</p>
-          <p class="card-info">Low: {{this.results[0]['low']}}</p>
-        </div>
-        <div class="card-info-right">
-          <p>Volume: {{this.results[0]['06. volume']}}</p>
-          <p>Previous close: {{this.results[0]['previousClose']}}</p>
-          <p>Change: {{this.results[0]['change']}}</p>
-          <p>Change%: {{this.results[0]['changePercent']}}</p>
-    </div>-->
-    <!-- bug- Input allows the enter of 'e' when only shouldbe number. Result in empty string quantity-->
-    <!-- <input
-          v-on:keyup.enter="buyStock"
-          type="number"
-          class="form-control"
-          id="searchBuy"
-          placeholder="Enter Quantity"
-          aria-describedby="basic-addon2"
-          v-model="quantity"
-          min="1"
-        />
-        <div class="input-group-append">
-          <button class="btn btn-outline-success" @click="buyStock">Buy</button>
-        </div>
-    </div>-->
-    <!-- </div> -->
+    </div>
+    </div>
     <div
       v-if="noResults"
       class="modalfade"
@@ -231,7 +194,7 @@ export default {
     stockRef.get().then(doc => {
       if (doc.exists) {
         console.log("doc");
-        this.funds = doc.data().funds;
+        this.funds = doc.data().funds.toFixed(2);
         this.portfolio = doc.data();
         this.$store.commit("updateFunds", this.funds);
       }
@@ -366,6 +329,11 @@ export default {
       console.log("reset");
       this.error = false;
       this.noResults = false;
+    },
+    boughtStock (funds){
+      console.log(funds)
+      console.log('recieved funds in parent')
+      this.funds = funds.toFixed(2)
     },
     check() {
       // firebase.auth().onAuthStateChanged(function(user) {
