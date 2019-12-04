@@ -192,6 +192,7 @@ export default {
 
     var stockRef = db.collection(id).doc("Portfolio");
     stockRef.get().then(doc => {
+      console.log('01010101')
       if (doc.exists) {
         console.log("doc");
         this.funds = doc.data().funds.toFixed(2);

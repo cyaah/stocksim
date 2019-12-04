@@ -90,6 +90,7 @@ export  const store = new Vuex.Store({
             this.state.loggedIn = true,
             this.state.accessToken = accessToken;
             this.state.user_id = user.uid
+            this.funds = 
             console.log(this.state.user_id)
         },
         LOGOUT() {

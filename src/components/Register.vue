@@ -66,13 +66,28 @@ export default {
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(cred => {
           this.id = cred.user.uid;
-     
-        }).then(res => {
-          return db.collection(this.id).doc("Portfolio").set({
-            stock: {},
-            funds: 100000
-             });
-          console.log('res')
+          console.log(cred.user);
+          console.log("xxxxxxxxxxxxxxx");
+        })
+        .then(res => {
+          return db
+            .collection(this.id)
+            .doc("Portfolio")
+            .set({
+              stock: {},
+              funds: 100000
+            });
+          // console.log('res')
+          // console.log(res)
+        })
+        .then(res => {
+          // console.log(res)
+          // console.log('PUSH HOME')
+          var blah = firebase.auth().currentUser;
+          console.log(blah);
+          this.$store.commit("LOGIN", this.id);
+
+          this.$router.push({ path: "/" });
         })
         .catch(function(error) {
           // Handle Errors here.
