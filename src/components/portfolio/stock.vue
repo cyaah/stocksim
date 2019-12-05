@@ -6,7 +6,7 @@
     <div class="card text-left" style="width: 18rem;">
       <div class="card-body">
         <p class="card-info">Name: {{stock.name}}</p>
-        <p class="card-info">Price: {{stock.price}}</p>
+        <p class="card-info">Purchase Price: {{stock.price}}</p>
         <p class="card-info">Quantity: {{this.dbQuantity}}</p>
         <p class="card-info">Current Price: {{this.stockInfo.latestPrice}}</p>
         <p class="card-info">Total Change: {{this.totalChange}}</p>
@@ -93,6 +93,7 @@ export default {
         });
     },
     sellStock() {
+      console.log('sell_stock')
       let userId = this.$store.getters.GETUSERID;
       //Building the order
       var order = {
@@ -107,16 +108,21 @@ export default {
       //Retrieving stock info from firebase
       stockRef.get().then(doc => {
         var currentStock = doc.data().stock[this.stockInfo.symbol];
-        var funds = doc.data().Funds;
+        var funds = doc.data().funds;
         var quan = parseInt(currentStock.quantity) - parseInt(order.quantity);
         console.log(parseInt(funds) + 70);
         var sellingPrice =
           parseFloat(this.stock.price).toFixed(2) * parseInt(order.quantity);
         var newFunds = parseFloat(funds) + sellingPrice;
-
+        console.log('selling price')
+        console.log(sellingPrice)
+        console.log('funds')
+        console.log(funds)
+        console.log(newFunds)
+        console.log('newFunds')
         var increaseBy = firebase.firestore.FieldValue.increment(sellingPrice);
 
-        stockRef.update({ Funds: increaseBy });
+        stockRef.update({ funds: increaseBy });
 
         if (currentStock) {
           if (quan <= 0) {
