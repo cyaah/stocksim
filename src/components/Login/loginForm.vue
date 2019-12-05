@@ -96,8 +96,7 @@
 
 <style scoped>
     body {
-        background-image: url("../../../images/roberto-junior-4fsCBcZt9H8-unsplash.jpg");
-        /* background: #2b0c5c; */
+        background: #black;
         background-size: cover;
         background-position: top;
         background-repeat: no-repeat;

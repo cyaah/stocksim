@@ -370,6 +370,11 @@ export default {
 </script>
 
 <style scoped>
+  body{
+    background-color: #black;
+    background-size: 100%;
+    background-size: cover;
+  }
 .container {
   font-family: "Roboto", sans-serif;
   width: 1000px;
