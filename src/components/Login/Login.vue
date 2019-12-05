@@ -1,34 +1,10 @@
 <template>
   <div class="container">
-    <div class="form-card">
-      <form>
-        <div class="form-group">
-          <strong for="exampleInputEmail1">Email address</strong>
-          <input
-            type="email"
-            class="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-            placeholder="Enter email"
-            v-model="email"
-          />
-          <small id="emailHelp" class="form-text">We'll never share your email with anyone else.</small>
-        </div>
-        <div class="form-group">
-          <strong for="exampleInputPassword1">Password</strong>
-          <input
-            type="password"
-            class="form-control"
-            id="exampleInputPassword1"
-            placeholder="Password"
-            v-model="password"
-          />
-        </div>
-        <button @click.prevent="loginUser" class="btn btn-primary">Login</button>
-        <!-- <button class="btn btn-primary" >Register</button> -->
-      </form>
-      <router-link class="registerLink" to="/register">Register</router-link>
-    </div>
+    <h1 class="main-header">
+      <span class="primary-header">StockSim</span>
+    </h1>
+   <loginForm></loginForm>
+
   </div>
 </template>
 
@@ -36,15 +12,17 @@
 
 <script>
 import axios from "axios";
-import { db, increment } from "../main.js";
+import { db, increment } from "../../main.js";
 import firebase from "firebase";
 import firestore from "firebase";
 import { isError } from "util";
 const FieldValue = require("firebase").firestore.FieldValue;
 import { mapActions } from "vuex";
-import { store } from "./store/store.js";
+import { store } from "../store/store.js";
+import loginForm from "./loginForm";
 
 export default {
+
   data() {
     return {
       user: null,
@@ -100,26 +78,44 @@ export default {
           // }
           console.log(error);
         });
-    }
-  }
+    },
+  },
+  components: {
+    loginForm
+  },
 };
 </script>
 
 <style scoped>
-body {
-  background-image: url("../../images/roberto-junior-4fsCBcZt9H8-unsplash.jpg");
-  /* background: #2b0c5c; */
-  background-size: cover;
-  background-position: top;
-  background-repeat: no-repeat;
-}
-.form-card {
-  position: absolute;
-  width: 35%;
-  top: 20%;
-  left: 80px;
-}
-.form-control {
-  width: 60%;
-}
+
+  .main-box {
+    position: absolute;
+    top: 47%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .main-header {
+    font-weight: 500;
+    font-size: 30px;
+    letter-spacing: 14px;
+    animation-name: moveInLeft;
+    animation-duration: 1.7s;
+    animation-timing-function: ease-out;
+  }
+/*body {*/
+/*  background-image: url("../../../images/roberto-junior-4fsCBcZt9H8-unsplash.jpg");*/
+/*  !* background: #2b0c5c; *!*/
+/*  background-size: cover;*/
+/*  background-position: top;*/
+/*  background-repeat: no-repeat;*/
+/*}*/
+/*.form-card {*/
+/*  position: absolute;*/
+/*  width: 35%;*/
+/*  top: 20%;*/
+/*  left: 80px;*/
+/*}*/
+/*.form-control {*/
+/*  width: 60%;*/
+/*}*/
 </style>

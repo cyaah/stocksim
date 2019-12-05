@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <topNavBar></topNavBar>
     <div class="funds-div">
       <p>Funds: {{this.funds}}</p>
     </div>
@@ -113,6 +114,7 @@ import { db, increment } from "../main.js";
 import firebase from "firebase";
 import firestore from "firebase";
 import { isError } from "util";
+import header from './Header.vue'
 const FieldValue = require("firebase").firestore.FieldValue;
 
 var myChart;
@@ -360,7 +362,8 @@ export default {
   },
   mounted() {},
   components: {
-    stockCard
+    stockCard,
+    topNavBar:header
   }
   // }
 };
