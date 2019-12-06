@@ -1,4 +1,5 @@
 <template>
+    <div class ="form-container">
     <div class="form-card">
         <form>
             <div class="form-group">
@@ -27,6 +28,7 @@
             <!-- <button class="btn btn-primary" >Register</button> -->
         </form>
         <router-link class="registerLink" to="/register">Register</router-link>
+    </div>
     </div>
 </template>
 
@@ -95,17 +97,20 @@
 </script>
 
 <style scoped>
-    body {
-        background: #black;
-        background-size: cover;
-        background-position: top;
-        background-repeat: no-repeat;
+    .form-container {
+       /*background-size: cover;*/
+       width: 38%;
+       min-height: 100vh;
+       background: white;
     }
     .form-card {
         position: absolute;
-        width: 35%;
-        top: 30%;
+        width: 50%;
+        height: 40%;
+        top: 35%;
         left: 80px;
+        /*background: yellow;*/
+        background-size: cover;
     }
     .form-control {
         width: 60%;

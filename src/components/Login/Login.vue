@@ -1,8 +1,13 @@
 <template>
   <div class="container">
-    <h1 class="main-header">
-      <span class="primary-header">StockSim</span>
-    </h1>
+<!--    <h1 class="main-header">-->
+<!--      <span class="primary-header">StockSim</span>-->
+<!--    </h1>-->
+      <div class="main-box">
+          <h1 class="main-header">
+              <span class="primary-header">TRADE STOCKS</span>
+          </h1>
+      </div>
    <loginForm></loginForm>
 
   </div>
@@ -88,19 +93,21 @@ export default {
 
 <style scoped>
 
-  body{
-    /*width: 100%;*/
-    /*min-height: 100vh;*/
-    /*background-color: black;*/
-    /*background-size: cover;*/
+  body {
+    /*background-image: url();*/
+    background-color: #cccccc;
   }
 
 .container {
-  /*width: 100vh;*/
   min-width: 100%;
   min-height: 100vh;
-  background-color: black;
+  /*background-color: #1126CE;*/
+    background: rgb(2,0,36);
+    background: linear-gradient(rgba(2,0,36,1) 0%, rgba(17,38,206,1) 39%, rgba(0,212,255,1) 100%);
+  /*background-image: url("../../assets/roberto-junior-4fsCBcZt9H8-unsplash.jpg");*/
   background-size: cover;
+  background-repeat: no-repeat;
+  padding: 0;
 }
   .main-box {
     position: absolute;
@@ -109,12 +116,36 @@ export default {
     transform: translate(-50%, -50%);
   }
   .main-header {
-    font-weight: 500;
-    font-size: 30px;
+    font-weight: 600;
+    font-size: 52px;
     letter-spacing: 14px;
-    animation-name: moveInLeft;
+    animation-name: moveInRight;
     animation-duration: 1.7s;
     animation-timing-function: ease-out;
+    color: white;
+  }
+  .main-box {
+      position: absolute;
+      top: 47%;
+      left: 70%;
+      transform: translate(-50%, -50%);
+  }
+  @keyframes moveInRight {
+      0% {
+          opacity: 0;
+          transform: translateX(100px);
+      }
+
+      80% {
+          transform: translateX(-15px);
+      }
+
+      100% {
+          opacity: 1;
+
+          /* We use tranlate 0 since it just renders it to how it actually is */
+          transform: translate(0);
+      }
   }
 /*body {*/
 /*  background-image: url("../../../images/roberto-junior-4fsCBcZt9H8-unsplash.jpg");*/
