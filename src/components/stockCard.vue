@@ -13,7 +13,7 @@
       </div>
       <h3 class="ticker">{{this.results[0]['symbol']}}</h3>
       <div class="card-info-left">
-        <p class="card-info">Price: ${{this.results[0]['latestPrice']}}</p>
+        <p class="card-info">Booking price: ${{this.results[0]['latestPrice']}}</p>
         <p class="card-info">Market Cap: $ {{this.results[0]['marketCap']}}</p>
         <p class="card-info">Open: {{this.results[0]['open']}}</p>
         <p class="card-info">High: {{this.results[0]['high']}}</p>

@@ -1,15 +1,13 @@
 <template>
-  <div>
-  <div class="header">
-    <app-header></app-header>
-  </div>
+<!--  <div class="header">-->
+<!--    <app-header></app-header>-->
+<!--  </div>-->
     <div class="page">
       <router-view></router-view>
     </div>
   <!-- <div class="container">
     //Put div container in the body
   </div>-->
-  </div>
 </template>
 
 <script>
@@ -38,17 +36,27 @@ export default {
 /* .container{
   font-family: 'Taviraj', serif;
 } */
-body {
-  /* background-image: url(../images/NYSE.jpg);
-  background-size: 100%;
-  background-size: cover; */
+/*body {*/
+
+/*  background-size: 100%;*/
+/*  background-size: cover;*/
+/*}*/
+
+body, html {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  min-height: 100vh;
 }
+
 
 .header {
   /*background-color: yellow;*/
 }
-/*.page {*/
-  /*top: 100px;*/
-  /*position: absolute;*/
-/*}*/
+.page {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  min-height: 100vh;
+}
 </style>

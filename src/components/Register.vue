@@ -33,6 +33,7 @@
         </div>
         <button type="submit" class="btn btn-primary">Register</button>
       </form>
+      <router-link class="registerLink" to="/login">Login</router-link>
     </div>
   </div>
 </template>
