@@ -1,5 +1,7 @@
 <template>
     <div class ="form-container">
+            <strong>StockSim</strong>
+
     <div class="form-card">
         <form>
             <div class="form-group">
@@ -97,11 +99,18 @@
 </script>
 
 <style scoped>
+    .logo {
+        font-family: 'Oswald', sans-serif;
+        font-weight:bold
+    }
     .form-container {
        /*background-size: cover;*/
        width: 38%;
        min-height: 100vh;
        background: white;
+        font-family: 'Oswald', sans-serif;
+        font-weight:bold
+
     }
     .form-card {
         position: absolute;

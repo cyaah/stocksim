@@ -1,11 +1,8 @@
 <template>
   <div class="container">
-<!--    <h1 class="main-header">-->
-<!--      <span class="primary-header">StockSim</span>-->
-<!--    </h1>-->
       <div class="main-box">
           <h1 class="main-header">
-              <span class="primary-header">TRADE STOCKS</span>
+              <strong class="primary-header">TRADE STOCKS</strong>
           </h1>
       </div>
    <loginForm></loginForm>
@@ -96,6 +93,10 @@ export default {
   body {
     /*background-image: url();*/
     background-color: #cccccc;
+      font-family: 'Oswald', sans-serif;
+
+
+
   }
 
 .container {
@@ -108,6 +109,9 @@ export default {
   background-size: cover;
   background-repeat: no-repeat;
   padding: 0;
+  font-family: 'Oswald', sans-serif;
+  font-weight:bold
+
 }
   .main-box {
     position: absolute;
