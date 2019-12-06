@@ -75,7 +75,7 @@ export default {
             .doc("Portfolio")
             .set({
               stock: {},
-              funds: 100000
+              funds: 1000
             });
           // console.log('res')
           // console.log(res)
