@@ -4,6 +4,8 @@
     <div class="funds-div">
       <p>Funds: {{this.funds}}</p>
     </div>
+    <sideBar></sideBar>
+    <div class=""dashboard">
     <div class="search-box">
       <div class="input-groupmb-3">
         <input
@@ -102,7 +104,7 @@
     <!--<div>-->
     <!--<button @click="check" class="logout">Check</button>-->
     <!--</div>-->
-    <sideBar></sideBar>
+  </div>
   </div>
 </template>
 
@@ -379,7 +381,7 @@ export default {
   }
 .container {
   font-family: "Roboto", sans-serif;
-  width: 1000px;
+  width: 100%;
   /*margin: 210px auto;*/
   background: #e5e5e517;
   display: flex;
@@ -387,6 +389,7 @@ export default {
   height: 100vh;
   background: yellow;
   background-size: cover;
+  align-items: stretch;
 
 }
 .funds-div {

@@ -77,16 +77,24 @@
     }
 
     #sidebar {
-        width: 250px;
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100%;
-        z-index: 999;
-        background:  rgb(2,0,36);
-        background: linear-gradient(rgba(2,0,36,1) 0%, rgba(17,38,206,1) 39%, rgba(0,212,255,1) 100%);
+        /*width: 250px;*/
+        /*position: fixed;*/
+        /*top: 0;*/
+        /*left: 0;*/
+        /*height: 100%;*/
+        /*z-index: 999;*/
+        /*background:  rgb(2,0,36);*/
+        /*background: linear-gradient(rgba(2,0,36,1) 0%, rgba(17,38,206,1) 39%, rgba(0,212,255,1) 100%);*/
 
-        color: #fff;
+        /*color: #fff;*/
+        /*transition: all 0.3s;*/
+
+
+
+        min-width: 250px;
+        max-width: 250px;
+        background: $lila;
+        color: $text-sidebar;
         transition: all 0.3s;
     }
 </style>

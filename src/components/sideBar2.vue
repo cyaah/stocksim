@@ -1,0 +1,135 @@
+<template>
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>Logo</h3>
+        </div>
+
+        <ul class="list-unstyled components">
+            <li class="active">
+                <a href="#homeSubmenu"  aria-expanded="false" class="dropdown-toggle">Home</a>
+            </li>
+            <li>
+                <a href="#">Portfolio</a>
+            </li>
+            <li>
+                <a href="#">Contact</a>
+            </li>
+        </ul>
+
+        <ul class="list-unstyled CTAs">
+            <li>
+                <a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a>
+            </li>
+        </ul>
+    </nav>
+</template>
+
+<script>
+  export default {
+    name: "sideBar2"
+  }
+</script>
+
+<style scoped>
+    $lila : $turbo-yellow /*#7386D5*/;
+    $lila-60 : $turbo-yellow-60 /*#6d7fcc*/;
+    $lila-line : $turbo-yellow-70 /*#47748b*/;
+
+    $text-sidebar : #6b6b6b /*#fff*/;
+    $text-sidebar-hover : #6b6b6b /*#fff*/;
+
+    .text-sidebar {
+        color: $text-sidebar;
+    }
+
+    .wrapper {
+        display: flex;
+        width: 100%;
+        align-items: stretch;
+    }
+
+    #sidebar {
+        min-width: 150px;
+        max-width: 150px;
+        background: $lila;
+        color: white;
+        transition: all 0.3s;
+        background: red;
+    }
+
+    #sidebar.active {
+        margin-left: -250px;
+    }
+
+    #sidebar .sidebar-header {
+        padding: 20px;
+        background:$lila-60 /*#6d7fcc*/;
+    }
+
+    #sidebar ul.components {
+        padding: 20px 0;
+        border-bottom: 1px solid $lila-line;
+    }
+
+    #sidebar ul p {
+        color: $text-sidebar;
+        padding: 10px;
+    }
+
+    #sidebar ul li a {
+        padding: 10px;
+        font-size: 1.1em;
+        display: block;
+    }
+
+    #sidebar ul li a:hover {
+        color: $lila;
+        background: $text-sidebar-hover;
+    }
+
+    #sidebar ul li.active>a, a[aria-expanded="true"] {
+        color: $text-sidebar;
+        background: $lila-60;
+    }
+
+    a[data-toggle="collapse"] {
+        position: relative;
+    }
+
+    .dropdown-toggle::after {
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
+    }
+
+    ul ul a {
+        font-size: 0.9em !important;
+        padding-left: 30px !important;
+        background: $lila-60;
+    }
+
+    ul.CTAs {
+        padding: 20px;
+    }
+
+    ul.CTAs a {
+        text-align: center;
+        font-size: 0.9em !important;
+        display: block;
+        border-radius: 5px;
+        margin-bottom: 5px;
+    }
+
+    a.download {
+        background: $text-sidebar;
+        color: $lila;
+    }
+
+    a.article,
+    a.article:hover {
+        background: $lila-60 !important;
+        color: $text-sidebar !important;
+    }
+</style>
