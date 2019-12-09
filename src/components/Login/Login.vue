@@ -110,8 +110,7 @@ export default {
   background-repeat: no-repeat;
   padding: 0;
   font-family: 'Oswald', sans-serif;
-  font-weight:bold
-
+  font-weight:bold;
 }
   .main-box {
     position: absolute;
@@ -120,7 +119,7 @@ export default {
     transform: translate(-50%, -50%);
   }
   .main-header {
-    font-weight: 600;
+    font-weight: 550;
     font-size: 52px;
     letter-spacing: 14px;
     animation-name: moveInRight;

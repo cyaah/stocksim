@@ -102,6 +102,7 @@
     <!--<div>-->
     <!--<button @click="check" class="logout">Check</button>-->
     <!--</div>-->
+    <sideBar></sideBar>
   </div>
 </template>
 
@@ -116,7 +117,7 @@ import firestore from "firebase";
 import { isError } from "util";
 import header from './Header.vue'
 const FieldValue = require("firebase").firestore.FieldValue;
-
+import sideBar from "./sideBar";
 var myChart;
 
 export default {
@@ -363,7 +364,8 @@ export default {
   mounted() {},
   components: {
     stockCard,
-    topNavBar:header
+    topNavBar:header,
+    sideBar
   }
   // }
 };
@@ -378,9 +380,14 @@ export default {
 .container {
   font-family: "Roboto", sans-serif;
   width: 1000px;
-  margin: 210px auto;
-
+  /*margin: 210px auto;*/
   background: #e5e5e517;
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  background: yellow;
+  background-size: cover;
+
 }
 .funds-div {
   position: absolute;
