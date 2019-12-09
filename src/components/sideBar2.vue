@@ -3,24 +3,19 @@
         <div class="sidebar-header">
             <h3>Logo</h3>
         </div>
-
+        <div class="sidebar-contents">
         <ul class="list-unstyled components">
-            <li class="active">
-                <a href="#homeSubmenu"  aria-expanded="false" class="dropdown-toggle">Home</a>
-            </li>
-            <li>
-                <a href="#">Portfolio</a>
-            </li>
-            <li>
-                <a href="#">Contact</a>
-            </li>
+          <li >
+            <router-link to="/">Dashboard</router-link>
+          </li>
+          <li>
+            <router-link to="/portfolio">Portfolio</router-link>
+          </li>
+          <li>
+            <a href="#">Contact</a>
+          </li>
         </ul>
-
-        <ul class="list-unstyled CTAs">
-            <li>
-                <a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a>
-            </li>
-        </ul>
+        </div>
     </nav>
 </template>
 
@@ -78,6 +73,7 @@
 
     #sidebar ul li a {
         padding: 10px;
+        padding-bottom: 40px;
         font-size: 1.1em;
         display: block;
     }
@@ -131,5 +127,12 @@
     a.article:hover {
         background: $lila-60 !important;
         color: $text-sidebar !important;
+    }
+
+    .sidebar-contents{
+        /*background: yellow;*/
+        position: absolute;
+        top: 135px;
+
     }
 </style>
