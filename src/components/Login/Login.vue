@@ -1,15 +1,14 @@
 <template>
   <div class="container">
-<!--    <h1 class="main-header">-->
-<!--      <span class="primary-header">StockSim</span>-->
-<!--    </h1>-->
-      <div class="main-box">
-          <h1 class="main-header">
-              <span class="primary-header">TRADE STOCKS</span>
-          </h1>
-      </div>
-   <loginForm></loginForm>
-
+    <!--    <h1 class="main-header">-->
+    <!--      <span class="primary-header">StockSim</span>-->
+    <!--    </h1>-->
+    <div class="main-box">
+      <h1 class="main-header">
+        <span class="primary-header">TRADE STOCKS</span>
+      </h1>
+    </div>
+    <loginForm></loginForm>
   </div>
 </template>
 
@@ -27,7 +26,6 @@ import { store } from "../store/store.js";
 import loginForm from "./loginForm";
 
 export default {
-
   data() {
     return {
       user: null,
@@ -40,7 +38,7 @@ export default {
     loginUser() {
       console.log("asd");
       console.log(this.email);
-      console.log(this.password)
+      console.log(this.password);
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
@@ -61,17 +59,17 @@ export default {
           var errorMessage = error.message;
 
           switch (errorCode) {
-            case 'auth/invalid-email':
-              alert("The user/email is invalid")
-                break;
-            case 'auth/wrong-password':
-              alert('The email or password is wrong')
+            case "auth/invalid-email":
+              alert("The user/email is invalid");
               break;
-            case 'auth/user-not-found':
-              alert('The user was not found')
+            case "auth/wrong-password":
+              alert("The email or password is wrong");
+              break;
+            case "auth/user-not-found":
+              alert("The user was not found");
               break;
             default:
-              alert(errorMessage)
+              alert(errorMessage);
               break;
           }
           // if (errorCode == "auth/wrong-password") {
@@ -83,70 +81,75 @@ export default {
           // }
           console.log(error);
         });
-    },
+    }
   },
   components: {
     loginForm
-  },
+  }
 };
 </script>
 
 <style scoped>
-
-  body {
-    /*background-image: url();*/
-    background-color: #cccccc;
-  }
+body {
+  /*background-image: url();*/
+  background-color: #cccccc;
+}
 
 .container {
   min-width: 100%;
   min-height: 100vh;
   /*background-color: #1126CE;*/
-    background: rgb(2,0,36);
-    background: linear-gradient(rgba(2,0,36,1) 0%, rgba(17,38,206,1) 39%, rgba(0,212,255,1) 100%);
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    rgba(2, 0, 36, 1) 0%,
+    rgba(17, 38, 206, 1) 39%,
+    rgba(0, 212, 255, 1) 100%
+  );
   /*background-image: url("../../assets/roberto-junior-4fsCBcZt9H8-unsplash.jpg");*/
   background-size: cover;
   background-repeat: no-repeat;
   padding: 0;
 }
-  .main-box {
-    position: absolute;
-    top: 47%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  .main-header {
-    font-weight: 600;
-    font-size: 52px;
-    letter-spacing: 14px;
-    animation-name: moveInRight;
-    animation-duration: 1.7s;
-    animation-timing-function: ease-out;
-    color: white;
-  }
-  .main-box {
-      position: absolute;
-      top: 47%;
-      left: 70%;
-      transform: translate(-50%, -50%);
-  }
-  @keyframes moveInRight {
-      0% {
-          opacity: 0;
-          transform: translateX(100px);
-      }
+.main-box {
+  position: absolute;
+  top: 47%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.main-header {
+  font-weight: 600;
+  font-size: 52px;
+  letter-spacing: 14px;
+  animation-name: moveInRight;
+  animation-duration: 1.7s;
+  animation-timing-function: ease-out;
+  color: white;
+  font-family: 'Oswald', sans-serif;
 
-      80% {
-          transform: translateX(-15px);
-      }
-
-      100% {
-          opacity: 1;
-
-          /* We use tranlate 0 since it just renders it to how it actually is */
-          transform: translate(0);
-      }
+}
+.main-box {
+  position: absolute;
+  top: 47%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+}
+@keyframes moveInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
   }
+
+  80% {
+    transform: translateX(-15px);
+  }
+
+  100% {
+    opacity: 1;
+
+    /* We use tranlate 0 since it just renders it to how it actually is */
+    transform: translate(0);
+  }
+}
 /*body {*/
 /*  background-image: url("../../../images/roberto-junior-4fsCBcZt9H8-unsplash.jpg");*/
 /*  !* background: #2b0c5c; *!*/
