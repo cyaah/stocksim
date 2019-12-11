@@ -5,7 +5,7 @@
       <p>Funds: {{this.funds}}</p>
     </div>
     <sideBar></sideBar>
-    <div class=""dashboard">
+    <div class="dashboard">
     <div class="search-box">
       <div class="input-groupmb-3">
         <input
