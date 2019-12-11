@@ -44,6 +44,7 @@
 
 <script>
 import axios from "axios";
+import { store } from "./store/store.js";
 
 export default {
   name: "navBar",
@@ -132,7 +133,8 @@ export default {
         }
         return true;
       };
-      //console.log("timeseries123");
+      console.log("timeseries123");
+      this.$store.dispatch("getStockInfo",'cc')
       this.term = "";
       this.noResults = false;
       this.searchTerm = "";

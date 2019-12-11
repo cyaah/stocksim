@@ -68,6 +68,9 @@ const mutations = {
     },
     'LOGOUT' (){
         state.loggedIn = false
+    },
+    'STOCKINFO'(stockInfo){
+     console.log('we got here in VUEX')
     }
 
 };
@@ -75,6 +78,10 @@ const mutations = {
 const actions = {
     doLogin({ commit }, loginData) {
         commit('LOGIN')
+    },
+    getStockInfo ({commit}, stockInfo) {
+        console.log('almost')
+        commit('STOCKINFO', stockInfo)
     }
 
     
