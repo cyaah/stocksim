@@ -39,9 +39,7 @@
         </ul>
       </div>
     </div>
-    <p>
-      {{}}
-    </p>
+
   </nav>
 </template>
 
@@ -56,7 +54,8 @@ export default {
       searchTerm: "",
       term: "",
       timeSeriesData: [],
-      results: []
+      results: [],
+      myChart: null,
     };
   },
   methods: {
@@ -118,7 +117,18 @@ export default {
           )}/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
         )
         .then(res => {
-          this.timeSeriesData = res.data;
+
+          for (var i = 0; i < this.timeSeriesData.length; i++) {
+            this.canvasData.data.labels.push(
+                    new Date(this.timeSeriesData[i].date)
+            );
+            this.canvasData.data.datasets[0].data.push(
+                    this.timeSeriesData[i].close
+            );
+            console.log('axcvxza')
+            console.log(this)
+            this.timeSeriesData = this.canvasData.data.datasets[0].data;
+          }
         })
         .catch(err => {
           console.log(err);
@@ -136,6 +146,10 @@ export default {
       this.term = "";
       this.noResults = false;
       this.searchTerm = "";
+    },
+    canvas: function(){
+      this.createChart("Intra Day Chart", this.canvasData);
+
     }
   },
   watch: {
@@ -240,7 +254,7 @@ a:focus {
 .search-container {
   width: 55%;
   position: relative;
-  right: 400px;
+  /*right: 400px;*/
   background: white;
 }
 

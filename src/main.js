@@ -8,6 +8,9 @@ import {
 } from './routes';
 //import store from './components/store/store';
 import { store } from './components/store/store.js';
+import 'bootstrap'
+
+
 
 
 
@@ -51,5 +54,5 @@ new Vue({
   router,
   store,
   render: h => h(App),
-    
+
 })

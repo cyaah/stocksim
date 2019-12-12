@@ -312,6 +312,7 @@ export default {
         myChart.destroy();
       }
       console.log("ctx" + myChart);
+      console.log('xoxoxoxoxoxoxoxoxoxo')
       const ctx = document.getElementById("myChart").getContext("2d");
 
       myChart = new Chart(ctx, {

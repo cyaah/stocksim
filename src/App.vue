@@ -33,9 +33,11 @@ export default {
 </script>
 
 <style>
-/* .container{
-  font-family: 'Taviraj', serif;
-} */
+    @import'~bootstrap/dist/css/bootstrap.css'
+
+        /* .container{
+          font-family: 'Taviraj', serif;
+        } */
 /*body {*/
 
 /*  background-size: 100%;*/
