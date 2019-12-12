@@ -12,10 +12,13 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   data (){
     return {
-  
+      // stockInfo: [],
+      // timeSeries:[]
     }
   },
   methods: {
@@ -48,6 +51,19 @@ export default {
       });
       this.canvasCreated = true;
     },
+  },
+  computed: {
+    ...mapGetters([
+      'getstockInfo',
+      'gettimeSeries'
+    ]),
+    timeSeries (){
+      console.log('dash time')
+
+    },
+    getstockInfo (){
+      console.log('resss dash')
+    }
   }
 };
 </script>

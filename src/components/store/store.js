@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import stocks from './modules/stocks';
 import portfolio from './modules/portfolio';
-import * as actions from './actions';
 import axios from 'axios';
 import VueAxios from 'vue-axios'
 
@@ -18,16 +16,18 @@ Vue.use(VueAxios, axios);
 //     }
 // })
 
-export  const store = new Vuex.Store({
+export const store = new Vuex.Store({
     state: {
         funds: 0,
         stocks: [],
         accessToken: null,
         user_id: '',
         loggedIn: false,
-        loginError: null
+        loginError: null,
+        stockInfo: [],
+        timeSeries: []
     },
-    mutations : {
+    mutations: {
         BUY_STOCK(state, {
             name,
             price,
@@ -88,41 +88,69 @@ export  const store = new Vuex.Store({
             console.log("LOGIN_202022")
             console.log(user)
             this.state.loggedIn = true,
-            this.state.accessToken = accessToken;
+                this.state.accessToken = accessToken;
             this.state.user_id = user.uid
-            this.funds = 
-            console.log(this.state.user_id)
+            this.funds =
+                console.log(this.state.user_id)
         },
         LOGOUT() {
             console.log('store logout');
             this.state.loggedIn = false
         },
-        updateFunds (state,funds){
+        updateFunds(state, funds) {
             state.funds = funds;
+        },
+        STOCKINFO(state, stockInfo) {
+            console.log(stockInfo)
+            console.log('stock info1212121')
+            state.stockInfo = stockInfo
+        },
+        TIMESERIES(state, timeSeries) {
+            console.log('THIIS TIME SERIES')
+            console.log(timeSeries)
+            state.timeSeries = timeSeries
         }
     },
-    actions : {
+    actions: {
         doLogin({
             commit
         }, loginData) {
             commit('LOGIN')
         },
         doLogout({
-            commit}) {
-          ('LOGOUT')
+            commit
+        }) {
+            ('LOGOUT')
+        },
+        getStockInfo({
+            commit
+        }, stockInfo) {
+            commit('STOCKINFO', stockInfo)
+        },
+        getTimeSeries({
+            commit
+        }, timeSeries) {
+            commit('TIMESERIES', timeSeries)
         }
     },
     getters: {
         CHECKLOGIN: state => {
             return state.loggedIn
         },
-        
+
         GETUSERID: state => {
             return state.user_id
         },
 
-        getUserFunds: state =>{
+        getUserFunds: state => {
             return state.funds
+        },
+        getStockInfo: state => {
+            return state.stockInfo
+        },
+        getTimeSeries: state => {
+            console.log('123545454')
+            return state.timeSeries
         }
 
     }

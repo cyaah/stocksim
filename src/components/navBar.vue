@@ -39,6 +39,9 @@
         </ul>
       </div>
     </div>
+    <p>
+      {{}}
+    </p>
   </nav>
 </template>
 
@@ -105,9 +108,6 @@ export default {
         })
         .catch(error => {
           this.error = true;
-          console.log("error");
-          console.log(this.error);
-          console.log(error);
         });
 
       //Getting time series data
@@ -125,7 +125,6 @@ export default {
         });
 
       var isEmpty = obj => {
-        console.log("isEMpty");
         for (var key in obj) {
           if (obj.hasOwnProperty(key)) {
             return false;
@@ -133,18 +132,21 @@ export default {
         }
         return true;
       };
-      console.log("timeseries123");
-      this.$store.dispatch("getStockInfo",'cc')
+      var stockInfo = { timeseries: this.timeSeriesData, stock: this.results };
       this.term = "";
       this.noResults = false;
       this.searchTerm = "";
     }
   },
   watch: {
-   results: function(oldVal, newVal){
-    
-   }   
-  }   
+    results: function(newVal, oldVal) {
+      console.log("new");
+      this.$store.dispatch("getStockInfo", newVal);
+    },
+    timeSeriesData: function(newVal, oldVal) {
+      this.$store.dispatch("getTimeSeries", newVal);
+    }
+  }
 };
 </script>
 
@@ -248,13 +250,18 @@ a:focus {
 }
 
 .search-container {
-  background: #fff;
+  background: black;
   color: #666;
   font: 90%/180% Arial, Helvetica, sans-serif;
   width: 800px;
   max-width: 96%;
+  /* right: 90%;
+  position: relative; */
 }
-
+/* .form-control {
+  right: 60%;
+  position: relative;
+} */
 input {
   outline: none;
 }
