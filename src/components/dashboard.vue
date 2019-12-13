@@ -9,6 +9,7 @@
         </div>
       </div>
     </div>
+    <div>{{getstockInfo}}</div>
   </div>
 </template>
 <script>
@@ -70,7 +71,7 @@ export default {
 
 <style scoped>
 .dashboard-container {
-  background: yellow;
+  /* background: yellow; */
   display: flex;
   flex-flow: row wrap;
   justify-content: space-evenly;
@@ -101,7 +102,7 @@ export default {
   position: absolute;
   top: 150px;
   left: 120px;
-
-  background: blue;
+/* 
+  background: blue; */
 }
 </style>
