@@ -39,9 +39,6 @@
         </ul>
       </div>
     </div>
-    <p>
-      {{}}
-    </p>
   </nav>
 </template>
 
@@ -56,7 +53,57 @@ export default {
       searchTerm: "",
       term: "",
       timeSeriesData: [],
-      results: []
+      results: [],
+      myChart: null,
+      canvasData: {
+        type: "line",
+        data: {
+          labels: [],
+          datasets: [
+            {
+              fill: false,
+              label: "price",
+              data: [],
+              backgroundColor: "rgb(34,139,34)",
+
+              borderColor: "rgb(34,139,34)",
+
+              borderWidth: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          lineTension: 1,
+          maintainAspectRatio: false,
+
+          scales: {
+            xAxes: [
+              {
+                type: "time",
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labalString: "Date"
+                }
+              }
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: false,
+                  padding: 25
+                },
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: "Price"
+                }
+              }
+            ]
+          }
+        }
+      }
     };
   },
   methods: {
@@ -105,6 +152,8 @@ export default {
               this.results.push(s);
             }
           }
+        }).then(res => {
+          this.$store.dispatch("getStockInfo", this.results);
         })
         .catch(error => {
           this.error = true;
@@ -118,7 +167,25 @@ export default {
           )}/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
         )
         .then(res => {
+       console.log("TIME SERIES");
           this.timeSeriesData = res.data;
+          //this.canvasData.labels = res.data;
+          for (var i = 0; i < this.timeSeriesData.length; i++) {
+            this.canvasData.data.labels.push(
+              new Date(this.timeSeriesData[i].date)
+            );
+            this.canvasData.data.datasets[0].data.push(
+              this.timeSeriesData[i].close
+            );
+          }
+          console.log("canvas data");
+          console.log(this.canvasData.data);
+          console.log(this.canvasData.data.datasets[0].data);
+          
+          // this.canvas();
+        }).then(res => {
+          this.$store.dispatch("getTimeSeries",this.canvasData)
+          
         })
         .catch(err => {
           console.log(err);
@@ -136,17 +203,22 @@ export default {
       this.term = "";
       this.noResults = false;
       this.searchTerm = "";
+    },
+    canvas: function() {
+      this.createChart("Intra Day Chart", this.canvasData);
     }
   },
-  watch: {
-    results: function(newVal, oldVal) {
-      console.log("new");
-      this.$store.dispatch("getStockInfo", newVal);
-    },
-    timeSeriesData: function(newVal, oldVal) {
-      this.$store.dispatch("getTimeSeries", newVal);
-    }
-  }
+  // watch: {
+  //   results: function(newVal, oldVal) {
+  //     console.log("new");
+  //     this.$store.dispatch("getStockInfo", newVal);
+  //   },
+  //   canvasData: function(newVal, oldVal) {
+  //     console.log(newVal)
+  //     console.log('NEWvalD')
+  //     this.$store.dispatch("getTimeSeries", newVal);
+  //   }
+  // }
 };
 </script>
 
@@ -240,7 +312,7 @@ a:focus {
 .search-container {
   width: 55%;
   position: relative;
-  right: 400px;
+  /*right: 400px;*/
   background: white;
 }
 

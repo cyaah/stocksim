@@ -1,34 +1,85 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-graph">
-      <div class="card-body-stock">     
-        <div class="card-body">
+      <div class="card-body">
           <div id="chart-container">
             <canvas id="myChart" width="320px" height="320px"></canvas>
           </div>
         </div>
-      </div>
+        <p>{{getTimeSeries}}</p>
     </div>
-    <div>{{getstockInfo}}</div>
+    <!-- <div>{{getstockInfo}}</div> -->
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex';
-
+var myChart;
 export default {
   data (){
     return {
-      // stockInfo: [],
-      // timeSeries:[]
+      stockInfo: [],
+      timeSeries:[],
+      canvasData: {
+        type: "line",
+        data: {
+          labels: [],
+          datasets: [
+            {
+              fill: false,
+              label: "price",
+              data: [],
+              backgroundColor: "rgb(34,139,34)",
+
+              borderColor: "rgb(34,139,34)",
+
+              borderWidth: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          lineTension: 1,
+          maintainAspectRatio: false,
+
+          scales: {
+            xAxes: [
+              {
+                type: "time",
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labalString: "Date"
+                }
+              }
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: false,
+                  padding: 25
+                },
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: "Price"
+                }
+              }
+            ]
+          }
+        }
+      }
     }
   },
   methods: {
-      canvas() {
-      this.createChart("Intra Day Chart", this.canvasData);
+      canvas(canvasData) {
+        console.log('121221121212121212121212')
+      this.createChart("Intra Day Chart", canvasData);
     },
 
     createChart(chartId, chartData) {
-      console.log("chartData" + chartData);
+       console.log("chartData" );
+      console.log(chartId)
+      console.log(chartData)
 
       if (myChart) {
         document.getElementById("myChart").remove();
@@ -43,27 +94,29 @@ export default {
         myChart.destroy();
       }
       console.log("ctx" + myChart);
+      console.log('xoxoxoxoxoxoxoxoxoxo')
       const ctx = document.getElementById("myChart").getContext("2d");
 
-      myChart = new Chart(ctx, {
-        type: chartData.type,
-        data: chartData.data,
-        options: chartData.options
-      });
+      // myChart = new Chart(ctx, {
+      //   type: chartData.type,
+      //   data: chartData.data,
+      //   options: chartData.options
+      // });
       this.canvasCreated = true;
     },
   },
   computed: {
-    ...mapGetters([
-      'getstockInfo',
-      'gettimeSeries'
-    ]),
-    timeSeries (){
-      console.log('dash time')
+    // ...mapGetters([
+    //   'getstockInfo',
+    //   'gettimeSeries'
+    // ]),
+    getTimeSeries (){
+      this.canvas(this.$store.getters.getTimeSeries);
+      return this.$store.getters.getTimeSeries
 
     },
     getstockInfo (){
-      console.log('resss dash')
+      return this.$store.getters.getStockInfo
     }
   }
 };
@@ -83,6 +136,7 @@ export default {
 .dashboard-graph {
   height: 50px;
   border: 2px solid red;
+  flex: flex-grow;
 }
 
 .dashboard-info {
@@ -91,7 +145,7 @@ export default {
   border: 2px solid red;
 }
 
-.card-body-stock {
+.card-body {
   /* width: 60%; */
   width: 680px;
   height: 25rem;
@@ -102,7 +156,7 @@ export default {
   position: absolute;
   top: 150px;
   left: 120px;
-/* 
-  background: blue; */
+
+  /*background: blue;*/
 }
 </style>

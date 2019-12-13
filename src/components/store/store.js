@@ -25,7 +25,7 @@ export const store = new Vuex.Store({
         loggedIn: false,
         loginError: null,
         stockInfo: [],
-        timeSeries: []
+        timeSeries:{}
     },
     mutations: {
         BUY_STOCK(state, {
@@ -107,8 +107,9 @@ export const store = new Vuex.Store({
         },
         TIMESERIES(state, timeSeries) {
             console.log('THIIS TIME SERIES')
-            console.log(timeSeries)
+         
             state.timeSeries = timeSeries
+            console.log(state.timeSeries)
         }
     },
     actions: {
@@ -146,7 +147,7 @@ export const store = new Vuex.Store({
             return state.funds
         },
         getStockInfo: state => {
-            return state
+            return state.stockInfo
         },
         getTimeSeries: state => {
             console.log('123545454')

@@ -297,7 +297,9 @@ export default {
     },
 
     createChart(chartId, chartData) {
-      console.log("chartData" + chartData);
+      console.log("chartData" );
+      console.log(chartId)
+      console.log(chartData)
 
       if (myChart) {
         document.getElementById("myChart").remove();
@@ -312,6 +314,7 @@ export default {
         myChart.destroy();
       }
       console.log("ctx" + myChart);
+      console.log('xoxoxoxoxoxoxoxoxoxo')
       const ctx = document.getElementById("myChart").getContext("2d");
 
       myChart = new Chart(ctx, {
