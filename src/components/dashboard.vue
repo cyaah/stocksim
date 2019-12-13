@@ -2,7 +2,7 @@
   <div class="dashboard-container">
     <div class="dashboard-graph">
       <div class="card-body">
-          <div id="chart-container">
+          <div v-if="this.canvasCreated" id="chart-container">
             <canvas id="myChart" width="320px" height="320px"></canvas>
           </div>
         </div>
@@ -67,8 +67,14 @@ export default {
             ]
           }
         }
-      }
+      },
+      canvasCreated: false
     }
+  },
+  created() {
+    console.log('CrEaTeD')
+    // const ctx = document.getElementById("myChart").getContext("2d");
+    console.log(this.getTimeSeries);
   },
   methods: {
       canvas(canvasData) {
@@ -95,14 +101,14 @@ export default {
       }
       console.log("ctx" + myChart);
       console.log('xoxoxoxoxoxoxoxoxoxo')
-      const ctx = document.getElementById("myChart").getContext("2d");
-
+      // const ctx = document.getElementById("myChart").getContext("2d");
+      //
       // myChart = new Chart(ctx, {
       //   type: chartData.type,
       //   data: chartData.data,
       //   options: chartData.options
       // });
-      this.canvasCreated = true;
+      // this.canvasCreated = true;
     },
   },
   computed: {
@@ -111,13 +117,17 @@ export default {
     //   'gettimeSeries'
     // ]),
     getTimeSeries (){
-      this.canvas(this.$store.getters.getTimeSeries);
+       this.canvas(this.$store.getters.getTimeSeries);
+       this.canvasCreated = true
       return this.$store.getters.getTimeSeries
 
     },
     getstockInfo (){
       return this.$store.getters.getStockInfo
     }
+  },
+  watch:{
+
   }
 };
 </script>

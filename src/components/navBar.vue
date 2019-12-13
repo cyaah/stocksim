@@ -125,9 +125,11 @@ export default {
       var term = this.searchTerm;
       //   if (this.myChart != null) {
       //     this.myChart.destroy();
-      //     this.canvasData.data.datasets[0].data = [];
+           this.canvasData.data.datasets[0].data = [];
+      this.canvasData.data.labels = []
       //     console.log(this.myChart);
       //   }
+      this.results= [];
 
       console.log("here we go");
       //Getting stock price info
@@ -181,11 +183,11 @@ export default {
           console.log("canvas data");
           console.log(this.canvasData.data);
           console.log(this.canvasData.data.datasets[0].data);
-          
+
           // this.canvas();
         }).then(res => {
           this.$store.dispatch("getTimeSeries",this.canvasData)
-          
+
         })
         .catch(err => {
           console.log(err);

@@ -103,11 +103,13 @@ export const store = new Vuex.Store({
         STOCKINFO(state, stockInfo) {
             console.log(stockInfo)
             console.log('stock info1212121')
+            state.stockInfo = []
             state.stockInfo = stockInfo
         },
         TIMESERIES(state, timeSeries) {
             console.log('THIIS TIME SERIES')
-         
+            state.timeSeries = {};
+            //console.log(state.timeSeries.data.labels)
             state.timeSeries = timeSeries
             console.log(state.timeSeries)
         }
