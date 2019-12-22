@@ -2,7 +2,7 @@
   <div class="dashboard-container">
     <div class="dashboard-graph">
       <div class="card-body">
-          <div id="chart-container">
+           <div id="chart-container">
             <canvas id="myChart" width="320px" height="320px"></canvas>
           </div>
         </div>
@@ -67,7 +67,8 @@ export default {
             ]
           }
         }
-      }
+      },
+      // myChart: null
     }
   },
   methods: {
@@ -77,7 +78,7 @@ export default {
     },
 
     createChart(chartId, chartData) {
-       console.log("chartData" );
+      console.log("chartData" );
       console.log(chartId)
       console.log(chartData)
 
@@ -96,7 +97,7 @@ export default {
       console.log("ctx" + myChart);
       console.log('xoxoxoxoxoxoxoxoxoxo')
       const ctx = document.getElementById("myChart").getContext("2d");
-
+      console.log(ctx)
       // myChart = new Chart(ctx, {
       //   type: chartData.type,
       //   data: chartData.data,

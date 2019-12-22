@@ -302,6 +302,7 @@ export default {
       console.log(chartData)
 
       if (myChart) {
+        console.log("00000000000000000000000000000000000000000000000000000000000000000")
         document.getElementById("myChart").remove();
         console.log(document.getElementById("myChart"));
         let canvas = document.createElement("canvas");
@@ -313,10 +314,10 @@ export default {
 
         myChart.destroy();
       }
-      console.log("ctx" + myChart);
+     
       console.log('xoxoxoxoxoxoxoxoxoxo')
       const ctx = document.getElementById("myChart").getContext("2d");
-
+       console.log(ctx);
       myChart = new Chart(ctx, {
         type: chartData.type,
         data: chartData.data,
@@ -324,16 +325,6 @@ export default {
       });
       this.canvasCreated = true;
     },
-
-    //console.log("ctx" + myChart);
-    // var ctx = document.getElementById("myChart").getContext("2d");
-
-    // this.myChart = new Chart(ctx, {
-    //   type: chartData.type,
-    //   data: chartData.data,
-    //   options: chartData.options
-    // });
-    // this.canvasCreated = true;
     resetError() {
       console.log("reset");
       this.error = false;
