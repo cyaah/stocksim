@@ -1,7 +1,11 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
-      <button type="button" id="sidebarCollapse" class="btn text-sidebar bg-turbo-yellow">
+      <button
+        type="button"
+        id="sidebarCollapse"
+        class="btn text-sidebar bg-turbo-yellow"
+      >
         <i class="fas fa-align-left"></i>
         <span></span>
       </button>
@@ -125,11 +129,11 @@ export default {
       var term = this.searchTerm;
       //   if (this.myChart != null) {
       //     this.myChart.destroy();
-           this.canvasData.data.datasets[0].data = [];
-      this.canvasData.data.labels = []
+      this.canvasData.data.datasets[0].data = [];
+      this.canvasData.data.labels = [];
       //     console.log(this.myChart);
       //   }
-      this.results= [];
+      this.results = [];
 
       console.log("here we go");
       //Getting stock price info
@@ -154,8 +158,11 @@ export default {
               this.results.push(s);
             }
           }
-        }).then(res => {
+        })
+        .then(res => {
           this.$store.dispatch("getStockInfo", this.results);
+          this.$emit("stockInfo", this.results);
+
         })
         .catch(error => {
           this.error = true;
@@ -169,7 +176,7 @@ export default {
           )}/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
         )
         .then(res => {
-       console.log("TIME SERIES");
+          console.log("TIME SERIES");
           this.timeSeriesData = res.data;
           //this.canvasData.labels = res.data;
           for (var i = 0; i < this.timeSeriesData.length; i++) {
@@ -185,10 +192,10 @@ export default {
           console.log(this.canvasData.data.datasets[0].data);
 
           // this.canvas();
-        }).then(res => {
-          this.$store.dispatch("getTimeSeries",this.canvasData)
-          this.$emit('chartData', this.canvasData)
-
+        })
+        .then(res => {
+          this.$store.dispatch("getTimeSeries", this.canvasData);
+          this.$emit("chartData", this.canvasData);
         })
         .catch(err => {
           console.log(err);
@@ -210,7 +217,7 @@ export default {
     canvas: function() {
       this.createChart("Intra Day Chart", this.canvasData);
     }
-  },
+  }
   // watch: {
   //   results: function(newVal, oldVal) {
   //     console.log("new");

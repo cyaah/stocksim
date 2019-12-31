@@ -191,20 +191,21 @@ export default {
     };
   },
   created() {
-    let user = firebase.auth().currentUser; //checking to see who the user is if logged in
-    this.currentUser = user;
-    let id = this.$store.getters.GETUSERID;
-
-    var stockRef = db.collection(id).doc("Portfolio");
-    stockRef.get().then(doc => {
-      console.log('01010101')
-      if (doc.exists) {
-        console.log("doc");
-        this.funds = doc.data().funds.toFixed(2);
-        this.portfolio = doc.data();
-        this.$store.commit("updateFunds", this.funds);
-      }
-    });
+    console.log("CREATED")
+    // let user = firebase.auth().currentUser; //checking to see who the user is if logged in
+    // this.currentUser = user;
+    // let id = this.$store.getters.GETUSERID;
+    //
+    // var stockRef = db.collection(id).doc("Portfolio");
+    // stockRef.get().then(doc => {
+    //   console.log('01010101')
+    //   if (doc.exists) {
+    //     console.log("doc");
+    //     this.funds = doc.data().funds.toFixed(2);
+    //     this.portfolio = doc.data();
+    //     this.$store.commit("updateFunds", this.funds);
+    //   }
+    // });
   },
   methods: {
     canvas() {
