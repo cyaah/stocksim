@@ -4,8 +4,19 @@
         <side-bar2></side-bar2>
         <!-- Page Content  -->
         <div id="content">
-          <navBar></navBar>
-          <dashboard></dashboard>
+          <navBar v-on:chartData="canvas"></navBar>
+<!--          <dashboard></dashboard>-->
+            <div class="dashboard-container">
+                <div class="dashboard-graph">
+                    <div class="card-body">
+                        <div id="chart-container">
+                            <canvas id="myChart" width="320px" height="320px"></canvas>
+                        </div>
+                    </div>
+<!--                    <p>{{getTimeSeries}}</p>-->
+                </div>
+                <!-- <div>{{getstockInfo}}</div> -->
+            </div>
         </div>
     </div>
 </template>
@@ -14,18 +25,149 @@
   import sideBar2 from "./sideBar2";
   import navBar from "./navBar";
   import dashboard from './dashboard';1
+  var myChart;
+
   export default {
     name: "Home2",
     components: {sideBar2: sideBar2,
-    navBar:navBar, dashboard:dashboard}
+    navBar:navBar, dashboard:dashboard},
+    data (){
+      return {
+        stockInfo: [],
+        timeSeries:[],
+        myChart: null,
+        canvasData: {
+          type: "line",
+          data: {
+            labels: ["Monthly"],
+            datasets: [
+              {
+                fill: false,
+                label: "Monthly",
+                data: [],
+                backgroundColor: "rgb(34,139,34)",
+
+                borderColor: "rgb(34,139,34)",
+
+                borderWidth: 3
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            lineTension: 1,
+            maintainAspectRatio: false,
+
+            scales: {
+              xAxes: [
+                {
+                  type: "time",
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labalString: "Date"
+                  }
+                }
+              ],
+              yAxes: [
+                {
+                  ticks: {
+                    beginAtZero: false,
+                    padding: 25
+                  },
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: "Price"
+                  }
+                }
+              ]
+            }
+          }
+        },
+      }
+    },
+    methods: {
+      canvas(canvasData) {
+        console.log('HAHAHAHAHAHAHAHAHAHAHAH')
+        this.createChart("Intra Day Chart", canvasData);
+      },
+
+      createChart(chartId, chartData) {
+        console.log("chartData" );
+        console.log(chartId);
+        console.log(chartData);
+
+        if (myChart) {
+          document.getElementById("myChart").remove();
+          console.log(document.getElementById("myChart"));
+          let canvas = document.createElement("canvas");
+          canvas.setAttribute("id", "myChart");
+          canvas.setAttribute("width", "300px");
+          canvas.setAttribute("height", "300px");
+          console.log(document.getElementById("chart-container"));
+          document.getElementById("chart-container").appendChild(canvas);
+
+          myChart.destroy();
+        }
+        console.log("ctx" + myChart);
+        console.log('xoxoxoxoxoxoxoxoxoxo')
+        const ctx = document.getElementById("myChart").getContext("2d");
+
+        myChart = new Chart(ctx, {
+          type: chartData.type,
+          data: chartData.data,
+          options: chartData.options
+        });
+      },
+    }
   }
 </script>
 
 <style scoped>
+    /* ---------------------------------------------------
+          Chart STYLE
+      ----------------------------------------------------- */
 
-    body {
+    bodybody {
         font-family: 'Oswald';
         background: #fafafa;
+    }
+    .dashboard-container {
+        /* background: yellow; */
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        border: 2px solid red;
+        height: 100vh;
+    }
+
+    .dashboard-graph {
+        height: 50px;
+        border: 2px solid red;
+        flex: flex-grow;
+    }
+
+    .dashboard-info {
+        background: black;
+        height: 100px;
+        border: 2px solid red;
+    }
+
+    .card-body {
+        /* width: 60%; */
+        width: 680px;
+        height: 25rem;
+        box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5);
+        font-family: "Roboto", sans-serif;
+        border-radius: 15px;
+        border: black;
+        position: absolute;
+        top: 150px;
+        left: 120px;
+
+        /*background: blue;*/
     }
 
     p {

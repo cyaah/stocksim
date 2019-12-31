@@ -62,7 +62,7 @@ export default {
           datasets: [
             {
               fill: false,
-              label: "price",
+              label: "1 Month",
               data: [],
               backgroundColor: "rgb(34,139,34)",
 
@@ -187,6 +187,7 @@ export default {
           // this.canvas();
         }).then(res => {
           this.$store.dispatch("getTimeSeries",this.canvasData)
+          this.$emit('chartData', this.canvasData)
 
         })
         .catch(err => {
