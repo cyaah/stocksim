@@ -17,7 +17,7 @@ export const routes = [{
     },
     {
         path: '/',
-        component: Home,
+        component: Home2,
         beforeEnter: (to, from, next) => {
             console.log(store.state.loggedIn === true)
             if (store.state.loggedIn) {

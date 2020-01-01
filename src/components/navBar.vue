@@ -38,7 +38,7 @@
             </div>
           </li>
           <li>
-            <span>Funds</span>
+            <span>Funds: {{funds}}</span>
           </li>
         </ul>
       </div>
@@ -109,6 +109,11 @@ export default {
         }
       }
     };
+  },
+  computed:{
+    funds() {
+      return this.$store.getters.getUserFunds
+    }
   },
   methods: {
     searchToggle(obj, evt) {
@@ -332,7 +337,6 @@ a:focus {
 }
 
 .search-container {
-  background: black;
   color: #666;
   font: 90%/180% Arial, Helvetica, sans-serif;
   width: 800px;

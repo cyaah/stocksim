@@ -5,15 +5,15 @@
     <!-- Page Content  -->
     <div id="content">
       <navBar v-on:chartData="canvas" v-on:stockInfo="stockCard"></navBar>
-      <!--          <dashboard></dashboard>-->
+      <!--<dashboard></dashboard>-->
       <div class="dashboard-container">
-        <div class="dashboard-graph">
-          <div class="card-body">
+<!--        <div v-if="this.stockInfo.length>0"  class="dashboard-graph">-->
+          <div class="chart-card-body" v-if="this.stockInfo.length>0">
             <div id="chart-container">
-              <canvas id="myChart" width="320px" height="320px"></canvas>
+              <canvas id="myChart" width="20px" height="320px"></canvas>
             </div>
           </div>
-        </div>
+<!--        </div>-->
         <stockCard
           :results="stockInfo"
           v-if="this.stockInfo"
@@ -98,15 +98,11 @@ export default {
   },
   methods: {
     canvas(canvasData) {
-      console.log('HAHAHAHAHAHAHAHAHAHAHAH')
+      console.log('canvas created')
       this.createChart("Intra Day Chart", canvasData);
     },
 
     createChart(chartId, chartData) {
-      console.log("chartData" );
-      console.log(chartId);
-      console.log(chartData);
-
       if (myChart) {
         document.getElementById("myChart").remove();
         console.log(document.getElementById("myChart"));
@@ -119,8 +115,6 @@ export default {
 
         myChart.destroy();
       }
-      console.log("ctx" + myChart);
-      console.log('xoxoxoxoxoxoxoxoxoxo')
       const ctx = document.getElementById("myChart").getContext("2d");
 
       myChart = new Chart(ctx, {
@@ -140,7 +134,7 @@ export default {
 <style scoped>
 /* ---------------------------------------------------
           Chart STYLE
-      ----------------------------------------------------- */
+   ----------------------------------------------------- */
 
 bodybody {
   font-family: "Oswald";
@@ -150,10 +144,10 @@ bodybody {
   /* background: yellow; */
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-  border: 2px solid red;
+  /*justify-content: space-between;*/
+  /*border: 2px solid red;*/
   height: 100vh;
+  padding:5px;
 }
 
 .dashboard-graph {
@@ -168,19 +162,20 @@ bodybody {
   border: 2px solid red;
 }
 
-.card-body {
+.chart-card-body {
   /* width: 60%; */
-  width: 680px;
+  width:90%;
   height: 25rem;
-  box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5);
-  font-family: "Roboto", sans-serif;
-  border-radius: 15px;
+  /*box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5);*/
+  /*border-radius: 15px;*/
   border: black;
-  position: absolute;
-  top: 150px;
+  /*position: absolute;*/
+  /*top: 150px;*/
   left: 120px;
-
   /*background: blue;*/
+  margin:5px;
+  /*flex: flex-grow;*/
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 p {
