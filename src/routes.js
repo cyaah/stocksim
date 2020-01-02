@@ -8,6 +8,8 @@ import {
     store
 }
 from './components/store/store.js';
+import firebase from "firebase";
+
 
 
 
@@ -19,15 +21,27 @@ export const routes = [{
         path: '/',
         component: Home2,
         beforeEnter: (to, from, next) => {
-            console.log(store.state.loggedIn === true)
-            if (store.state.loggedIn) {
-                console.log("vue navguard")
-                console.log(store.state.loggedIn)
-                next()
-            } else {
-                console.log('not logged in')
-                next('/login')
-            }
+            console.log(store.state.loggedIn)
+            console.log("router guard before if")
+            // if (store.state.loggedIn) {
+            //     console.log("vue navguard")
+            //
+            //     next()
+            // } else {
+            //     console.log('not logged in')
+            //     next('/login')
+            // }
+            firebase.auth().onAuthStateChanged(function (user){
+                console.log(user)
+                console.log('user')
+                if(user){
+                    console.log('user is signed in')
+                    next()
+                } else {
+                    console.log('user is not signed in')
+                    next('/login')
+                }
+            })
         }
     },
     {
