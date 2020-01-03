@@ -127,6 +127,22 @@ export default {
       //var quan = parseInt(order.quantity, 10);
       //var increment = firebase.firestore.FieldValue.increment(quan);
 
+
+      //Getting current user id
+      firebase.auth().onAuthStateChanged(function (user){
+        console.log(user.uid)
+        console.log('user inside stock card')
+        this.userId = user
+        console.log(this.userId)
+        if(user){
+
+        } else {
+          console.log('Cant get user id')
+
+        }
+      });
+
+
       //Updating portfolio funds to firestore
       var stockRef = db.collection(this.userId).doc("Portfolio");
       var name = order.name;

@@ -49,7 +49,9 @@
         background: $lila;
         color: white;
         transition: all 0.3s;
-        background: red;
+        /*background: red;*/
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+
     }
 
     #sidebar.active {

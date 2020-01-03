@@ -3,6 +3,7 @@
     <div class="funds-div">
       <h3>Funds: {{this.funds}}</h3>
     </div>
+    <side-bar2></side-bar2>
     <div class="column">
       <!-- <transition-group tag="div" name="portfolio"> -->
       <app-stock
@@ -27,6 +28,8 @@ import firebase from "firebase";
 import firestore from "firebase";
 import portfolio from "../store/modules/portfolio";
 const FieldValue = require("firebase").firestore.FieldValue;
+import sideBar2 from "../sideBar2";
+
 
 export default {
   data() {
@@ -44,7 +47,8 @@ export default {
   //     }
   //   },
   components: {
-    appStock: stock
+    appStock: stock,
+    sideBar2:sideBar2
   },
   created() {
     this.userId = this.$store.getters.GETUSERID;
