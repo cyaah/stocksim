@@ -29,6 +29,7 @@
                     aria-controls="navbarSupportedContent"
                     aria-expanded="false"
                     aria-label="Toggle navigation"
+                    @click="logout"
             >
               Logout
             </button>
@@ -42,6 +43,8 @@
 <script>
 import axios from "axios";
 import { store } from "./store/store.js";
+import firebase from  'firebase';
+
 
 export default {
   name: "navBar",
@@ -122,6 +125,22 @@ export default {
         // clear input
         container.find(".search-input").val("");
       }
+    },
+    logout() {
+      console.log("sign out");
+      firebase
+              .auth()
+              .signOut()
+              .then(resp => {
+                // console.log("ssss");
+                this.$store.commit('LOGOUT')
+
+
+              }).then(() => {
+        // console.log('then');
+        this.$router.push({ path: '/login' })
+
+      });
     },
     search: function() {
       var term = this.searchTerm;
@@ -278,8 +297,10 @@ body {
   font-family: "oswald", sans-serif;
   background: #fafafa;
 }
-.btn btn-primary-outline{
+.btn-primary-outline{
   background-color: transparent;
+  bottom: 7px;
+  position: relative
 }
 
 p {
