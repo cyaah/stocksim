@@ -2,7 +2,7 @@
   <div class="dashboard-container">
     <div class="dashboard-graph">
       <div class="card-body">
-           <div id="chart-container">
+          <div v-if="this.canvasCreated" id="chart-container">
             <canvas id="myChart" width="320px" height="320px"></canvas>
           </div>
         </div>
@@ -68,8 +68,14 @@ export default {
           }
         }
       },
-      // myChart: null
+      canvasCreated: false
     }
+  },
+  created() {
+    console.log('CrEaTeD')
+    // const ctx = document.getElementById("myChart").getContext("2d");
+    console.log(this.getTimeSeries);
+    console.log(this.canvasCreated);
   },
   methods: {
       canvas(canvasData) {
@@ -97,12 +103,12 @@ export default {
       console.log("ctx" + myChart);
       console.log('xoxoxoxoxoxoxoxoxoxo')
       const ctx = document.getElementById("myChart").getContext("2d");
-      console.log(ctx)
-      // myChart = new Chart(ctx, {
-      //   type: chartData.type,
-      //   data: chartData.data,
-      //   options: chartData.options
-      // });
+      
+      myChart = new Chart(ctx, {
+        type: chartData.type,
+        data: chartData.data,
+        options: chartData.options
+      });
       this.canvasCreated = true;
     },
   },
@@ -112,13 +118,18 @@ export default {
     //   'gettimeSeries'
     // ]),
     getTimeSeries (){
-      this.canvas(this.$store.getters.getTimeSeries);
-      return this.$store.getters.getTimeSeries
+      console.log('triggered')
+       this.canvas(this.$store.getters.getTimeSeries);
+       //this.canvasCreated = true
+      //return this.$store.getters.getTimeSeries
 
     },
     getstockInfo (){
       return this.$store.getters.getStockInfo
     }
+  },
+  watch:{
+
   }
 };
 </script>
