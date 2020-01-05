@@ -4,18 +4,17 @@
     <side-bar2></side-bar2>
     <!-- Page Content  -->
     <div id="content">
-      <navBar></navBar>
-      <!-- <dashboard></dashboard> -->
+      <navBar v-on:chartData="canvas" v-on:stockInfo="stockCard"></navBar>
+      <!--<dashboard></dashboard>-->
       <div class="dashboard-container">
-        <div class="dashboard-graph">
-          <div class="card-body">
-            <div v-if="this.canvasCreated" id="chart-container">
-              <canvas id="myChart" width="320px" height="320px"></canvas>
-            </div>
+        <!--        <div v-if="this.stockInfo.length>0"  class="dashboard-graph">-->
+        <div class="chart-card-body" v-if="this.stockInfo.length>0">
+          <div id="chart-container">
+            <canvas id="myChart" width="20px" height="320px"></canvas>
           </div>
-          <p>{{getTimeSeries}}</p>
         </div>
-        <!-- <div>{{getstockInfo}}</div> -->
+        <!--        </div>-->
+        <stockCard :results="stockInfo" v-if="this.stockInfo"></stockCard>
       </div>
     </div>
   </div>
@@ -25,19 +24,32 @@
 import sideBar2 from "./sideBar2";
 import navBar from "./navBar";
 import dashboard from "./dashboard";
+import stockCard from "./stockCard";
+
+var myChart;
+
 export default {
   name: "Home2",
-  components: { sideBar2: sideBar2, navBar: navBar, dashboard: dashboard },
-   stockInfo: [],
-      timeSeries:[],
+  components: {
+    sideBar2: sideBar2,
+    navBar: navBar,
+    dashboard: dashboard,
+    stockCard
+  },
+  data() {
+    return {
+      stockInfo: [],
+      timeSeries: [],
+      myChart: null,
+      stockData: false,
       canvasData: {
         type: "line",
         data: {
-          labels: [],
+          labels: ["Monthly"],
           datasets: [
             {
               fill: false,
-              label: "price",
+              label: "Monthly",
               data: [],
               backgroundColor: "rgb(34,139,34)",
 
@@ -78,17 +90,90 @@ export default {
             ]
           }
         }
-      },
-      canvasCreated: false
-    //}
-  
+      }
+    };
+  },
+  methods: {
+    canvas(canvasData) {
+      console.log("canvas created");
+      this.createChart("Intra Day Chart", canvasData);
+    },
+
+    createChart(chartId, chartData) {
+      if (myChart) {
+        document.getElementById("myChart").remove();
+        console.log(document.getElementById("myChart"));
+        let canvas = document.createElement("canvas");
+        canvas.setAttribute("id", "myChart");
+        canvas.setAttribute("width", "300px");
+        canvas.setAttribute("height", "300px");
+        console.log(document.getElementById("chart-container"));
+        document.getElementById("chart-container").appendChild(canvas);
+
+        myChart.destroy();
+      }
+      const ctx = document.getElementById("myChart").getContext("2d");
+
+      myChart = new Chart(ctx, {
+        type: chartData.type,
+        data: chartData.data,
+        options: chartData.options
+      });
+      this.stockData = true;
+    },
+    stockCard(stockInfo) {
+      this.stockInfo = stockInfo;
+    }
+  }
 };
 </script>
 
 <style scoped>
-body {
-  font-family: "Oswald";
+/* ---------------------------------------------------
+          Chart STYLE
+   ----------------------------------------------------- */
+
+.body {
+  /* font-family: "Oswald"; */
   background: #fafafa;
+  font-family: "Montserrat", sans-serif;
+}
+.dashboard-container {
+  /* background: yellow; */
+  display: flex;
+  flex-flow: row wrap;
+  /*justify-content: space-between;*/
+  /*border: 2px solid red;*/
+  height: 100vh;
+  padding: 5px;
+}
+
+.dashboard-graph {
+  height: 50px;
+  border: 2px solid red;
+  flex: flex-grow;
+}
+
+.dashboard-info {
+  background: black;
+  height: 100px;
+  border: 2px solid red;
+}
+
+.chart-card-body {
+  /* width: 60%; */
+  width: 90%;
+  height: 25rem;
+  /*box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5);*/
+  /*border-radius: 15px;*/
+  border: black;
+  /*position: absolute;*/
+  /*top: 150px;*/
+  left: 120px;
+  /*background: blue;*/
+  margin: 5px;
+  /*flex: flex-grow;*/
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 p {
@@ -113,7 +198,7 @@ a:focus {
   border: none;
   border-radius: 0;
   margin-bottom: 40px;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); */
 }
 
 .navbar-btn {
@@ -151,10 +236,9 @@ $text-sidebar-hover: #6b6b6b /*#fff*/;
 }
 
 #sidebar {
-  min-width: 100px;
-  max-width: 100px;
+  min-width: 112px;
   background: $lila;
-  color: $text-sidebar;
+  color: Black;
   transition: all 0.3s;
 }
 
@@ -261,42 +345,5 @@ a.article:hover {
   #sidebarCollapse span {
     display: none;
   }
-}
-
-.dashboard-container {
-  /* background: yellow; */
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-  border: 2px solid red;
-  height: 100vh;
-}
-
-.dashboard-graph {
-  height: 50px;
-  border: 2px solid red;
-  flex: flex-grow;
-}
-
-.dashboard-info {
-  background: black;
-  height: 100px;
-  border: 2px solid red;
-}
-
-.card-body {
-  /* width: 60%; */
-  width: 680px;
-  height: 25rem;
-  box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5);
-  font-family: "Roboto", sans-serif;
-  border-radius: 15px;
-  border: black;
-  position: absolute;
-  top: 150px;
-  left: 120px;
-
-  /*background: blue;*/
 }
 </style>

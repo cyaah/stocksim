@@ -1,22 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
-      <button type="button" id="sidebarCollapse" class="btn text-sidebar bg-turbo-yellow">
-        <i class="fas fa-align-left"></i>
-        <span></span>
-      </button>
-      <button
-        class="btn btn-dark d-inline-block d-lg-none ml-auto"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <i class="fas fa-align-justify"></i>
-      </button>
-
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="nav navbar-nav ml-auto">
           <li class="nav-item">
@@ -34,7 +18,19 @@
             </div>
           </li>
           <li>
-            <span>Funds</span>
+            <span>Funds: {{funds}}</span>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="btn btn-primary-outline"
+              data-toggle="collapse"
+              data-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+              @click="logout"
+            >Logout</button>
           </li>
         </ul>
       </div>
@@ -45,6 +41,7 @@
 <script>
 import axios from "axios";
 import { store } from "./store/store.js";
+import firebase from "firebase";
 
 export default {
   name: "navBar",
@@ -62,7 +59,7 @@ export default {
           datasets: [
             {
               fill: false,
-              label: "price",
+              label: "1 Month",
               data: [],
               backgroundColor: "rgb(34,139,34)",
 
@@ -106,6 +103,11 @@ export default {
       }
     };
   },
+  computed: {
+    funds() {
+      return this.$store.getters.getUserFunds;
+    }
+  },
   methods: {
     searchToggle(obj, evt) {
       var container = $(obj).closest(".search-wrapper");
@@ -121,15 +123,29 @@ export default {
         container.find(".search-input").val("");
       }
     },
+    logout() {
+      console.log("sign out");
+      firebase
+        .auth()
+        .signOut()
+        .then(resp => {
+          // console.log("ssss");
+          this.$store.commit("LOGOUT");
+        })
+        .then(() => {
+          // console.log('then');
+          this.$router.push({ path: "/login" });
+        });
+    },
     search: function() {
       var term = this.searchTerm;
       //   if (this.myChart != null) {
       //     this.myChart.destroy();
-           this.canvasData.data.datasets[0].data = [];
-      this.canvasData.data.labels = []
+      this.canvasData.data.datasets[0].data = [];
+      this.canvasData.data.labels = [];
       //     console.log(this.myChart);
       //   }
-      this.results= [];
+      this.results = [];
 
       console.log("here we go");
       //Getting stock price info
@@ -154,8 +170,10 @@ export default {
               this.results.push(s);
             }
           }
-        }).then(res => {
+        })
+        .then(res => {
           this.$store.dispatch("getStockInfo", this.results);
+          this.$emit("stockInfo", this.results);
         })
         .catch(error => {
           this.error = true;
@@ -169,7 +187,7 @@ export default {
           )}/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
         )
         .then(res => {
-       console.log("TIME SERIES");
+          console.log("TIME SERIES");
           this.timeSeriesData = res.data;
           //this.canvasData.labels = res.data;
           for (var i = 0; i < this.timeSeriesData.length; i++) {
@@ -185,9 +203,10 @@ export default {
           console.log(this.canvasData.data.datasets[0].data);
 
           // this.canvas();
-        }).then(res => {
-          this.$store.dispatch("getTimeSeries",this.canvasData)
-
+        })
+        .then(res => {
+          this.$store.dispatch("getTimeSeries", this.canvasData);
+          this.$emit("chartData", this.canvasData);
         })
         .catch(err => {
           console.log(err);
@@ -209,7 +228,7 @@ export default {
     canvas: function() {
       this.createChart("Intra Day Chart", this.canvasData);
     }
-  },
+  }
   // watch: {
   //   results: function(newVal, oldVal) {
   //     console.log("new");
@@ -273,6 +292,17 @@ body {
   background: #fafafa;
 }
 
+.nav-item {
+  right: 230px;
+  position: relative;
+}
+
+.btn-primary-outline {
+  background-color: transparent;
+  bottom: 7px;
+  position: relative;
+}
+
 p {
   font-family: "Poppins", sans-serif;
   font-size: 1.1em;
@@ -295,7 +325,7 @@ a:focus {
   border: none;
   border-radius: 0;
   margin-bottom: 40px;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); */
 }
 
 .navbar-btn {
@@ -314,7 +344,7 @@ a:focus {
 .search-container {
   width: 55%;
   position: relative;
-  /*right: 400px;*/
+  right: 00px;
   background: white;
 }
 
@@ -324,7 +354,6 @@ a:focus {
 }
 
 .search-container {
-  background: black;
   color: #666;
   font: 90%/180% Arial, Helvetica, sans-serif;
   width: 800px;

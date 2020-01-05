@@ -87,7 +87,6 @@ export default {
           var blah = firebase.auth().currentUser;
           console.log(blah);
           this.$store.commit("LOGIN", this.id);
-
           this.$router.push({ path: "/" });
         })
         .catch(function(error) {

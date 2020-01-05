@@ -48,7 +48,8 @@ export default {
       quantity: 0,
       stockInfo: {},
       totalChange: 0,
-      dbQuantity: 0
+      dbQuantity: 0,
+      userId:""
     };
   },
   created() {
@@ -62,6 +63,7 @@ export default {
         if (res) {
           console.log("data for each stock");
           this.stockInfo = res.data;
+          console.log(this.stockInfo)
           this.totalChange = (
             parseFloat(this.stockInfo.latestPrice) *
               parseFloat(this.stock.quantity) -
@@ -93,8 +95,9 @@ export default {
         });
     },
     sellStock() {
-      console.log('sell_stock')
-      let userId = this.$store.getters.GETUSERID;
+      console.log("sell_stock");
+      var user = firebase.auth().currentUser;
+      this.userId = user.uid;
       //Building the order
       var order = {
         name: this.stock.name,
@@ -102,7 +105,7 @@ export default {
         quantity: parseInt(this.quantity)
       };
       console.log(order);
-      var stockRef = db.collection(userId).doc("Portfolio");
+      var stockRef = db.collection(this.userId).doc("Portfolio");
       console.log("stock");
       console.log("axaxa");
       //Retrieving stock info from firebase
@@ -114,12 +117,12 @@ export default {
         var sellingPrice =
           parseFloat(this.stock.price).toFixed(2) * parseInt(order.quantity);
         var newFunds = parseFloat(funds) + sellingPrice;
-        console.log('selling price')
-        console.log(sellingPrice)
-        console.log('funds')
-        console.log(funds)
-        console.log(newFunds)
-        console.log('newFunds')
+        console.log("selling price");
+        console.log(sellingPrice);
+        console.log("funds");
+        console.log(funds);
+        console.log(newFunds);
+        console.log("newFunds");
         var increaseBy = firebase.firestore.FieldValue.increment(sellingPrice);
 
         stockRef.update({ funds: increaseBy });
@@ -170,6 +173,11 @@ export default {
 
       //this.placeSellOrder(order);
       //this.dbQuantity = 0;
+    }
+  },
+  computed:{
+    currentPrice: {
+  
     }
   }
 };
