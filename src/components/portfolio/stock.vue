@@ -24,7 +24,6 @@
             <button class="btn btn-outline-success" @click="sellStock">Sell</button>
           </div>
         </div>
-        <button @click="timeSeries" class="btn btn-outline-success">Chart</button>
       </div>
     </div>
   </div>
@@ -53,6 +52,8 @@ export default {
     };
   },
   created() {
+    console.log('created')
+
     axios
       .get(
         `https://cloud.iexapis.com/stable/stock/${encodeURIComponent(

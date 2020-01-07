@@ -26,6 +26,7 @@ export default {
   // }
   computed: {
     stocks() {
+      console.log('xoxoxoxox')
       return this.$store.getters.stocks;
     }
   }

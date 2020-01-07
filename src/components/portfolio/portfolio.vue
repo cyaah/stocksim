@@ -7,23 +7,24 @@
       <navBar></navBar>
       <!--<dashboard></dashboard>-->
       <div class="dashboard-container">
-         <div class="column">
-    <transition-group tag="div" name="portfolio">
-    <app-stock
-        v-for="(stock,index) in portfolio"
-        :stock="stock"
-        :portfolio="portfolio"
-        v-on:deleteStock="deleteThisStock"
-        v-on:updateStock="updateStock"
-        :key="stock.name"
-        :index="index"
-    ></app-stock>
-    </transition-group>
-    </div>
+        <portfolioTable :portfolio="portfolio" ></portfolioTable>
+
+        <!-- <div class="column">
+        
+          <transition-group tag="div" name="portfolio">
+            <app-stock
+              v-for="(stock,index) in portfolio"
+              :stock="stock"
+              :portfolio="portfolio"
+              v-on:deleteStock="deleteThisStock"
+              v-on:updateStock="updateStock"
+              :key="stock.name"
+              :index="index"
+            ></app-stock>
+          </transition-group>
+        </div> -->
       </div>
     </div>
-
-   
   </div>
 </template>
 
@@ -36,6 +37,8 @@ import firestore from "firebase";
 import portfolio from "../store/modules/portfolio";
 const FieldValue = require("firebase").firestore.FieldValue;
 import sideBar2 from "../sideBar2";
+import navBar from "../navBar";
+import portfolioTable from "./portfolioTable";
 
 export default {
   data() {
@@ -54,15 +57,15 @@ export default {
   //   },
   components: {
     appStock: stock,
-    sideBar2: sideBar2
+    sideBar2: sideBar2,
+    navBar,
+    portfolioTable
   },
   created() {
     this.funds = this.$store.getters.getUserFunds;
 
-   
-      var user = firebase.auth().currentUser;
-      this.userId = user.uid;
-
+    var user = firebase.auth().currentUser;
+    this.userId = user.uid;
 
     var stockRef = db.collection(this.userId).doc("Portfolio");
 
