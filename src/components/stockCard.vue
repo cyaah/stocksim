@@ -27,9 +27,9 @@
           v-model="quantity"
           min="1"
         />
-        <!-- <div>
+         <div>
           <button class="btn btn-outline-success" @click="buyStock">Buy</button>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>

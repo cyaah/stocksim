@@ -21,16 +21,8 @@ export const routes = [{
         path: '/',
         component: Home2,
         beforeEnter: (to, from, next) => {
-            console.log(store.state.loggedIn)
-            console.log("router guard before if")
-            // if (store.state.loggedIn) {
-            //     console.log("vue navguard")
-            //
-            //     next()
-            // } else {
-            //     console.log('not logged in')
-            //     next('/login')
-            // }
+            console.log(store.state.loggedIn);
+            console.log("router guard before if");
             firebase.auth().onAuthStateChanged(function (user){
                 console.log(user)
                 console.log('user')
@@ -48,10 +40,7 @@ export const routes = [{
         path: '/portfolio',
         component: Portfolio,
         beforeEnter: (to, from, next) => {
-            console.log(store.state.loggedIn === true)
             firebase.auth().onAuthStateChanged(function (user){
-                console.log(user)
-                console.log('user')
                 if(user){
                     console.log('user is signed in')
                     next()

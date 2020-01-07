@@ -6,17 +6,17 @@
           <th scope="col">Ticker</th>
           <th scope="col">Name</th>
           <th scope="col">Current Price</th>
+          <th scope="col">Quantity</th>
           <th scope="col">Gain/Loss</th>
         </tr>
       </thead>
       <tbody>
-        <stock></stock>
-        <!-- <tr v-for="stock in portfolio">
-          <th scope="row">{{stock.name}}</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td> -->
-        </tr>
+
+<tr  v-for="(stock,index) in stocks" is="stock"  :portfolio="portfolio"  :key="stock.name" :stock="stock"></tr>
+<!--          <th scope="row">{{stock.name}}</th>-->
+<!--          <td>Mark</td>-->
+<!--          <td>Otto</td>-->
+<!--          <td>@mdo</td> -->
       </tbody>
     </table>
   </div>
@@ -32,14 +32,16 @@ export default {
   },
   components:{
     stock
-  }
+  },
   data(){
     return{
-
+    stocks: this.portfolio
     }
   },
   created (){
     console.log(this.portfolio)
+    console.log(this.stocks)
+
   }
 };
 </script>
