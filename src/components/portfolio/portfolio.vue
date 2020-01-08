@@ -280,7 +280,7 @@ export default {
 
 .chart-card-body {
   /* width: 60%; */
-  width: 90%;
+  width: 50%;
   height: 25rem;
   /*box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5);*/
   /*border-radius: 15px;*/
