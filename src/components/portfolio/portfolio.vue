@@ -51,9 +51,6 @@ import { EventBus } from "./../eventBus";
 import axios from "axios";
 var myChart;
 
-
-
-
 export default {
   data() {
     return {
@@ -61,18 +58,18 @@ export default {
       funds: 0,
       userId: "",
       stockSelected: {},
+      timeSeries: [],
       canvasData: {
         type: "line",
         data: {
-          labels: ["Monthly"],
+          labels: [],
           datasets: [
             {
               fill: false,
               label: "Monthly",
               data: [],
-              backgroundColor: "rgb(34,139,34)",
-
-              borderColor: "rgb(34,139,34)",
+              backgroundColor: "rgb(45, 58, 58)",
+              borderColor: "rgb(43,168,74)",
 
               borderWidth: 3
             }
@@ -146,12 +143,13 @@ export default {
 
     //EventBus listener
     EventBus.$on("stockSelected", stock => {
+      this.canvasData.data.datasets[0].data = [];
+      this.canvasData.data.labels = [];
       console.log("event bus listener");
       console.log(stock);
       this.stockSelected = stock;
       var term = stock.symbol;
 
-      //Getting time series data
       axios
         .get(
           `https://cloud.iexapis.com/stable/stock/${encodeURIComponent(
@@ -160,6 +158,7 @@ export default {
         )
         .then(res => {
           console.log("TIME SERIES");
+          console.log(this.canvasData.data.labels)
           this.timeSeriesData = res.data;
           //this.canvasData.labels = res.data;
           for (var i = 0; i < this.timeSeriesData.length; i++) {
@@ -170,18 +169,16 @@ export default {
               this.timeSeriesData[i].close
             );
           }
-          console.log("canvas data");
+          console.log("canvas data portfolio");
           console.log(this.canvasData.data);
           console.log(this.canvasData.data.datasets[0].data);
 
           // this.canvas();
         })
         .then(res => {
-          console.log("END");
-          this.selected = true;
-          this.createChart("Intra Day Chart", this.canvasData);
-
           this.$store.dispatch("getTimeSeries", this.canvasData);
+          //this.$emit("chartData", this.canvasData);
+            this.createChart("Intra Day Chart",this.canvasData)
         })
         .catch(err => {
           console.log(err);
@@ -193,7 +190,7 @@ export default {
       console.log("trying to create ");
 
       if (myChart) {
-        console.log('inside')
+        console.log("inside");
         document.getElementById("myChart").remove();
         console.log(document.getElementById("myChart"));
         let canvas = document.createElement("canvas");

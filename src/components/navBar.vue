@@ -51,7 +51,56 @@ export default {
       term: "",
       timeSeriesData: [],
       results: [],
-      myChart: null
+      myChart: null,
+      canvasData: {
+        type: "line",
+        data: {
+          labels: [],
+          datasets: [
+            {
+              fill: false,
+              label: "Monthly",
+              data: [],
+              backgroundColor: "rgb(34,139,34)",
+
+              borderColor: "rgb(34,139,34)",
+
+              borderWidth: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          lineTension: 1,
+          maintainAspectRatio: false,
+
+          scales: {
+            xAxes: [
+              {
+                type: "time",
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labalString: "Date"
+                }
+              }
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: false,
+                  padding: 25
+                },
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: "Price"
+                }
+              }
+            ]
+          }
+        }
+      }
     };
   },
   computed: {
@@ -141,6 +190,8 @@ export default {
         )
         .then(res => {
           console.log("TIME SERIES");
+          console.log(this.canvasData.data.labels)          ;
+
           this.timeSeriesData = res.data;
           //this.canvasData.labels = res.data;
           for (var i = 0; i < this.timeSeriesData.length; i++) {
@@ -151,8 +202,8 @@ export default {
               this.timeSeriesData[i].close
             );
           }
-          console.log("canvas data");
-          console.log(this.canvasData.data);
+          console.log("canvas data navbar");
+          console.log(this.canvasData.data.labels)          ;
           console.log(this.canvasData.data.datasets[0].data);
 
           // this.canvas();

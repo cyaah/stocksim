@@ -49,7 +49,7 @@ export default {
       canvasData: {
         type: "line",
         data: {
-          labels: ["Monthly"],
+          labels: [],
           datasets: [
             {
               fill: false,
@@ -100,6 +100,7 @@ export default {
   methods: {
     canvas(canvasData) {
       console.log("canvas created");
+      console.log(canvasData)
       this.createChart("Intra Day Chart", canvasData);
     },
 
