@@ -11,6 +11,9 @@
 
 <script>
 import axios from "axios";
+import { EventBus} from './../eventBus';
+
+
 
 export default {
   props: ["stock", "portfolio", "index"],
@@ -49,6 +52,7 @@ export default {
     stockSelected: function (stock){
       console.log(stock);
       console.log('picked stock');
+      EventBus.$emit("stockSelected",stock)
     }
   },
   computed: {
@@ -79,7 +83,7 @@ export default {
     transition-property: color, background-color;
   }
   .stockEntry:hover, .stockEntry:focus, .stockEntry:active {
-    background-color: #2098D1;
+    background-color: #2BA84A;
     color: white;
   }
 

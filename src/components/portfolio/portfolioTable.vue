@@ -1,7 +1,7 @@
 <template>
   <div class="column">
     <table class="table">
-      <thead class="thead-light">
+      <thead class="thead">
         <tr>
           <th scope="col">Ticker</th>
           <th scope="col">Name</th>
@@ -47,5 +47,11 @@ export default {
 </script>
 
 <style scoped>
+th {
+  color: white;
+}
 
+.thead{
+  background-color: #040F0F;
+}
 </style>

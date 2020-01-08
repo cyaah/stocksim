@@ -56,7 +56,7 @@ export default {
   },
   computed: {
     funds() {
-      console.log('FUNDS')
+
       console.log(this.$store.getters.getUserFunds)
       return this.$store.getters.getUserFunds;
     }

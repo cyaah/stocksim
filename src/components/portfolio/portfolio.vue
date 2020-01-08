@@ -7,7 +7,10 @@
       <navBar></navBar>
       <!--<dashboard></dashboard>-->
       <div class="dashboard-container">
-        <portfolioTable :portfolio="portfolio" ></portfolioTable>
+        <portfolioTable
+          v-on:stockSelected="stockSelected"
+          :portfolio="portfolio"
+        ></portfolioTable>
 
         <!-- <div class="column">
 
@@ -23,6 +26,12 @@
             ></app-stock>
           </transition-group>
         </div> -->
+
+        <div class="chart-card-body">
+          <div id="chart-container">
+            <canvas id="myChart" width="20px" height="320px"></canvas>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -38,22 +47,78 @@ const FieldValue = require("firebase").firestore.FieldValue;
 import sideBar2 from "../sideBar2";
 import navBar from "../navBar";
 import portfolioTable from "./portfolioTable";
+import { EventBus } from "./../eventBus";
+import axios from "axios";
+var myChart;
+
+
+
 
 export default {
   data() {
     return {
       portfolio: [],
       funds: 0,
-      userId: ""
+      userId: "",
+      stockSelected: {},
+      canvasData: {
+        type: "line",
+        data: {
+          labels: ["Monthly"],
+          datasets: [
+            {
+              fill: false,
+              label: "Monthly",
+              data: [],
+              backgroundColor: "rgb(34,139,34)",
+
+              borderColor: "rgb(34,139,34)",
+
+              borderWidth: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          lineTension: 1,
+          maintainAspectRatio: false,
+
+          scales: {
+            xAxes: [
+              {
+                type: "time",
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labalString: "Date"
+                }
+              }
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: false,
+                  padding: 25
+                },
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: "Price"
+                }
+              }
+            ]
+          }
+        }
+      },
+      selected: false
     };
   },
 
-  //   computed: {
-  //     stocks() {
-  //       var stock = this.$store.getters.stockPortfolio;
-  //       return this.$store.getters.stockPortfolio;
-  //     }
-  //   },
+  computed: {
+    selected() {
+      this.createChart("Intra Day Chart", this.canvasData);
+    }
+  },
   components: {
     appStock: stock,
     sideBar2: sideBar2,
@@ -61,11 +126,10 @@ export default {
     portfolioTable
   },
   created() {
+    //Getting user funds
     this.funds = this.$store.getters.getUserFunds;
-
     var user = firebase.auth().currentUser;
     this.userId = user.uid;
-
     var stockRef = db.collection(this.userId).doc("Portfolio");
 
     stockRef.get().then(doc => {
@@ -79,8 +143,77 @@ export default {
         //console.log(this.portfolio);
       }
     });
+
+    //EventBus listener
+    EventBus.$on("stockSelected", stock => {
+      console.log("event bus listener");
+      console.log(stock);
+      this.stockSelected = stock;
+      var term = stock.symbol;
+
+      //Getting time series data
+      axios
+        .get(
+          `https://cloud.iexapis.com/stable/stock/${encodeURIComponent(
+            term
+          )}/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
+        )
+        .then(res => {
+          console.log("TIME SERIES");
+          this.timeSeriesData = res.data;
+          //this.canvasData.labels = res.data;
+          for (var i = 0; i < this.timeSeriesData.length; i++) {
+            this.canvasData.data.labels.push(
+              new Date(this.timeSeriesData[i].date)
+            );
+            this.canvasData.data.datasets[0].data.push(
+              this.timeSeriesData[i].close
+            );
+          }
+          console.log("canvas data");
+          console.log(this.canvasData.data);
+          console.log(this.canvasData.data.datasets[0].data);
+
+          // this.canvas();
+        })
+        .then(res => {
+          console.log("END");
+          this.selected = true;
+          this.createChart("Intra Day Chart", this.canvasData);
+
+          this.$store.dispatch("getTimeSeries", this.canvasData);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    });
   },
   methods: {
+    createChart(chartId, chartData) {
+      console.log("trying to create ");
+
+      if (myChart) {
+        console.log('inside')
+        document.getElementById("myChart").remove();
+        console.log(document.getElementById("myChart"));
+        let canvas = document.createElement("canvas");
+        canvas.setAttribute("id", "myChart");
+        canvas.setAttribute("width", "300px");
+        canvas.setAttribute("height", "300px");
+        console.log(document.getElementById("chart-container"));
+        document.getElementById("chart-container").appendChild(canvas);
+
+        myChart.destroy();
+      }
+      const ctx = document.getElementById("myChart").getContext("2d");
+
+      myChart = new Chart(ctx, {
+        type: chartData.type,
+        data: chartData.data,
+        options: chartData.options
+      });
+      this.stockData = true;
+    },
     deleteThisStock: function(payload) {
       console.log("DELETE STOCK");
       let index = payload.index;
@@ -102,6 +235,10 @@ export default {
       let funds = this.funds;
       this.funds += order.sellingPrice;
       console.log(this.funds);
+    },
+    stockSelected: function(stock) {
+      console.log(stock);
+      console.log("grand parent reached");
     }
   }
 };

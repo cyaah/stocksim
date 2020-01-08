@@ -50,8 +50,9 @@ $text-sidebar-hover: #6b6b6b /*#fff*/;
   color: white;
   transition: all 0.3s;
   /*background: red;*/
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 3px 1px 3px rgba(0, 0, 0, 0.1);
   font-family: "Montserrat", sans-serif;
+  background-color: #FCFFFC;
 }
 
 #sidebar.active {
