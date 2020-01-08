@@ -1,5 +1,5 @@
 <template>
-  <tr class="stockEntry" @click="stockSelected(stock)">
+  <tr class="stockEntry" @click="stockSelected(stockInfo)">
     <!--    <th scope="row">{{a}}</th>-->
     <td>{{ stock.name }}</td>
     <td>{{stockInfo.companyName}}</td>
@@ -66,6 +66,8 @@ export default {
 <style scoped>
   .stockEntry {
     /*display: inline-block;*/
+    cursor: pointer;
+
     vertical-align: middle;
     -webkit-transform: perspective(1px) translateZ(0);
     transform: perspective(1px) translateZ(0);

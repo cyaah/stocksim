@@ -25,6 +25,9 @@ import sideBar2 from "./sideBar2";
 import navBar from "./navBar";
 import dashboard from "./dashboard";
 import stockCard from "./stockCard";
+import firebase from "firebase";
+import { db, increment } from "../main.js";
+
 
 var myChart;
 
@@ -38,6 +41,7 @@ export default {
   },
   data() {
     return {
+      funds:0,
       stockInfo: [],
       timeSeries: [],
       myChart: null,
@@ -124,6 +128,25 @@ export default {
     stockCard(stockInfo) {
       this.stockInfo = stockInfo;
     }
+  },
+  created() {
+    console.log('dashboard created')
+
+
+    var user = firebase.auth().currentUser;
+    this.userId = user.uid;
+
+    var stockRef = db.collection(this.userId).doc("Portfolio");
+
+
+    stockRef.get().then(doc => {
+      if (doc.exists) {
+        this.funds = doc.data().funds;
+        console.log(this.funds);
+
+        this.$store.commit("updateFunds",this.funds)
+      }
+    });
   }
 };
 </script>

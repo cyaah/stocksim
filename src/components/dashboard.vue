@@ -72,10 +72,7 @@ export default {
     }
   },
   created() {
-    console.log('CrEaTeD')
-    // const ctx = document.getElementById("myChart").getContext("2d");
-    console.log(this.getTimeSeries);
-    console.log(this.canvasCreated);
+
   },
   methods: {
       canvas(canvasData) {
@@ -103,7 +100,7 @@ export default {
       console.log("ctx" + myChart);
       console.log('xoxoxoxoxoxoxoxoxoxo')
       const ctx = document.getElementById("myChart").getContext("2d");
-      
+
       myChart = new Chart(ctx, {
         type: chartData.type,
         data: chartData.data,

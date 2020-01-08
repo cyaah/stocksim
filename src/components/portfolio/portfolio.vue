@@ -10,7 +10,7 @@
         <portfolioTable :portfolio="portfolio" ></portfolioTable>
 
         <!-- <div class="column">
-        
+
           <transition-group tag="div" name="portfolio">
             <app-stock
               v-for="(stock,index) in portfolio"
@@ -33,7 +33,6 @@ import stock from "./stock.vue";
 import { mapGetters } from "vuex";
 import { db, increment } from "../../main.js";
 import firebase from "firebase";
-import firestore from "firebase";
 import portfolio from "../store/modules/portfolio";
 const FieldValue = require("firebase").firestore.FieldValue;
 import sideBar2 from "../sideBar2";
@@ -332,7 +331,7 @@ a.article:hover {
 } */
 /* .column {
   /* background-color: blue; */
-/* } 
+/* }
 
 /* .stock-enter-active,
 .stock-leave-active,

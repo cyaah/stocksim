@@ -88,7 +88,7 @@ export const store = new Vuex.Store({
             console.log("LOGIN_202022")
             console.log(user)
             this.state.loggedIn = true,
-                this.state.accessToken = accessToken;
+            this.state.accessToken = accessToken;
             this.state.user_id = user.uid
             this.funds =
                 console.log(this.state.user_id)

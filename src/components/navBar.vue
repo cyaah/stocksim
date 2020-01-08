@@ -18,7 +18,7 @@
             </div>
           </li>
           <li>
-            <span>Funds: {{funds}}</span>
+            <span>Funds: ${{funds}}</span>
           </li>
           <li>
             <button
@@ -51,60 +51,13 @@ export default {
       term: "",
       timeSeriesData: [],
       results: [],
-      myChart: null,
-      canvasData: {
-        type: "line",
-        data: {
-          labels: [],
-          datasets: [
-            {
-              fill: false,
-              label: "1 Month",
-              data: [],
-              backgroundColor: "rgb(34,139,34)",
-
-              borderColor: "rgb(34,139,34)",
-
-              borderWidth: 3
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          lineTension: 1,
-          maintainAspectRatio: false,
-
-          scales: {
-            xAxes: [
-              {
-                type: "time",
-                display: true,
-                scaleLabel: {
-                  display: true,
-                  labalString: "Date"
-                }
-              }
-            ],
-            yAxes: [
-              {
-                ticks: {
-                  beginAtZero: false,
-                  padding: 25
-                },
-                display: true,
-                scaleLabel: {
-                  display: true,
-                  labelString: "Price"
-                }
-              }
-            ]
-          }
-        }
-      }
+      myChart: null
     };
   },
   computed: {
     funds() {
+      console.log('FUNDS')
+      console.log(this.$store.getters.getUserFunds)
       return this.$store.getters.getUserFunds;
     }
   },
