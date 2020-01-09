@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       funds:0,
-      stockInfo: [],
+      stockInfo: {},
       timeSeries: [],
       myChart: null,
       stockData: false,

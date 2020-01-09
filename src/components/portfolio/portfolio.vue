@@ -7,10 +7,7 @@
       <navBar></navBar>
       <!--<dashboard></dashboard>-->
       <div class="dashboard-container">
-        <portfolioTable
-          v-on:stockSelected="stockSelected"
-          :portfolio="portfolio"
-        ></portfolioTable>
+        <portfolioTable v-on:stockSelected="stockSelected" :portfolio="portfolio"></portfolioTable>
 
         <!-- <div class="column">
 
@@ -25,13 +22,14 @@
               :index="index"
             ></app-stock>
           </transition-group>
-        </div> -->
+        </div>-->
 
-        <div class="chart-card-body">
+        <div class="chart-card-body" v-if="this.selected === true">
           <div id="chart-container">
             <canvas id="myChart" width="20px" height="320px"></canvas>
           </div>
         </div>
+        <stockCard :results="stockSelected" v-if="this.selected === true"></stockCard>
       </div>
     </div>
   </div>
@@ -49,6 +47,7 @@ import navBar from "../navBar";
 import portfolioTable from "./portfolioTable";
 import { EventBus } from "./../eventBus";
 import axios from "axios";
+import stockCard from "../stockCard";
 var myChart;
 
 export default {
@@ -110,18 +109,19 @@ export default {
       selected: false
     };
   },
-
+  components: {
+    appStock: stock,
+    sideBar2: sideBar2,
+    navBar,
+    portfolioTable,
+    stockCard
+  },
   computed: {
     selected() {
       this.createChart("Intra Day Chart", this.canvasData);
     }
   },
-  components: {
-    appStock: stock,
-    sideBar2: sideBar2,
-    navBar,
-    portfolioTable
-  },
+
   created() {
     //Getting user funds
     this.funds = this.$store.getters.getUserFunds;
@@ -143,6 +143,8 @@ export default {
 
     //EventBus listener
     EventBus.$on("stockSelected", stock => {
+      this.selected = true;
+
       this.canvasData.data.datasets[0].data = [];
       this.canvasData.data.labels = [];
       console.log("event bus listener");
@@ -158,7 +160,7 @@ export default {
         )
         .then(res => {
           console.log("TIME SERIES");
-          console.log(this.canvasData.data.labels)
+          console.log(this.canvasData.data.labels);
           this.timeSeriesData = res.data;
           //this.canvasData.labels = res.data;
           for (var i = 0; i < this.timeSeriesData.length; i++) {
@@ -178,7 +180,7 @@ export default {
         .then(res => {
           this.$store.dispatch("getTimeSeries", this.canvasData);
           //this.$emit("chartData", this.canvasData);
-            this.createChart("Intra Day Chart",this.canvasData)
+          this.createChart("Intra Day Chart", this.canvasData);
         })
         .catch(err => {
           console.log(err);
@@ -242,7 +244,7 @@ export default {
 //}
 </script>
 
-<style>
+<style scoped>
 .portfolioPage {
   /* top: 60px; */
   display: flex;
@@ -280,17 +282,17 @@ export default {
 
 .chart-card-body {
   /* width: 60%; */
-  width: 50%;
+  width: 46%;
   height: 25rem;
   /*box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5);*/
   /*border-radius: 15px;*/
   border: black;
-  /*position: absolute;*/
+  position: relative;
   /*top: 150px;*/
   left: 120px;
-  /*background: blue;*/
-  margin: 5px;
+  /* background: blue; */
   /*flex: flex-grow;*/
+  justify-content: flex-start;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 

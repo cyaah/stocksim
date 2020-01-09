@@ -1,20 +1,20 @@
 <template>
   <div class="search-results">
     <div class="card-body-stock">
-      <h3 class="ticker">{{ this.results[0]["symbol"] }}</h3>
+      <h3 class="ticker">{{ this.results["symbol"] }}</h3>
       <div class="card-info-left">
-        <p class="card-info">Booking price: ${{ this.results[0]["latestPrice"] }}</p>
-        <p class="card-info">Market Cap: $ {{ this.results[0]["marketCap"] }}</p>
-        <p class="card-info">Open: {{ this.results[0]["open"] }}</p>
-        <p class="card-info">High: {{ this.results[0]["high"] }}</p>
-        <p class="card-info">Low: {{ this.results[0]["low"] }}</p>
+        <p class="card-info">Booking price: ${{ this.results["latestPrice"] }}</p>
+        <p class="card-info">Market Cap: $ {{ this.results["marketCap"] }}</p>
+        <p class="card-info">Open: {{ this.results["open"] }}</p>
+        <p class="card-info">High: {{ this.results["high"] }}</p>
+        <p class="card-info">Low: {{ this.results["low"] }}</p>
       </div>
       <div class="card-info-right">
-        <p class="card-info">Volume: {{ this.results[0]["volume"] }}</p>
-        <p class="card-info">Previous close: {{ this.results[0]["previousClose"] }}</p>
-        <p class="card-info">Change: {{ this.results[0]["change"] }}</p>
-        <p class="card-info">Change%: {{ this.results[0]["changePercent"] }}</p>
-        <p class="card-info">P/E Ratio: {{ this.results[0]["peRatio"] }}</p>
+         <p class="card-info">Volume: {{ this.results["volume"] }}</p>
+        <p class="card-info">Previous close: {{ this.results["previousClose"] }}</p>
+        <p class="card-info">Change: {{ this.results["change"] }}</p>
+        <p class="card-info">Change%: {{ this.results["changePercent"] }}</p>
+        <p class="card-info">P/E Ratio: {{ this.results["peRatio"] }}</p> 
       </div>
       <!-- bug- Input allows the enter of 'e' when only shouldbe number. Result in empty string quantity-->
       <div class="input-group">
@@ -44,68 +44,10 @@ export default {
   props: ["results"],
   data() {
     return {
-      myChart: null,
       currentUser: null,
-      searchTerm: "",
       funds: 0,
       userId: "",
-      //results: [],
-      noResults: false,
-      notSearched: true,
-      error: false,
-      quantity: 0,
-      //planetChartDaisEmptyta: planetChartData,
-      timeSeriesData: [],
-      canvasCreated: false,
-      canvasData: {
-        type: "line",
-        data: {
-          labels: [],
-          datasets: [
-            {
-              fill: false,
-              label: "price",
-              data: [],
-              backgroundColor: "rgb(34,139,34)",
-
-              borderColor: "rgb(34,139,34)",
-
-              borderWidth: 3
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          lineTension: 1,
-          maintainAspectRatio: false,
-
-          scales: {
-            xAxes: [
-              {
-                type: "time",
-                display: true,
-                scaleLabel: {
-                  display: true,
-                  labalString: "Date"
-                }
-              }
-            ],
-            yAxes: [
-              {
-                ticks: {
-                  beginAtZero: false,
-                  padding: 25
-                },
-                display: true,
-                scaleLabel: {
-                  display: true,
-                  labelString: "Price"
-                }
-              }
-            ]
-          }
-        }
-      }
+      quantity: 0,    
     };
   },
   methods: {
@@ -113,8 +55,8 @@ export default {
       console.log("stock buy button");
       console.log(this.userId);
       var order = {
-        name: this.results[0]["symbol"],
-        price: parseFloat(this.results[0]["latestPrice"]).toFixed(2),
+        name: this.results["symbol"],
+        price: parseFloat(this.results["latestPrice"]).toFixed(2),
         quantity: parseInt(this.quantity)
       };
 
@@ -212,8 +154,9 @@ export default {
       return this.$store.state.user_id;
     }
   },
-  mounted() {
+  created() {
     console.log("resultsxoxo");
+    console.log(this.results)
     console.log(this.$store.getters.GETUSERID);
     this.userId = this.$store.getters.GETUSERID;
   }

@@ -50,7 +50,7 @@ export default {
       searchTerm: "",
       term: "",
       timeSeriesData: [],
-      results: [],
+      results: {},
       myChart: null,
       canvasData: {
         type: "line",
@@ -149,7 +149,6 @@ export default {
       //   }
       this.results = [];
 
-      console.log("here we go");
       //Getting stock price info
       axios
         .get(
@@ -159,7 +158,7 @@ export default {
         )
         .then(res => {
           if (res) {
-            this.results = [];
+            this.results = {};
             this.noResults = false;
             var s = res.data;
 
@@ -169,7 +168,7 @@ export default {
             } else {
               //turning the object and storing it in an array
               this.notSearched = false;
-              this.results.push(s);
+              this.results = s;
             }
           }
         })
