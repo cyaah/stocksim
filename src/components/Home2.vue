@@ -8,13 +8,13 @@
       <!--<dashboard></dashboard>-->
       <div class="dashboard-container">
         <!--        <div v-if="this.stockInfo.length>0"  class="dashboard-graph">-->
-        <div class="chart-card-body" v-if="this.stockInfo.length>0">
+        <div class="chart-card-body" v-if="this.stockPicked === true">
           <div id="chart-container">
             <canvas id="myChart" width="20px" height="320px"></canvas>
           </div>
         </div>
         <!--        </div>-->
-        <stockCard :results="stockInfo" v-if="this.stockInfo"></stockCard>
+        <stockCard :results="stockInfo" v-if="this.stockPicked === true"></stockCard>
       </div>
     </div>
   </div>
@@ -94,7 +94,8 @@ export default {
             ]
           }
         }
-      }
+      },
+      // stockPicked: false
     };
   },
   methods: {
@@ -132,8 +133,6 @@ export default {
   },
   created() {
     console.log('dashboard created')
-
-
     var user = firebase.auth().currentUser;
     this.userId = user.uid;
 
@@ -148,6 +147,16 @@ export default {
         this.$store.commit("updateFunds",this.funds)
       }
     });
+  },
+  computed:{
+    stockPicked:function(){
+      console.log('computed')
+      for(var key in this.stockInfo) {
+        if(this.stockInfo.hasOwnProperty(key))
+          return true;
+      }
+      return false;
+    }
   }
 };
 </script>

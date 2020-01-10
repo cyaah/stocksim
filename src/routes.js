@@ -38,6 +38,7 @@ export const routes = [{
     },
     {
         path: '/portfolio',
+        name: 'portfolio',
         component: Portfolio,
         beforeEnter: (to, from, next) => {
             firebase.auth().onAuthStateChanged(function (user){

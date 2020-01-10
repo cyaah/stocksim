@@ -85,11 +85,11 @@ export const store = new Vuex.Store({
             console.log(state.stocks);
         },
         LOGIN(accessToken, user) {
-            console.log("LOGIN_202022")
-            console.log(user)
-            this.state.loggedIn = true,
+            console.log("LOGIN_202022");
+            console.log(user);
+            this.state.loggedIn = true;
             this.state.accessToken = accessToken;
-            this.state.user_id = user.uid
+            this.state.user_id = user.uid;
             this.funds =
                 console.log(this.state.user_id)
         },
@@ -101,16 +101,16 @@ export const store = new Vuex.Store({
             state.funds = funds;
         },
         STOCKINFO(state, stockInfo) {
-            console.log(stockInfo)
-            console.log('stock info1212121')
-            state.stockInfo = []
+            console.log(stockInfo);
+            console.log('stock info1212121');
+            state.stockInfo = [];
             state.stockInfo = stockInfo
         },
         TIMESERIES(state, timeSeries) {
-            console.log('THIIS TIME SERIES')
+            console.log('THIIS TIME SERIES');
             state.timeSeries = {};
             //console.log(state.timeSeries.data.labels)
-            state.timeSeries = timeSeries
+            state.timeSeries = timeSeries;
             console.log(state.timeSeries)
         }
     },

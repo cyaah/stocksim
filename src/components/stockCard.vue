@@ -3,7 +3,7 @@
     <div class="card-body-stock">
       <h3 class="ticker">{{ this.results["symbol"] }}</h3>
       <div class="card-info-left">
-        <p class="card-info">Booking price: ${{ this.results["latestPrice"] }}</p>
+        <p class="card-info">Current price: ${{ this.results["latestPrice"] }}</p>
         <p class="card-info">Market Cap: $ {{ this.results["marketCap"] }}</p>
         <p class="card-info">Open: {{ this.results["open"] }}</p>
         <p class="card-info">High: {{ this.results["high"] }}</p>
@@ -14,7 +14,7 @@
         <p class="card-info">Previous close: {{ this.results["previousClose"] }}</p>
         <p class="card-info">Change: {{ this.results["change"] }}</p>
         <p class="card-info">Change%: {{ this.results["changePercent"] }}</p>
-        <p class="card-info">P/E Ratio: {{ this.results["peRatio"] }}</p> 
+        <p class="card-info">P/E Ratio: {{ this.results["peRatio"] }}</p>
       </div>
       <!-- bug- Input allows the enter of 'e' when only shouldbe number. Result in empty string quantity-->
       <div class="input-group">
@@ -29,6 +29,9 @@
         />
          <div>
           <button class="btn btn-outline-success" @click="buyStock">Buy</button>
+        </div>
+        <div v-if="this.$route.name === 'portfolio' " class="input-group-append">
+          <button class="btn btn-outline-success" id=""sellButton @click="sellStock">Sell</button>
         </div>
       </div>
     </div>
@@ -47,7 +50,7 @@ export default {
       currentUser: null,
       funds: 0,
       userId: "",
-      quantity: 0,    
+      quantity: 0,
     };
   },
   methods: {
@@ -85,29 +88,29 @@ export default {
         if (!currentStock[order.name] && !Object.keys({}).length) {
           console.log("inside if");
           stockRef
-            .set({ stock: { [order.name]: order } }, { merge: true })
-            //Tried to change db scheme but this only make it into an array by default. Look into inserting straight object instead of object
-            //.set({[order.name]: [order]},  { merge: true })
-            .then(resp => {
-              console.log("New stock added");
-              //stockRef.FieldValue('stock').add({ [order.name]: order})
-            });
+                  .set({stock: {[order.name]: order}}, {merge: true})
+                  //Tried to change db scheme but this only make it into an array by default. Look into inserting straight object instead of object
+                  //.set({[order.name]: [order]},  { merge: true })
+                  .then(resp => {
+                    console.log("New stock added");
+                    //stockRef.FieldValue('stock').add({ [order.name]: order})
+                  });
         } else {
           console.log("else");
           console.log(currentStock[order.name]);
 
           var quantity =
-            parseInt(currentStock[order.name].quantity) +
-            parseInt(order.quantity);
+                  parseInt(currentStock[order.name].quantity) +
+                  parseInt(order.quantity);
 
           var totalPrice =
-            parseFloat(currentStock[order.name].quantity).toFixed(2) *
-              parseFloat(currentStock[order.name].price).toFixed(2) +
-            parseInt(order.quantity) * parseInt(order.price);
-            console.log('total price')
-            console.log(totalPrice)
+                  parseFloat(currentStock[order.name].quantity).toFixed(2) *
+                  parseFloat(currentStock[order.name].price).toFixed(2) +
+                  parseInt(order.quantity) * parseInt(order.price);
+          console.log('total price')
+          console.log(totalPrice)
           var average =
-            parseFloat(totalPrice).toFixed(2) / parseInt(quantity).toFixed(2);
+                  parseFloat(totalPrice).toFixed(2) / parseInt(quantity).toFixed(2);
           var name = currentStock[order.name].name;
 
           var newOrder = {
@@ -123,7 +126,7 @@ export default {
         }
         console.log(this.funds);
         var buyingPrice =
-          parseFloat(order.price).toFixed(2) * parseInt(order.quantity);
+                parseFloat(order.price).toFixed(2) * parseInt(order.quantity);
         console.log("order");
         console.log(buyingPrice);
         console.log(funds);
@@ -136,9 +139,9 @@ export default {
           var newFunds = funds - buyingPrice;
           console.log(newFunds);
           var decreaseBy = firebase.firestore.FieldValue.increment(
-            buyingPrice * -1
+                  buyingPrice * -1
           );
-          stockRef.update({ funds: decreaseBy });
+          stockRef.update({funds: decreaseBy});
           this.funds = newFunds;
           console.log(this.funds);
           this.$emit("boughtStock", newFunds);
@@ -147,7 +150,87 @@ export default {
 
       this.$store.commit("BUY_STOCK", order);
       this.quantity = 0;
-    }
+    },
+    sellStock() {
+      console.log("sell_stock");
+      var user = firebase.auth().currentUser;
+      this.userId = user.uid;
+      //Building the order
+      var order = {
+        name: this.results["symbol"],
+        price: parseFloat(this.results["latestPrice"]).toFixed(2),
+        quantity: parseInt(this.quantity)
+      };
+      console.log(order);
+      var stockRef = db.collection(this.userId).doc("Portfolio");
+      console.log("stock");
+      console.log("axaxa");
+      //Retrieving stock info from firebase
+      stockRef.get().then(doc => {
+        var currentStock = doc.data().stock;
+        var funds = doc.data().funds;
+        var quan = parseInt(currentStock.quantity) - parseInt(order.quantity);
+        console.log(parseInt(funds) + 70);
+        var sellingPrice =
+                parseFloat(this.results["latestPrice"]).toFixed(2) * parseInt(order.quantity);
+        var newFunds = parseFloat(funds) + sellingPrice;
+        console.log("selling price");
+        console.log(sellingPrice);
+        console.log("funds");
+        console.log(funds);
+        console.log(newFunds);
+        console.log("newFunds");
+        var increaseBy = firebase.firestore.FieldValue.increment(sellingPrice);
+
+        stockRef.update({funds: increaseBy});
+
+        if (currentStock) {
+          if (quan <= 0) {
+            let name = currentStock.name;
+            // let update = stockRef.update({
+            //   name: firebase.firestore.FieldValue.delete()
+            // });
+            //stockRef.update({ 'stock': {[order.name]: firebase.firestore.FieldValue.delete() }});
+            stockRef.update({
+              ["stock." + name]: firebase.firestore.FieldValue.delete()
+            });
+            // var update = {};
+            // update[`stock.${name}`] = newOrder;
+            //  stockRef.update(update);
+            // console.log("check delete");
+            // console.log("index" + this.index);
+            var payload = {
+              index: this.index,
+              sellingPrice: sellingPrice
+            };
+            this.$emit("deleteStock", payload);
+          } else {
+            // console.log("ELSE");
+            //Fix currently completely wiping db
+            order = {
+              name: this.results["symbol"],
+              price: this.results["latestPrice"].toFixed(2),
+              quantity: quan
+            };
+
+            //Updating firestore with the change in quantity
+            var update = {};
+            update[`stock.${this.results["symbol"]}`] = order;
+            // stockRef.update({stock: {[order.name]: {[order.name.quantity] : decrement}})
+            stockRef.update(update);
+            order.sellingPrice = sellingPrice;
+            this.$emit("updateStock", order);
+
+            this.dbQuantity = quan;
+          }
+
+          this.quantity = 0;
+        }
+      });
+
+      //this.placeSellOrder(order);
+      //this.dbQuantity = 0;
+    },
   },
   computed: {
     userId() {
@@ -156,6 +239,7 @@ export default {
   },
   created() {
     console.log("resultsxoxo");
+    console.log(this.$route.name)
     console.log(this.results)
     console.log(this.$store.getters.GETUSERID);
     this.userId = this.$store.getters.GETUSERID;
@@ -225,6 +309,10 @@ export default {
 /* .input-group-append {
   width: 400px;
 } */
+
+#sellButton{
+  color: #040F0F;
+}
 
 #searchBuy {
   border-radius: 5px;
