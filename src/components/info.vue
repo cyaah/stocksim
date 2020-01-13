@@ -316,7 +316,7 @@ export default {
 
 #searchBuy {
   border-radius: 5px;
-  width: 50%;
+
 }
 .btn {
   left: 10px;

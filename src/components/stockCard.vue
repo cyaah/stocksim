@@ -315,7 +315,8 @@ export default {
 
 #searchBuy {
   border-radius: 5px;
-  width: 50%;
+  position: relative;
+  left: 23px;
 }
 .btn {
   left: 10px;
@@ -325,5 +326,7 @@ export default {
 .ticker {
   font-weight: 600;
   letter-spacing: 4px;
+  left: 23px;
+  position: relative;
 }
 </style>
