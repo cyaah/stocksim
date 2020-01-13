@@ -2,23 +2,21 @@
   <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="search-container">
+          <input
+            v-on:keyup.enter="search"
+            v-on:keyyp.enter="canvas"
+            type="search"
+            class="form-control"
+            placeholder="Enter Stock Ticker"
+            aria-label="Recipient's username"
+            v-model="searchTerm"
+            id="main-search"
+          />
+        </div>
         <ul class="nav navbar-nav ml-auto">
-          <li class="nav-item">
-            <div class="search-container">
-              <input
-                v-on:keyup.enter="search"
-                v-on:keyyp.enter="canvas"
-                type="search"
-                class="form-control"
-                placeholder="Enter Stock Ticker"
-                aria-label="Recipient's username"
-                v-model="searchTerm"
-                id="main-search"
-              />
-            </div>
-          </li>
-          <li>
-            <span>Funds: ${{funds}}</span>
+          <li class="fundsLi">
+            <span class="funds">Funds: ${{funds}}</span>
           </li>
           <li>
             <button
@@ -105,8 +103,7 @@ export default {
   },
   computed: {
     funds() {
-
-      console.log(this.$store.getters.getUserFunds)
+      console.log(this.$store.getters.getUserFunds);
       return this.$store.getters.getUserFunds;
     }
   },
@@ -189,7 +186,7 @@ export default {
         )
         .then(res => {
           console.log("TIME SERIES");
-          console.log(this.canvasData.data.labels)          ;
+          console.log(this.canvasData.data.labels);
 
           this.timeSeriesData = res.data;
           //this.canvasData.labels = res.data;
@@ -202,7 +199,7 @@ export default {
             );
           }
           console.log("canvas data navbar");
-          console.log(this.canvasData.data.labels)          ;
+          console.log(this.canvasData.data.labels);
           console.log(this.canvasData.data.datasets[0].data);
 
           // this.canvas();
@@ -291,23 +288,23 @@ $turbo-yellow-90: darken($turbo-yellow, 40%);
 }
 
 body {
-  font-family: "oswald", sans-serif;
   background: #fafafa;
 }
-
-.nav-item {
-  right: 230px;
-  position: relative;
+.funds {
+  font-weight: bold;
+  letter-spacing: 1.5px;
 }
 
 .btn-primary-outline {
   background-color: transparent;
   bottom: 7px;
+  left: 15px;
   position: relative;
+  font-weight: bolder;
+  letter-spacing: 1.5px;
 }
 
 p {
-  font-family: "Poppins", sans-serif;
   font-size: 1.1em;
   font-weight: 300;
   line-height: 1.7em;
@@ -359,7 +356,7 @@ a:focus {
 .search-container {
   color: #666;
   font: 90%/180% Arial, Helvetica, sans-serif;
-  width: 800px;
+  /* width: 800px; */
   max-width: 96%;
   /* right: 90%;
   position: relative; */
@@ -401,10 +398,11 @@ input[type="search"] {
 input[type="search"]:focus {
   width: 130px;
   background-color: #fff;
-  border-color: #66cc75;
+  border-color: #2ba84a;
 
   -webkit-box-shadow: 0 0 5px rgba(109, 207, 246, 0.5);
   -moz-box-shadow: 0 0 5px rgba(109, 207, 246, 0.5);
+
   box-shadow: 0 0 5px rgba(109, 207, 246, 0.5);
 }
 

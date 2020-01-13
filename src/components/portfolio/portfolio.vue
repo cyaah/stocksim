@@ -28,8 +28,8 @@
           <div id="chart-container">
             <canvas id="myChart" width="20px" height="320px"></canvas>
           </div>
+          <info :results="stockSelected" v-if="this.selected === true"></info>
         </div>
-        <stockCard :results="stockSelected" v-if="this.selected === true"></stockCard>
       </div>
     </div>
   </div>
@@ -47,7 +47,8 @@ import navBar from "../navBar";
 import portfolioTable from "./portfolioTable";
 import { EventBus } from "./../eventBus";
 import axios from "axios";
-import stockCard from "../stockCard";
+import info from "../info.vue";
+
 var myChart;
 
 export default {
@@ -114,7 +115,7 @@ export default {
     sideBar2: sideBar2,
     navBar,
     portfolioTable,
-    stockCard
+    info
   },
   computed: {
     selected() {
@@ -293,7 +294,7 @@ export default {
   /* background: blue; */
   /*flex: flex-grow;*/
   justify-content: flex-start;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); */
 }
 
 p {

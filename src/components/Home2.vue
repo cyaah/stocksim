@@ -1,20 +1,24 @@
 <template>
   <div class="wrapper">
-    <!-- Sidebar  -->
+    
     <side-bar2></side-bar2>
+    <div v-if="success === true" class="alert alert-success"  id="alert" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <strong>Success!</strong> You have been signed in successfully!
+    </div>
     <!-- Page Content  -->
     <div id="content">
       <navBar v-on:chartData="canvas" v-on:stockInfo="stockCard"></navBar>
       <!--<dashboard></dashboard>-->
       <div class="dashboard-container">
-        <!--        <div v-if="this.stockInfo.length>0"  class="dashboard-graph">-->
         <div class="chart-card-body" v-if="this.stockPicked === true">
           <div id="chart-container">
             <canvas id="myChart" width="20px" height="320px"></canvas>
           </div>
         </div>
-        <!--        </div>-->
-        <stockCard :results="stockInfo" v-if="this.stockPicked === true"></stockCard>
+        <stockCard @stockBought="stockBought" :results="stockInfo" v-if="this.stockPicked === true"></stockCard>
       </div>
     </div>
   </div>
@@ -28,7 +32,6 @@ import stockCard from "./stockCard";
 import firebase from "firebase";
 import { db, increment } from "../main.js";
 
-
 var myChart;
 
 export default {
@@ -41,7 +44,8 @@ export default {
   },
   data() {
     return {
-      funds:0,
+      funds: 0,
+      success: false,
       stockInfo: {},
       timeSeries: [],
       myChart: null,
@@ -94,14 +98,14 @@ export default {
             ]
           }
         }
-      },
+      }
       // stockPicked: false
     };
   },
   methods: {
     canvas(canvasData) {
       console.log("canvas created");
-      console.log(canvasData)
+      console.log(canvasData);
       this.createChart("Intra Day Chart", canvasData);
     },
 
@@ -129,33 +133,50 @@ export default {
     },
     stockCard(stockInfo) {
       this.stockInfo = stockInfo;
+    },
+    stockBought() {
+      console.log("switichjing to true");
+      this.success = true;
     }
   },
   created() {
-    console.log('dashboard created')
+    console.log("dashboard created");
     var user = firebase.auth().currentUser;
     this.userId = user.uid;
 
     var stockRef = db.collection(this.userId).doc("Portfolio");
-
 
     stockRef.get().then(doc => {
       if (doc.exists) {
         this.funds = doc.data().funds;
         console.log(this.funds);
 
-        this.$store.commit("updateFunds",this.funds)
+        this.$store.commit("updateFunds", this.funds);
       }
     });
   },
-  computed:{
-    stockPicked:function(){
-      console.log('computed')
-      for(var key in this.stockInfo) {
-        if(this.stockInfo.hasOwnProperty(key))
-          return true;
+  computed: {
+    stockPicked: function() {
+      console.log("computed");
+      for (var key in this.stockInfo) {
+        if (this.stockInfo.hasOwnProperty(key)) return true;
       }
       return false;
+    }
+  },
+  watch: {
+    success: function() {
+      window.setTimeout(function() {
+        document
+          .getElementById("alert")
+          .fadeTo(200, 0)
+          .slideUp(200, function() {
+            document.getElementById("alert").remove();
+            this.success = false;
+          });
+      }, 2000);
+      console.log(this.success);
+      console.log("sucesss");
     }
   }
 };
@@ -266,6 +287,7 @@ $text-sidebar-hover: #6b6b6b /*#fff*/;
   display: flex;
   width: 100%;
   align-items: stretch;
+  font-family: "Montserrat", sans-serif;
 }
 
 #sidebar {

@@ -1,8 +1,5 @@
 <template>
   <nav id="sidebar">
-    <div class="sidebar-header">
-      <h3>Logo</h3>
-    </div>
     <div class="sidebar-contents">
       <ul class="list-unstyled components">
         <li>
@@ -11,9 +8,6 @@
         <li>
           <router-link to="/portfolio">Portfolio</router-link>
         </li>
-        <!-- <li>
-            <a href="#">Contact</a>
-        </li>-->
       </ul>
     </div>
   </nav>
@@ -52,7 +46,7 @@ $text-sidebar-hover: #6b6b6b /*#fff*/;
   /*background: red;*/
   box-shadow: 3px 1px 3px rgba(0, 0, 0, 0.1);
   font-family: "Montserrat", sans-serif;
-  background-color: #FCFFFC;
+  background-color: #fcfffc;
 }
 
 #sidebar.active {

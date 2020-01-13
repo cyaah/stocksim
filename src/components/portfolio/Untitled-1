@@ -1,9 +1,0 @@
-TASKS
-#Delete stock card & stock from array once quantity goes to 0 in portfolio 
-#Fix bug where during trading hours the api retrieves price data from last trading session. Find a way to parse and retrieve price from 9:00 am
-#Destroy canvas after every call
-#fix css
-#Error handling for all api calls
-#create portfolio charts 
-#Oauth
-#deploy

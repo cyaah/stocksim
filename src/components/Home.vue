@@ -117,7 +117,7 @@ import { db, increment } from "../main.js";
 import firebase from "firebase";
 import firestore from "firebase";
 import { isError } from "util";
-import header from './Header.vue'
+// import header from './Header.vue'
 const FieldValue = require("firebase").firestore.FieldValue;
 import sideBar from "./sideBar";
 var myChart;
@@ -361,7 +361,7 @@ export default {
   mounted() {},
   components: {
     stockCard,
-    topNavBar:header,
+    // topNavBar:header,
     sideBar
   }
   // }
