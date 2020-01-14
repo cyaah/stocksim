@@ -18,7 +18,7 @@
             <canvas id="myChart" width="20px" height="320px"></canvas>
           </div>
         </div>
-        <stockCard @stockBought="stockBought" :results="stockInfo" v-if="this.stockPicked === true"></stockCard>
+        <stockCard @stockBought="stockBought" :results="stockInfo" :funds="funds"v-if="this.stockPicked === true"></stockCard>
       </div>
     </div>
   </div>

@@ -42,201 +42,96 @@ import { mapGetters } from "vuex";
 import { db, increment } from "../main.js";
 import firebase from "firebase";
 import firestore from "firebase";
-import { EventBus} from './eventBus'
-
+import { EventBus } from "./eventBus";
 
 export default {
-  props: ["results"],
+  props: ["results", "funds"],
   data() {
     return {
       currentUser: null,
-      funds: 0,
       userId: "",
       quantity: 0
     };
   },
   methods: {
     buyStock() {
-      console.log("stock buy button");
-      console.log(this.userId);
       var order = {
         name: this.results["symbol"],
         price: parseFloat(this.results["latestPrice"]).toFixed(2),
         quantity: parseInt(this.quantity)
       };
-
-      //var quan = parseInt(order.quantity, 10);
-      //var increment = firebase.firestore.FieldValue.increment(quan);
-
-      //Getting current user id
-
       var user = firebase.auth().currentUser;
-      this.userId = user.uid;
-      //Updating portfolio funds to firestore
-      var stockRef = db.collection(this.userId).doc("Portfolio");
+      var buyingPrice =
+        parseFloat(order.price).toFixed(2) * parseInt(order.quantity);
       var name = order.name;
-      console.log("order");
-      console.log(order);
-      stockRef.get().then(doc => {
-        console.log("doc does not exist");
-        console.log(doc.data().stock);
-        var currentStock = doc.data().stock;
-        var funds = doc.data().funds;
-        //var currentStock = doc.data()[order.name];
-        console.log("stockdoes not exist");
-        console.log(funds);
+      this.userId = user.uid;
 
-        //Creating new stock
-        if (!currentStock[order.name] && !Object.keys({}).length) {
-          console.log("inside if");
-          stockRef
-            .set({ stock: { [order.name]: order } }, { merge: true })
-            //Tried to change db scheme but this only make it into an array by default. Look into inserting straight object instead of object
-            //.set({[order.name]: [order]},  { merge: true })
-            .then(resp => {
-              console.log("New stock added");
-              //stockRef.FieldValue('stock').add({ [order.name]: order})
-            });
-        } else {
-          console.log("else");
-          console.log(currentStock[order.name]);
+      //CHeck if you have enough funds
+      if (buyingPrice > this.funds) {
+        console.log("cant afford");
+        alert("Not enough funds to buy stock");
+      } else {
+        //Updating portfolio funds to firestore
+        var stockRef = db.collection(this.userId).doc("Portfolio");
+        stockRef.get().then(doc => {
+          console.log("doc does not exist");
+          var currentStock = doc.data().stock;
 
-          var quantity =
-            parseInt(currentStock[order.name].quantity) +
-            parseInt(order.quantity);
+          //Creating new stock
+          if (!currentStock[order.name] && !Object.keys({}).length) {
+            console.log("inside if");
+            stockRef
+              .set({ stock: { [order.name]: order } }, { merge: true })
+              //Tried to change db scheme but this only make it into an array by default. Look into inserting straight object instead of object
+              //.set({[order.name]: [order]},  { merge: true })
+              .then(resp => {
+                console.log("New stock added");
+                //stockRef.FieldValue('stock').add({ [order.name]: order})
+              });
 
-          var totalPrice =
-            parseFloat(currentStock[order.name].quantity).toFixed(2) *
-              parseFloat(currentStock[order.name].price).toFixed(2) +
-            parseInt(order.quantity) * parseInt(order.price);
-          console.log("total price");
-          console.log(totalPrice);
-          var average =
-            parseFloat(totalPrice).toFixed(2) / parseInt(quantity).toFixed(2);
-          var name = currentStock[order.name].name;
+            //Update existing stock
+          } else {
+            console.log("else");
+            var quantity =
+              parseInt(currentStock[order.name].quantity) +
+              parseInt(order.quantity);
 
-          var newOrder = {
-            name: name,
-            price: average,
-            quantity: quantity
-          };
-          var update = {};
-          update[`stock.${name}`] = newOrder;
-          console.log("does exist");
-          console.log(newOrder);
-          stockRef.update(update);
-        }
-        console.log(this.funds);
-        var buyingPrice =
-          parseFloat(order.price).toFixed(2) * parseInt(order.quantity);
-        console.log("order");
-        console.log(buyingPrice);
-        console.log(funds);
+            var totalPrice =
+              parseFloat(currentStock[order.name].quantity).toFixed(2) *
+                parseFloat(currentStock[order.name].price).toFixed(2) +
+              parseInt(order.quantity) * parseInt(order.price);
+            console.log("total price");
+            var average =
+              parseFloat(totalPrice).toFixed(2) / parseInt(quantity).toFixed(2);
+            var name = currentStock[order.name].name;
 
-        //Make sure you cant buy stocks
-        if (buyingPrice > funds) {
-          console.log("cant afford");
-          alert("Not enough funds to buy stock");
-        } else {
-          console.log("when buying price less than funds");
-          var newFunds = (funds - buyingPrice).toFixed(2);
-          console.log(newFunds);
-          var decreaseBy = firebase.firestore.FieldValue.increment(
-            buyingPrice * -1
-          );
-          stockRef.update({ funds: decreaseBy });
-          this.funds = newFunds;
-          console.log(this.funds);
-          this.$emit("boughtStock", newFunds);
-          this.$emit("stockBought", true)
-          this.$store.commit("BUY_STOCK", order);
-          EventBus.$emit('successNotification','notification')
+            var newOrder = {
+              name: name,
+              price: average,
+              quantity: quantity
+            };
+            var update = {};
+            update[`stock.${name}`] = newOrder;
+            console.log("does exist");
+            stockRef.update(update);
+          }
+        });
+        console.log("when buying price less than funds");
 
-        }
-      });
+        //updating funds
+        var newFunds = (this.funds - buyingPrice).toFixed(2);
+        var decreaseBy = firebase.firestore.FieldValue.increment(
+          buyingPrice * -1
+        );
+        stockRef.update({ funds: decreaseBy });
+        this.funds = newFunds;
+        this.$emit("boughtStock", newFunds);
+        this.$emit("stockBought", true);
+        this.$store.commit("BUY_STOCK", order);
+        EventBus.$emit("successNotification", "notification");
+      }
 
       this.quantity = 0;
-    },
-    sellStock() {
-      console.log("sell_stock");
-      var user = firebase.auth().currentUser;
-      this.userId = user.uid;
-      //Building the order
-      var order = {
-        name: this.results["symbol"],
-        price: parseFloat(this.results["latestPrice"]).toFixed(2),
-        quantity: parseInt(this.quantity)
-      };
-      console.log(order);
-      var stockRef = db.collection(this.userId).doc("Portfolio");
-      console.log("stock");
-      console.log("axaxa");
-      //Retrieving stock info from firebase
-      stockRef.get().then(doc => {
-        var currentStock = doc.data().stock;
-        var funds = doc.data().funds;
-        var quan = parseInt(currentStock.quantity) - parseInt(order.quantity);
-        console.log(parseInt(funds) + 70);
-        var sellingPrice =
-          parseFloat(this.results["latestPrice"]).toFixed(2) *
-          parseInt(order.quantity);
-        var newFunds = parseFloat(funds) + sellingPrice;
-        console.log("selling price");
-        console.log(sellingPrice);
-        console.log("funds");
-        console.log(funds);
-        console.log(newFunds);
-        console.log("newFunds");
-        var increaseBy = firebase.firestore.FieldValue.increment(sellingPrice);
-
-        stockRef.update({ funds: increaseBy });
-
-        if (currentStock) {
-          if (quan <= 0) {
-            let name = currentStock.name;
-            // let update = stockRef.update({
-            //   name: firebase.firestore.FieldValue.delete()
-            // });
-            //stockRef.update({ 'stock': {[order.name]: firebase.firestore.FieldValue.delete() }});
-            stockRef.update({
-              ["stock." + name]: firebase.firestore.FieldValue.delete()
-            });
-            // var update = {};
-            // update[`stock.${name}`] = newOrder;
-            //  stockRef.update(update);
-            // console.log("check delete");
-            // console.log("index" + this.index);
-            var payload = {
-              index: this.index,
-              sellingPrice: sellingPrice
-            };
-            this.$emit("deleteStock", payload);
-          } else {
-            // console.log("ELSE");
-            //Fix currently completely wiping db
-            order = {
-              name: this.results["symbol"],
-              price: this.results["latestPrice"].toFixed(2),
-              quantity: quan
-            };
-
-            //Updating firestore with the change in quantity
-            var update = {};
-            update[`stock.${this.results["symbol"]}`] = order;
-            // stockRef.update({stock: {[order.name]: {[order.name.quantity] : decrement}})
-            stockRef.update(update);
-            order.sellingPrice = sellingPrice;
-            this.$emit("updateStock", order);
-
-            this.dbQuantity = quan;
-          }
-
-          this.quantity = 0;
-        }
-      });
-
-      //this.placeSellOrder(order);
-      //this.dbQuantity = 0;
     }
   },
   computed: {
