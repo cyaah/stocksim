@@ -2,12 +2,12 @@
   <div class="wrapper">
     
     <side-bar2></side-bar2>
-    <div v-if="success === true" class="alert alert-success"  id="alert" role="alert">
+    <!-- <div v-if="success === true" class="alert alert-success"  id="alert" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
       <strong>Success!</strong> You have been signed in successfully!
-    </div>
+    </div> -->
     <!-- Page Content  -->
     <div id="content">
       <navBar v-on:chartData="canvas" v-on:stockInfo="stockCard"></navBar>
@@ -164,21 +164,21 @@ export default {
       return false;
     }
   },
-  watch: {
-    success: function() {
-      window.setTimeout(function() {
-        document
-          .getElementById("alert")
-          .fadeTo(200, 0)
-          .slideUp(200, function() {
-            document.getElementById("alert").remove();
-            this.success = false;
-          });
-      }, 2000);
-      console.log(this.success);
-      console.log("sucesss");
-    }
-  }
+  // watch: {
+  //   success: function() {
+  //     window.setTimeout(function() {
+  //       document
+  //         .getElementById("alert")
+  //         .fadeTo(200, 0)
+  //         .slideUp(200, function() {
+  //           document.getElementById("alert").remove();
+  //           this.success = false;
+  //         });
+  //     }, 2000);
+  //     console.log(this.success);
+  //     console.log("sucesss");
+  //   }
+  // }
 };
 </script>
 

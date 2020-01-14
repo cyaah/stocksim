@@ -42,6 +42,8 @@ import { mapGetters } from "vuex";
 import { db, increment } from "../main.js";
 import firebase from "firebase";
 import firestore from "firebase";
+import { EventBus} from './eventBus'
+
 
 export default {
   props: ["results"],
@@ -148,6 +150,8 @@ export default {
           this.$emit("boughtStock", newFunds);
           this.$emit("stockBought", true)
           this.$store.commit("BUY_STOCK", order);
+          EventBus.$emit('successNotification','notification')
+
         }
       });
 
