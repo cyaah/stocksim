@@ -5,6 +5,7 @@
         <div class="form-group">
           <Strong>User Name:</Strong>
           <input
+            id="userName"
             type="text"
             class="form-control"
             aria-describedby="emailHelp"
@@ -67,8 +68,9 @@ export default {
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(cred => {
           this.id = cred.user.uid;
-          console.log(cred.user);
-          console.log("xxxxxxxxxxxxxxx");
+          return cred.user.updateProfile({
+            displayName: document.getElementById("userName").value
+          });
         })
         .then(res => {
           return db

@@ -15,8 +15,11 @@
           />
         </div>
         <ul class="nav navbar-nav ml-auto">
+          <li>
+            <span id="user" class="funds">{{userName.displayName}} |</span>
+          </li>
           <li class="fundsLi">
-            <span class="funds">Funds: ${{funds}}</span>
+            <span class="funds">Funds: ${{funds}}|</span>
           </li>
           <li>
             <button
@@ -45,6 +48,7 @@ export default {
   name: "navBar",
   data() {
     return {
+      userName: "",
       searchTerm: "",
       term: "",
       timeSeriesData: [],
@@ -100,6 +104,11 @@ export default {
         }
       }
     };
+  },
+  mounted() {
+    var user = firebase.auth().currentUser;
+    this.userName = user;
+    console.log(user);
   },
   computed: {
     funds() {
@@ -289,10 +298,16 @@ $turbo-yellow-90: darken($turbo-yellow, 40%);
 
 body {
   background: #fafafa;
+  font-family: "Montserrat", sans-serif;
+}
+
+.container-fluid {
+  font-family: "Montserrat", sans-serif;
 }
 .funds {
   font-weight: bold;
   letter-spacing: 1.5px;
+  font-size: 20px;
 }
 
 .btn-primary-outline {
@@ -301,6 +316,7 @@ body {
   left: 15px;
   position: relative;
   font-weight: bolder;
+  font-size: 20px;
   letter-spacing: 1.5px;
 }
 
@@ -311,6 +327,11 @@ p {
   color: #999;
 }
 
+#user {
+  right: 10px;
+  position: relative;
+  font-family: "Montserrat", sans-serif;
+}
 a,
 a:hover,
 a:focus {
@@ -355,7 +376,7 @@ a:focus {
 
 .search-container {
   color: #666;
-  font: 90%/180% Arial, Helvetica, sans-serif;
+  font-family: "Montserrat", sans-serif;
   /* width: 800px; */
   max-width: 96%;
   /* right: 90%;

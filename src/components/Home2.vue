@@ -2,12 +2,12 @@
   <div class="wrapper">
     
     <side-bar2></side-bar2>
-    <div v-if="success === true" class="alert alert-success"  id="alert" role="alert">
+    <!-- <div v-if="success === true" class="alert alert-success"  id="alert" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
       <strong>Success!</strong> You have been signed in successfully!
-    </div>
+    </div> -->
     <!-- Page Content  -->
     <div id="content">
       <navBar v-on:chartData="canvas" v-on:stockInfo="stockCard"></navBar>
@@ -15,10 +15,10 @@
       <div class="dashboard-container">
         <div class="chart-card-body" v-if="this.stockPicked === true">
           <div id="chart-container">
-            <canvas id="myChart" width="20px" height="320px"></canvas>
+            <canvas id="myChart" height="320px"></canvas>
           </div>
         </div>
-        <stockCard @stockBought="stockBought" :results="stockInfo" v-if="this.stockPicked === true"></stockCard>
+        <stockCard @stockBought="stockBought" :results="stockInfo" :funds="funds"v-if="this.stockPicked === true"></stockCard>
       </div>
     </div>
   </div>
@@ -59,9 +59,9 @@ export default {
               fill: false,
               label: "Monthly",
               data: [],
-              backgroundColor: "rgb(34,139,34)",
+              backgroundColor: " rgb(34, 51, 38);",
 
-              borderColor: "rgb(34,139,34)",
+              borderColor: " rgb(34, 51, 38);",
 
               borderWidth: 3
             }
@@ -148,9 +148,9 @@ export default {
 
     stockRef.get().then(doc => {
       if (doc.exists) {
-        this.funds = doc.data().funds;
+        this.funds = doc.data().funds.toFixed(2) ;
         console.log(this.funds);
-
+        console.log('x0x0x0x')
         this.$store.commit("updateFunds", this.funds);
       }
     });
@@ -164,21 +164,21 @@ export default {
       return false;
     }
   },
-  watch: {
-    success: function() {
-      window.setTimeout(function() {
-        document
-          .getElementById("alert")
-          .fadeTo(200, 0)
-          .slideUp(200, function() {
-            document.getElementById("alert").remove();
-            this.success = false;
-          });
-      }, 2000);
-      console.log(this.success);
-      console.log("sucesss");
-    }
-  }
+  // watch: {
+  //   success: function() {
+  //     window.setTimeout(function() {
+  //       document
+  //         .getElementById("alert")
+  //         .fadeTo(200, 0)
+  //         .slideUp(200, function() {
+  //           document.getElementById("alert").remove();
+  //           this.success = false;
+  //         });
+  //     }, 2000);
+  //     console.log(this.success);
+  //     console.log("sucesss");
+  //   }
+  // }
 };
 </script>
 
@@ -214,20 +214,21 @@ export default {
   border: 2px solid red;
 }
 
+
 .chart-card-body {
   /* width: 60%; */
   width: 90%;
   height: 25rem;
-  /*box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5);*/
-  /*border-radius: 15px;*/
+  box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5);
+  border-radius: 15px;
   border: black;
   /*position: absolute;*/
-  /*top: 150px;*/
-  left: 120px;
+  /* top: 150px;
+  left: 120px; */
   /*background: blue;*/
   margin: 5px;
   /*flex: flex-grow;*/
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); */
 }
 
 p {
