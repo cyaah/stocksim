@@ -6,7 +6,7 @@
     <router-view></router-view>
     <notifications
       group="notification"
-      :duration="4000"
+      :duration="8000"
       :width="500"
       animation-name="v-fade-left"
       position="top left"
@@ -18,7 +18,7 @@
 <script>
 import { mapState } from "vuex";
 import Chart from "chart.js";
-import {EventBus} from '../src/components/eventBus'
+import { EventBus } from "../src/components/eventBus";
 export default {
   // components: {
   //   appHeader: Header
@@ -33,25 +33,30 @@ export default {
   mounted() {
     console.log("at create");
     //this.$store.dispatch("loadStocks");
-    EventBus.$on('successNotification', resp=> {
-      console.log('x0x0x0000000000000000000000')
-      console.log(resp)
-      this.show('notification', 'success')
-    })
+    EventBus.$on("successNotification", resp => {
+      console.log(resp);
+      this.show("notification", "success");
+    });
+
+    EventBus.$on("soldNotification", resp => {
+      console.log("x0x0x0x0x0x0");
+      this.show("notification", "error");
+    });
   },
 
   methods: {
     show(group, type = "") {
-      console.log('sucess')
+      console.log("sucess");
+      let action = type === "success" ? "Bought" : "Sold";
       const text = `
-        This is notification text!
+        Shares Sucessfully ${action}!
         <br>
         Date: ${new Date()}
       `;
       this.$notify({
         group,
-        title: `Test ${type} notification #${this.id++}`,
-        text,
+        title: text,
+
         type,
         data: {
           randomNumber: Math.random()
@@ -87,9 +92,10 @@ export default {
   margin: 0;
   width: 100%;
   min-height: 100vh;
+  font-family: "Montserrat", sans-serif;
 }
 
-.btn-success{
+.btn-success {
   position: absolute;
   right: 100px;
   bottom: 50px;

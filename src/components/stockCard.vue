@@ -166,8 +166,8 @@ export default {
   /* width: 60%; */
   /*width: 30rem;*/
   height: 21rem;
-  /*box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5);*/
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5);
+  /* box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); */
   font-family: "Montserrat", sans-serif;
   border-radius: 15px;
   border: black;
@@ -218,7 +218,7 @@ export default {
   left: 23px;
 }
 .btn {
-  left: 10px;
+  left: 30px;
   position: relative;
 }
 

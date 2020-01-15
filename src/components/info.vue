@@ -3,8 +3,8 @@
   <div class="card-body-stock">
     <h3 class="ticker">{{ this.results["symbol"] }}</h3>
     <div class="card-info-left">
-      <p class="card-info">Current price: $</p>
-      <p class="data">{{ this.results["latestPrice"] }}</p>
+      <p class="card-info">Current price: {{ this.results["latestPrice"] }}$</p>
+      <!-- <p class="data">{{ this.results["latestPrice"] }}</p> -->
       <p class="card-info">Market Cap: $ {{ this.results["marketCap"] }}</p>
       <p class="card-info">Open: {{ this.results["open"] }}</p>
       <p class="card-info">High: {{ this.results["high"] }}</p>
@@ -32,7 +32,7 @@
         <button class="btn btn-outline-success" @click="buyStock">Buy</button>
       </div>
       <div v-if="this.$route.name === 'portfolio' " class="input-group-append">
-        <button class="btn btn-outline-success" id sellButton @click="sellStock">Sell</button>
+        <button class="btn btn-outline-success" id="sellButton" @click="sellStock">Sell</button>
       </div>
     </div>
   </div>
@@ -43,6 +43,7 @@ import { mapGetters } from "vuex";
 import { db, increment } from "../main.js";
 import firebase from "firebase";
 import firestore from "firebase";
+import { EventBus } from "../components/eventBus";
 
 export default {
   props: ["results"],
@@ -187,6 +188,7 @@ export default {
         stockRef.update({ funds: increaseBy });
 
         if (currentStock) {
+          //Selling all shares
           if (quan <= 0) {
             let name = currentStock.name;
             // let update = stockRef.update({
@@ -206,9 +208,9 @@ export default {
               sellingPrice: sellingPrice
             };
             this.$emit("deleteStock", payload);
+
+            //Selling from db
           } else {
-            // console.log("ELSE");
-            //Fix currently completely wiping db
             order = {
               name: this.results["symbol"],
               price: this.results["latestPrice"].toFixed(2),
@@ -225,7 +227,7 @@ export default {
 
             this.dbQuantity = quan;
           }
-
+          EventBus.$emit("soldNotification");
           this.quantity = 0;
         }
       });
@@ -273,9 +275,7 @@ export default {
   border: black;
   position: relative;
 }
-.data{
-  display: inline;
-}
+
 
 .stockBuy {
   position: relative;
@@ -306,17 +306,14 @@ export default {
   font-weight: 400;
   left: 60px;
 }
-/* .input-group-append {
-  width: 400px;
-} */
 
 #sellButton {
-  color: #040f0f;
+  left: 25px;
+  border-radius: 5px;
 }
 
 #searchBuy {
   border-radius: 5px;
-
 }
 .btn {
   left: 10px;
