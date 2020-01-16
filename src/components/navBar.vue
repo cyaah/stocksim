@@ -3,9 +3,16 @@
     <div class="container-fluid">
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <div class="search-container">
+          <!--          <div v-if="this.error === true " class="alert alert-dark" role="alert">-->
+          <!--            Error stock ticker "{{searchTerm}}" cannot be found. Try another ticker-->
+          <!--            <button type="button" class="close" data-dismiss="alert" aria-label="Close">-->
+          <!--              <span aria-hidden="true">&times;</span>-->
+          <!--            </button>-->
+          <!--          </div>-->
           <input
             v-on:keyup.enter="search"
             v-on:keyyp.enter="canvas"
+            v-on:click="errorChange"
             type="search"
             class="form-control"
             placeholder="Enter Stock Ticker"
@@ -14,12 +21,24 @@
             id="main-search"
           />
         </div>
+        <div v-if="this.error === true" class="alert alert-dark" role="alert">
+          Error stock ticker "{{ searchTerm }}" cannot be found. Try another
+          ticker
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
         <ul class="nav navbar-nav ml-auto">
           <li>
-            <span id="user" class="funds">{{userName.displayName}} |</span>
+            <span id="user" class="funds">{{ userName.displayName }}</span>
           </li>
           <li class="fundsLi">
-            <span class="funds">Funds: ${{funds}}|</span>
+            <span class="funds"> ${{ funds }}</span>
           </li>
           <li>
             <button
@@ -31,7 +50,9 @@
               aria-expanded="false"
               aria-label="Toggle navigation"
               @click="logout"
-            >Logout</button>
+            >
+              Logout
+            </button>
           </li>
         </ul>
       </div>
@@ -54,6 +75,7 @@ export default {
       timeSeriesData: [],
       results: {},
       myChart: null,
+      error: false,
       canvasData: {
         type: "line",
         data: {
@@ -108,7 +130,6 @@ export default {
   mounted() {
     var user = firebase.auth().currentUser;
     this.userName = user;
-    console.log(user);
   },
   computed: {
     funds() {
@@ -181,8 +202,10 @@ export default {
         .then(res => {
           this.$store.dispatch("getStockInfo", this.results);
           this.$emit("stockInfo", this.results);
+          this.error = false;
         })
         .catch(error => {
+          console.log(error);
           this.error = true;
         });
 
@@ -229,13 +252,16 @@ export default {
         }
         return true;
       };
-      var stockInfo = { timeseries: this.timeSeriesData, stock: this.results };
+      // var stockInfo = { timeseries: this.timeSeriesData, stock: this.results };
       this.term = "";
       this.noResults = false;
-      this.searchTerm = "";
+      // this.searchTerm = "";
     },
     canvas: function() {
       this.createChart("Intra Day Chart", this.canvasData);
+    },
+    errorChange: function(){
+      this.error = false
     }
   }
   // watch: {
@@ -296,11 +322,6 @@ $turbo-yellow-90: darken($turbo-yellow, 40%);
   background-color: $turbo-yellow-90;
 }
 
-body {
-  background: #fafafa;
-  font-family: "Montserrat", sans-serif;
-}
-
 .container-fluid {
   font-family: "Montserrat", sans-serif;
 }
@@ -313,7 +334,7 @@ body {
 .btn-primary-outline {
   background-color: transparent;
   bottom: 7px;
-  left: 15px;
+
   position: relative;
   font-weight: bolder;
   font-size: 20px;
@@ -347,6 +368,22 @@ a:focus {
   border-radius: 0;
   margin-bottom: 40px;
   /* box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); */
+}
+nav li {
+  display: inline-block;
+  padding: 0 0.25em 0 0;
+}
+
+nav li:after {
+  content: " | ";
+  color: #ccc;
+  display: inline-block;
+  font-size: 100%;
+  margin: 0 0 0 0.5em;
+}
+
+nav li:last-child:after {
+  content: " ";
 }
 
 .navbar-btn {

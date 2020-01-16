@@ -33,6 +33,7 @@
         <div v-if="this.$route.name === 'portfolio' " class="input-group-append">
           <button class="btn btn-outline-success" id sellButton @click="sellStock">Sell</button>
         </div>
+
       </div>
     </div>
   </div>
@@ -88,6 +89,7 @@ export default {
                 console.log("New stock added");
                 //stockRef.FieldValue('stock').add({ [order.name]: order})
               });
+
 
             //Update existing stock
           } else {

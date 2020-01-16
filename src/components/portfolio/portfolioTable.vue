@@ -8,6 +8,7 @@
           <th scope="col">Current Price</th>
           <th scope="col">Quantity</th>
           <th scope="col">Gain/Loss</th>
+          <th scope="col">% Change </th>
         </tr>
       </thead>
       <tbody>

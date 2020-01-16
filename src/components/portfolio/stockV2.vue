@@ -6,6 +6,7 @@
     <td>$ {{stockInfo.latestPrice}}</td>
     <td>{{ stock.quantity }}</td>
     <td>$ {{totalChange }}</td>
+    <td>{{ percentChange}}</td>
   </tr>
 </template>
 
@@ -62,6 +63,9 @@ export default {
           parseFloat(this.stock.quantity) -
         parseFloat(this.stock.price) * parseFloat(this.stock.quantity)
       ).toFixed(2);
+    },
+    percentChange: function (){
+      return (this.totalChange / (parseFloat(this.stock.price) * parseFloat(this.stock.quantity))).toFixed(2)
     }
   }
 };

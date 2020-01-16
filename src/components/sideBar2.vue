@@ -40,13 +40,13 @@ $text-sidebar-hover: #6b6b6b /*#fff*/;
 #sidebar {
   min-width: 112px;
   max-width: 112px;
-  background: $lila;
+  /*background: #5A5A5C;*/
   color: white;
   transition: all 0.3s;
-  /*background: red;*/
+  background: #313A3A;
   box-shadow: 3px 1px 3px rgba(0, 0, 0, 0.1);
   font-family: "Montserrat", sans-serif;
-  background-color: #fcfffc;
+
 }
 
 #sidebar.active {
@@ -70,11 +70,11 @@ $text-sidebar-hover: #6b6b6b /*#fff*/;
 
 #sidebar ul li a {
   padding: 10px;
-  padding-bottom: 40px;
+  padding-top: 40px;
   font-size: 1.1em;
   font-weight: bold;
-  color: black;
-  display: block;
+  color: #FCFFFC;
+  display: inline-block;
 }
 
 #sidebar ul li a:hover {
