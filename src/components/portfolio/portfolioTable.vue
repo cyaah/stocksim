@@ -8,41 +8,44 @@
           <th scope="col">Current Price</th>
           <th scope="col">Quantity</th>
           <th scope="col">Gain/Loss</th>
-          <th scope="col">% Change </th>
+          <th scope="col">% Change</th>
         </tr>
       </thead>
       <tbody>
-
-<tr  v-for="(stock,index) in stocks" is="stock"  :portfolio="portfolio"  :key="stock.name" :stock="stock"></tr>
-<!--          <th scope="row">{{stock.name}}</th>-->
-<!--          <td>Mark</td>-->
-<!--          <td>Otto</td>-->
-<!--          <td>@mdo</td> -->
+        <tr
+          v-for="(stock,index) in stocks"
+          is="stock"
+          :portfolio="portfolio"
+          :key="stock.name"
+          :stock="stock"
+        ></tr>
+        <!--          <th scope="row">{{stock.name}}</th>-->
+        <!--          <td>Mark</td>-->
+        <!--          <td>Otto</td>-->
+        <!--          <td>@mdo</td> -->
       </tbody>
     </table>
   </div>
 </template>
 
 <script>
-import stock from './stockV2';
-
+import stock from "./stockV2";
 
 export default {
-  props:{
+  props: {
     portfolio: Array
   },
-  components:{
+  components: {
     stock
   },
-  data(){
-    return{
-    stocks: this.portfolio
-    }
+  data() {
+    return {
+      stocks: this.portfolio
+    };
   },
-  created (){
-    console.log(this.portfolio)
-    console.log(this.stocks)
-
+  created() {
+    console.log(this.portfolio);
+    console.log(this.stocks);
   }
 };
 </script>
@@ -50,9 +53,10 @@ export default {
 <style scoped>
 th {
   color: white;
+  font-family: "Montserrat", sans-serif;
 }
 
-.thead{
-  background-color: #040F0F;
+.thead {
+  background-color: #040f0f;
 }
 </style>

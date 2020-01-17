@@ -18,7 +18,7 @@ Vue.use(VueAxios, axios);
 
 export const store = new Vuex.Store({
     state: {
-        funds: 0,
+        funds: null,
         stocks: [],
         accessToken: null,
         user_id: '',
@@ -54,9 +54,10 @@ export const store = new Vuex.Store({
             }
         },
         SET_PORTFOLIO(state, portfolio) {
-            state.funds = funds;
+            // state.funds = funds;
             console.log("stock portfolio");
-            state.stocks = portfolio.stockPortfolio ? portfolio.stockPortfolio : [];
+            console.log(portfolio)
+            state.stocks = portfolio
             console.log(state.stocks);
         },
         SELL_STOCK(state, {
@@ -66,18 +67,19 @@ export const store = new Vuex.Store({
         }) {
             console.log("stock sold");
             //console.log(name);
-            //console.log(state.stocks[0].name);
+            console.log(state);
+            console.log(state.stocks)
             const record = state.stocks.find(element => {
-                //element.name === name
-                console.log(name);
-                console.log(element.name);
-
+                console.log(element);
                 return element.name === name
             });
+
             console.log("=+=");
-            console.log(record);
+            console.log(record.quantity);
+            console.log(quantity)
             if (record.quantity > quantity) {
-                record.quantity -= quantity
+                record.quantity = quantity
+                console.log(record.quantity)
             } else {
                 state.stocks.splice(state.stocks.indexOf(record), 1);
             }
@@ -146,6 +148,8 @@ export const store = new Vuex.Store({
         },
 
         getUserFunds: state => {
+            console.log('trying')
+            console.log(state.funds)
             return state.funds
         },
         getStockInfo: state => {
