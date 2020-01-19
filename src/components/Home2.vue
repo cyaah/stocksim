@@ -113,7 +113,7 @@ export default {
   },
   methods: {
     canvas(canvasData) {
-      console.log("canvas created");
+      console.log("canvas created 121232132158485318518181851318135484181");
       console.log(canvasData);
       this.createChart("Intra Day Chart", canvasData);
     },

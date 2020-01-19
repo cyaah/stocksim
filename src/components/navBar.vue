@@ -38,7 +38,7 @@
             <span id="user" class="funds">{{ userName.displayName }}</span>
           </li>
           <li class="fundsLi">
-            <span class="funds">${{ funds }}</span>
+            <span class="funds">{{ funds | Currency }}</span>
           </li>
           <li>
             <button
@@ -129,6 +129,8 @@ export default {
   mounted() {
     var user = firebase.auth().currentUser;
     this.userName = user;
+    console.log(this.$route)
+    console.log('x0x0')
   },
   computed: {
     funds() {
@@ -257,7 +259,7 @@ export default {
             );
           }
           console.log("canvas data navbar");
-          console.log(this.canvasData.data.labels);
+          // console.log(this.canvasData.data.labels);
           console.log(this.canvasData.data.datasets[0].data);
 
           // this.canvas();
@@ -281,6 +283,11 @@ export default {
       // var stockInfo = { timeseries: this.timeSeriesData, stock: this.results };
       this.term = "";
       this.noResults = false;
+      // this.$route.fullPath !== '/'? this.$router.push({ path: "/" }) :console.log('nothing')
+      if(this.$route.fullPath !== "/"){
+        console.log('1010101001010100101')
+        this.$router.push({ path: "/" })
+      }
       // this.searchTerm = "";
     },
     canvas: function() {
@@ -289,18 +296,20 @@ export default {
     errorChange: function() {
       this.error = false;
     }
+  },
+  filters: {
+    Currency(value){
+      // if(typeof value !== "number"){
+      //   return value;
+      // }
+      var formatter = new Intl.NumberFormat('en-Us', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0
+      });
+      return formatter.format(value)
+    }
   }
-  // watch: {
-  //   results: function(newVal, oldVal) {
-  //     console.log("new");
-  //     this.$store.dispatch("getStockInfo", newVal);
-  //   },
-  //   canvasData: function(newVal, oldVal) {
-  //     console.log(newVal)
-  //     console.log('NEWvalD')
-  //     this.$store.dispatch("getTimeSeries", newVal);
-  //   }
-  // }
 };
 </script>
 
