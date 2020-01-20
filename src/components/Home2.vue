@@ -1,13 +1,12 @@
 <template>
   <div class="wrapper">
-    
     <side-bar2></side-bar2>
     <!-- <div v-if="success === true" class="alert alert-success"  id="alert" role="alert">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
       <strong>Success!</strong> You have been signed in successfully!
-    </div> -->
+    </div>-->
     <!-- Page Content  -->
     <div id="content">
       <navBar v-on:chartData="canvas" v-on:stockInfo="stockCard"></navBar>
@@ -18,7 +17,17 @@
             <canvas id="myChart" height="320px"></canvas>
           </div>
         </div>
-        <stockCard @stockBought="stockBought" :results="stockInfo" :funds="funds"v-if="this.stockPicked === true"></stockCard>
+        <stockCard
+          @stockBought="stockBought"
+          :results="stockInfo"
+          :funds="funds"
+          v-if="this.stockPicked === true"
+        ></stockCard>
+        <div v-if="this.stockPicked === false" class="main-box">
+          <h1 class="main-header">
+            <span class="primary-header">TRADE STOCKS</span>
+          </h1>
+        </div>
       </div>
     </div>
   </div>
@@ -148,9 +157,9 @@ export default {
 
     stockRef.get().then(doc => {
       if (doc.exists) {
-        this.funds = doc.data().funds.toFixed(2) ;
+        this.funds = doc.data().funds.toFixed(2);
         console.log(this.funds);
-        console.log('x0x0x0x')
+        console.log("x0x0x0x");
         this.$store.commit("updateFunds", this.funds);
       }
     });
@@ -163,7 +172,7 @@ export default {
       }
       return false;
     }
-  },
+  }
   // watch: {
   //   success: function() {
   //     window.setTimeout(function() {
@@ -183,6 +192,39 @@ export default {
 </script>
 
 <style scoped>
+.main-box {
+  position: absolute;
+  top: 47%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.main-header {
+  font-weight: 500;
+  font-size: 40px;
+  letter-spacing: 25px;
+  animation-name: moveInLeft;
+  animation-duration: 1.7s;
+  animation-timing-function: ease-out;
+}
+
+@keyframes moveInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+
+  80% {
+    transform: translateX(15px);
+  }
+
+  100% {
+    opacity: 1;
+
+    /* We use tranlate 0 since it just renders it to how it actually is */
+    transform: translate(0);
+  }
+}
 /* ---------------------------------------------------
           Chart STYLE
    ----------------------------------------------------- */
@@ -192,6 +234,7 @@ export default {
   background: #fafafa;
   font-family: "Montserrat", sans-serif;
 }
+
 .dashboard-container {
   /* background: yellow; */
   display: flex;
@@ -213,7 +256,6 @@ export default {
   height: 100px;
   border: 2px solid red;
 }
-
 
 .chart-card-body {
   /* width: 60%; */

@@ -38,7 +38,7 @@
             <span id="user" class="funds">{{ userName.displayName }}</span>
           </li>
           <li class="fundsLi">
-            <span class="funds"> ${{ funds }}</span>
+            <span class="funds">${{ funds }}</span>
           </li>
           <li>
             <button
@@ -50,9 +50,7 @@
               aria-expanded="false"
               aria-label="Toggle navigation"
               @click="logout"
-            >
-              Logout
-            </button>
+            >Logout</button>
           </li>
         </ul>
       </div>
@@ -64,6 +62,7 @@
 import axios from "axios";
 import { store } from "./store/store.js";
 import firebase from "firebase";
+import { db } from "../main.js";
 
 export default {
   name: "navBar",
@@ -133,7 +132,34 @@ export default {
   },
   computed: {
     funds() {
-      console.log(this.$store.getters.getUserFunds);
+      // if (
+      //   this.$store.getters.getUserFunds === null ||
+      //   this.$store.getters.getUserFunds === undefined
+      // ) {
+      //   console.log("gettinnggg fundsssssss");
+      //   var user = firebase.auth().currentUser;
+      //   var userId = user.uid;
+
+      //   var stockRef = db.collection(userId).doc("Portfolio");
+      //   var f = 0;
+      //   stockRef
+      //     .get()
+      //     .then(doc => {
+      //       if (doc.exists) {
+      //         f = doc.data().funds.toFixed(2);
+      //         console.log(f);
+      //         console.log("x0x0x0x1212221");  
+      //       }
+      //     })
+      //     .then(resp => {
+      //       this.$store.commit("updateFunds", this.funds);
+            
+      //     });
+      // } else {
+      //   console.log("was null");
+      //   console.log(this.$store.getters.getUserFunds);
+      //   return this.$store.getters.getUserFunds;
+      // }
       return this.$store.getters.getUserFunds;
     }
   },
@@ -260,8 +286,8 @@ export default {
     canvas: function() {
       this.createChart("Intra Day Chart", this.canvasData);
     },
-    errorChange: function(){
-      this.error = false
+    errorChange: function() {
+      this.error = false;
     }
   }
   // watch: {
@@ -469,5 +495,9 @@ input:-moz-placeholder {
 }
 input::-webkit-input-placeholder {
   color: #999;
+}
+
+.alert-dark {
+  right: 80px;
 }
 </style>

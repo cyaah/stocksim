@@ -6,15 +6,13 @@
     <td>$ {{stockInfo.latestPrice}}</td>
     <td>{{ stock.quantity }}</td>
     <td>$ {{totalChange }}</td>
-    <td>{{ percentChange}}</td>
+    <td>{{ percentChange}}%</td>
   </tr>
 </template>
 
 <script>
 import axios from "axios";
-import { EventBus} from './../eventBus';
-
-
+import { EventBus } from "./../eventBus";
 
 export default {
   props: ["stock", "portfolio", "index"],
@@ -50,10 +48,10 @@ export default {
       });
   },
   methods: {
-    stockSelected: function (stock){
+    stockSelected: function(stock) {
       console.log(stock);
-      console.log('picked stock');
-      EventBus.$emit("stockSelected",stock)
+      console.log("picked stock");
+      EventBus.$emit("stockSelected", stock);
     }
   },
   computed: {
@@ -64,31 +62,38 @@ export default {
         parseFloat(this.stock.price) * parseFloat(this.stock.quantity)
       ).toFixed(2);
     },
-    percentChange: function (){
-      return (this.totalChange / (parseFloat(this.stock.price) * parseFloat(this.stock.quantity))).toFixed(2)
+    percentChange: function() {
+      return (
+        this.totalChange /
+        (parseFloat(this.stock.price) * parseFloat(this.stock.quantity))
+      ).toFixed(2);
     }
   }
 };
 </script>
 
 <style scoped>
-  .stockEntry {
-    /*display: inline-block;*/
-    cursor: pointer;
+.stockEntry {
+  /*display: inline-block;*/
+  cursor: pointer;
 
-    vertical-align: middle;
-    -webkit-transform: perspective(1px) translateZ(0);
-    transform: perspective(1px) translateZ(0);
-    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-    overflow: hidden;
-    -webkit-transition-duration: 0.3s;
-    transition-duration: 0.3s;
-    -webkit-transition-property: color, background-color;
-    transition-property: color, background-color;
-  }
-  .stockEntry:hover, .stockEntry:focus, .stockEntry:active {
-    background-color: #2BA84A;
-    color: white;
-  }
-
+  vertical-align: middle;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  overflow: hidden;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: color, background-color;
+  transition-property: color, background-color;
+}
+.stockEntry:hover,
+.stockEntry:focus,
+.stockEntry:active {
+  background-color: #2ba84a;
+  color: white;
+}
+td {
+  font-family: "Montserrat", sans-serif;
+}
 </style>

@@ -125,7 +125,31 @@ export default {
 
   created() {
     //Getting user funds
-    this.funds = this.$store.getters.getUserFunds;
+    if (
+      this.$store.getters.getUserFunds === null ||
+      this.$store.getters.getUserFunds === undefined
+    ) {
+      console.log("gettinnggg fundsssssss");
+      var user = firebase.auth().currentUser;
+      var userId = user.uid;
+
+      var stockRef = db.collection(userId).doc("Portfolio");
+      stockRef
+        .get()
+        .then(doc => {
+          if (doc.exists) {
+            this.funds = doc.data().funds.toFixed(2);
+            console.log(this.funds);
+            console.log("x0x0x0x1212221");
+          }
+        })
+        .then(resp => {
+          this.$store.commit("updateFunds", this.funds);
+        });
+    } else {
+      this.funds = this.$store.getters.getUserFunds;
+    }
+
     var user = firebase.auth().currentUser;
     this.userId = user.uid;
     var stockRef = db.collection(this.userId).doc("Portfolio");
@@ -139,6 +163,7 @@ export default {
         }
         //console.log("portfolio");
         //console.log(this.portfolio);
+        this.$store.commit("SET_PORTFOLIO", this.portfolio);
       }
     });
 
