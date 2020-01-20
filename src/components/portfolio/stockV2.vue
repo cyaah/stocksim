@@ -24,8 +24,6 @@ export default {
     };
   },
   created() {
-    console.log("V2");
-    console.log("created");
     axios
       .get(
         `https://cloud.iexapis.com/stable/stock/${encodeURIComponent(
@@ -34,9 +32,8 @@ export default {
       )
       .then(res => {
         if (res) {
-          console.log("data for each stock");
           this.stockInfo = res.data;
-          console.log(this.stockInfo);
+          // console.log(this.stockInfo);
         }
       })
       .then(con => {
@@ -49,8 +46,6 @@ export default {
   },
   methods: {
     stockSelected: function(stock) {
-      console.log(stock);
-      console.log("picked stock");
       EventBus.$emit("stockSelected", stock);
     }
   },

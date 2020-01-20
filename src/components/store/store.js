@@ -24,7 +24,7 @@ export const store = new Vuex.Store({
         user_id: '',
         loggedIn: false,
         loginError: null,
-        stockInfo: [],
+        stockInfo: {},
         timeSeries:{}
     },
     mutations: {
@@ -104,9 +104,12 @@ export const store = new Vuex.Store({
         },
         STOCKINFO(state, stockInfo) {
             console.log(stockInfo);
-            console.log('stock info1212121');
-            state.stockInfo = [];
+            console.log('stock info1212121WWOWOWOWOWOWOWOWOWOWOWOWOOWOWOWOWOWOW');
+            state.stockInfo = {};
             state.stockInfo = stockInfo
+            console.log(state.stockInfo)
+            console.log(state.stockInfo.length)
+
         },
         TIMESERIES(state, timeSeries) {
             console.log('THIIS TIME SERIES');

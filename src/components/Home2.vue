@@ -12,7 +12,7 @@
       <navBar v-on:chartData="canvas" v-on:stockInfo="stockCard"></navBar>
       <!--<dashboard></dashboard>-->
       <div class="dashboard-container">
-        <div class="chart-card-body" v-if="this.stockPicked === true">
+        <div class="chart-card-body" v-if="this.stockPicked === true && ">
           <div id="chart-container">
             <canvas id="myChart" height="320px"></canvas>
           </div>
@@ -142,52 +142,42 @@ export default {
     },
     stockCard(stockInfo) {
       this.stockInfo = stockInfo;
+      console.log(stockInfo)
+      console.log("x0x0x0x");
+
+
     },
     stockBought() {
       console.log("switichjing to true");
       this.success = true;
     }
   },
-  created() {
+  mounted() {
+
+    var stock = this.$store.getters.getStockInfo;
+    this.stockInfo = stock;
     console.log("dashboard created");
     var user = firebase.auth().currentUser;
     this.userId = user.uid;
-
     var stockRef = db.collection(this.userId).doc("Portfolio");
 
     stockRef.get().then(doc => {
       if (doc.exists) {
         this.funds = doc.data().funds.toFixed(2);
-        console.log(this.funds);
-        console.log("x0x0x0x");
         this.$store.commit("updateFunds", this.funds);
       }
     });
   },
   computed: {
+    //Checking if the stock info object is empty
     stockPicked: function() {
-      console.log("computed");
       for (var key in this.stockInfo) {
         if (this.stockInfo.hasOwnProperty(key)) return true;
       }
       return false;
-    }
+    },
+    time
   }
-  // watch: {
-  //   success: function() {
-  //     window.setTimeout(function() {
-  //       document
-  //         .getElementById("alert")
-  //         .fadeTo(200, 0)
-  //         .slideUp(200, function() {
-  //           document.getElementById("alert").remove();
-  //           this.success = false;
-  //         });
-  //     }, 2000);
-  //     console.log(this.success);
-  //     console.log("sucesss");
-  //   }
-  // }
 };
 </script>
 
@@ -200,7 +190,7 @@ export default {
 }
 
 .main-header {
-  font-weight: 500;
+  font-weight: 900;
   font-size: 40px;
   letter-spacing: 25px;
   animation-name: moveInLeft;
