@@ -11,7 +11,6 @@
       animation-name="v-fade-left"
       position="top left"
     />
-    <button class="btn btn-success" @click="show('notification', 'success')"></button>
   </div>
 </template>
 
@@ -95,9 +94,4 @@ export default {
   font-family: "Montserrat", sans-serif;
 }
 
-.btn-success {
-  position: absolute;
-  right: 100px;
-  bottom: 50px;
-}
 </style>

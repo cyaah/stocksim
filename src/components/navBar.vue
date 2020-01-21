@@ -38,7 +38,7 @@
             <span id="user" class="funds">{{ userName.displayName }}</span>
           </li>
           <li class="fundsLi">
-            <span class="funds">{{ funds | Currency }}</span>
+            <span class="funds">{{ funds | currency }}</span>
           </li>
           <li>
             <button
@@ -50,7 +50,9 @@
               aria-expanded="false"
               aria-label="Toggle navigation"
               @click="logout"
-            >Logout</button>
+            >
+              Logout
+            </button>
           </li>
         </ul>
       </div>
@@ -134,34 +136,6 @@ export default {
   },
   computed: {
     funds() {
-      // if (
-      //   this.$store.getters.getUserFunds === null ||
-      //   this.$store.getters.getUserFunds === undefined
-      // ) {
-      //   console.log("gettinnggg fundsssssss");
-      //   var user = firebase.auth().currentUser;
-      //   var userId = user.uid;
-
-      //   var stockRef = db.collection(userId).doc("Portfolio");
-      //   var f = 0;
-      //   stockRef
-      //     .get()
-      //     .then(doc => {
-      //       if (doc.exists) {
-      //         f = doc.data().funds.toFixed(2);
-      //         console.log(f);
-      //         console.log("x0x0x0x1212221");  
-      //       }
-      //     })
-      //     .then(resp => {
-      //       this.$store.commit("updateFunds", this.funds);
-            
-      //     });
-      // } else {
-      //   console.log("was null");
-      //   console.log(this.$store.getters.getUserFunds);
-      //   return this.$store.getters.getUserFunds;
-      // }
       return this.$store.getters.getUserFunds;
     }
   },
@@ -229,10 +203,14 @@ export default {
         })
         .then(res => {
           this.$store.dispatch("getStockInfo", this.results);
+          console.log('0000000000000000000000000000')
+
           this.$emit("stockInfo", this.results);
+          console.log('12345678910121515121')
           this.error = false;
-        })
-        .catch(error => {
+        }).then(resp =>{
+        this.$router.push({ path: "/" })
+      }).catch(error => {
           console.log(error);
           this.error = true;
         });
@@ -283,11 +261,7 @@ export default {
       // var stockInfo = { timeseries: this.timeSeriesData, stock: this.results };
       this.term = "";
       this.noResults = false;
-      // this.$route.fullPath !== '/'? this.$router.push({ path: "/" }) :console.log('nothing')
-      if(this.$route.fullPath !== "/"){
-        console.log('1010101001010100101')
-        this.$router.push({ path: "/" })
-      }
+      // this.$router.push({ path: "/" });
       // this.searchTerm = "";
     },
     canvas: function() {
@@ -298,16 +272,13 @@ export default {
     }
   },
   filters: {
-    Currency(value){
-      // if(typeof value !== "number"){
-      //   return value;
-      // }
-      var formatter = new Intl.NumberFormat('en-Us', {
-        style: 'currency',
-        currency: 'USD',
+    currency: function(value) {
+      var formatter = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
         minimumFractionDigits: 0
       });
-      return formatter.format(value)
+      return formatter.format(value);
     }
   }
 };
