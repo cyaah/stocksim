@@ -12,7 +12,7 @@
       <navBar v-on:chartData="canvas" v-on:stockInfo="stockCard"></navBar>
       <!--<dashboard></dashboard>-->
       <div class="dashboard-container">
-        <div class="chart-card-body" v-if="this.stockPicked === true && ">
+        <div class="chart-card-body" v-if="this.stockPicked === true && this.timeSeriesPicked">
           <div id="chart-container">
             <canvas id="myChart" height="320px"></canvas>
           </div>
@@ -80,7 +80,6 @@ export default {
           responsive: true,
           lineTension: 1,
           maintainAspectRatio: false,
-
           scales: {
             xAxes: [
               {
@@ -88,7 +87,7 @@ export default {
                 display: true,
                 scaleLabel: {
                   display: true,
-                  labalString: "Date"
+                  labelString: "Date"
                 }
               }
             ],
@@ -176,7 +175,14 @@ export default {
       }
       return false;
     },
-    time
+    timeSeriesPicked: function(){
+      console.log('time series picked ')
+      if(this.canvasData.data.datasets[0].data.length > 0){
+        console.log('yes')
+        
+      }
+
+    }
   }
 };
 </script>
