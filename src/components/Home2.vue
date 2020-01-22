@@ -9,10 +9,10 @@
     </div>-->
     <!-- Page Content  -->
     <div id="content">
-      <navBar v-on:chartData="canvas" v-on:stockInfo="stockCard"></navBar>
+      <navBar v-on:chartData="createCanvas" v-on:stockInfo="stockCard"></navBar>
       <!--<dashboard></dashboard>-->
       <div class="dashboard-container">
-        <div class="chart-card-body" v-if="this.stockPicked === true && ">
+        <div class="chart-card-body" v-if="this.stockPicked === true">
           <div id="chart-container">
             <canvas id="myChart" height="320px"></canvas>
           </div>
@@ -80,7 +80,6 @@ export default {
           responsive: true,
           lineTension: 1,
           maintainAspectRatio: false,
-
           scales: {
             xAxes: [
               {
@@ -88,7 +87,7 @@ export default {
                 display: true,
                 scaleLabel: {
                   display: true,
-                  labalString: "Date"
+                  labelString: "Date"
                 }
               }
             ],
@@ -107,14 +106,33 @@ export default {
             ]
           }
         }
-      }
-      // stockPicked: false
+      },
+      timeSeriesPicked: false
     };
   },
+  mounted() {
+    var stock = this.$store.getters.getStockInfo;
+    this.stockInfo = stock;
+    console.log("dashboard created");
+    var user = firebase.auth().currentUser;
+    this.userId = user.uid;
+    var stockRef = db.collection(this.userId).doc("Portfolio");
+    // this.canvasData = this.$store.getters.getTimeSeries;
+
+    stockRef.get().then(doc => {
+      if (doc.exists) {
+        this.funds = doc.data().funds.toFixed(2);
+        this.$store.commit("updateFunds", this.funds);
+      }
+    });
+  },
   methods: {
-    canvas(canvasData) {
+    createCanvas(canvasData) {
       console.log("canvas created 121232132158485318518181851318135484181");
       console.log(canvasData);
+      this.canvasData = canvasData;
+
+      console.log(this.canvasData);
       this.createChart("Intra Day Chart", canvasData);
     },
 
@@ -131,6 +149,8 @@ export default {
 
         myChart.destroy();
       }
+      console.log(document.getElementById("myChart"));
+      console.log(document.getElementsByClassName("chart-card-body"));
       const ctx = document.getElementById("myChart").getContext("2d");
 
       myChart = new Chart(ctx, {
@@ -142,32 +162,15 @@ export default {
     },
     stockCard(stockInfo) {
       this.stockInfo = stockInfo;
-      console.log(stockInfo)
+      console.log(stockInfo);
       console.log("x0x0x0x");
-
-
     },
     stockBought() {
       console.log("switichjing to true");
       this.success = true;
     }
   },
-  mounted() {
 
-    var stock = this.$store.getters.getStockInfo;
-    this.stockInfo = stock;
-    console.log("dashboard created");
-    var user = firebase.auth().currentUser;
-    this.userId = user.uid;
-    var stockRef = db.collection(this.userId).doc("Portfolio");
-
-    stockRef.get().then(doc => {
-      if (doc.exists) {
-        this.funds = doc.data().funds.toFixed(2);
-        this.$store.commit("updateFunds", this.funds);
-      }
-    });
-  },
   computed: {
     //Checking if the stock info object is empty
     stockPicked: function() {
@@ -175,10 +178,18 @@ export default {
         if (this.stockInfo.hasOwnProperty(key)) return true;
       }
       return false;
-    },
-    timeSeries: function(){
-      
     }
+    // timeSeriesPicked: function() {
+    //   console.log("time series picked ");
+    //   console.log(this.canvasData.data.datasets);
+    //   if (this.canvasData.data.datasets[0].data.length > 0) {
+
+    //     // this.createCanvas(this.canvasData);
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // }
   }
 };
 </script>

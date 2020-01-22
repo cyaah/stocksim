@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <div class="search-container">
+        <div class="search-container" v-if="this.$route.path === '/'">
           <!--          <div v-if="this.error === true " class="alert alert-dark" role="alert">-->
           <!--            Error stock ticker "{{searchTerm}}" cannot be found. Try another ticker-->
           <!--            <button type="button" class="close" data-dismiss="alert" aria-label="Close">-->
@@ -132,7 +132,7 @@ export default {
     var user = firebase.auth().currentUser;
     this.userName = user;
     console.log(this.$route)
-    console.log('x0x0')
+    // console.log('x0x0')
   },
   computed: {
     funds() {
@@ -208,15 +208,19 @@ export default {
           this.$emit("stockInfo", this.results);
           console.log('12345678910121515121')
           this.error = false;
-        }).then(resp =>{
-        this.$router.push({ path: "/" })
-      }).catch(error => {
-          console.log(error);
-          this.error = true;
-        });
+        })
+      //   .then(resp =>{
+      //   this.$router.push({ path: "/" })
+      // })
+      .
+      // catch(error => {
+      //     console.log(error);
+      //     this.error = true;
+      //   });
 
       //Getting time series data
-      axios
+      then(() =>{
+        axios
         .get(
           `https://cloud.iexapis.com/stable/stock/${encodeURIComponent(
             term
@@ -239,17 +243,21 @@ export default {
           console.log("canvas data navbar");
           // console.log(this.canvasData.data.labels);
           console.log(this.canvasData.data.datasets[0].data);
-
+          this.$emit("chartData", this.canvasData);
           // this.canvas();
         })
         .then(res => {
           this.$store.dispatch("getTimeSeries", this.canvasData);
-          this.$emit("chartData", this.canvasData);
+          console.log()
+          // this.$emit("chartData", this.canvasData);
+        }).then(()=>{
+          console.log('GOT HERR')
+          this.$router.push({ path: "/" })
         })
         .catch(err => {
           console.log(err);
         });
-
+      })
       var isEmpty = obj => {
         for (var key in obj) {
           if (obj.hasOwnProperty(key)) {

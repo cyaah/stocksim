@@ -156,6 +156,7 @@ export const store = new Vuex.Store({
             return state.funds
         },
         getStockInfo: state => {
+            console.log('getting from store stock info ')
             return state.stockInfo
         },
         getTimeSeries: state => {
