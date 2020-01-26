@@ -33,9 +33,9 @@
         <div v-if="this.$route.name === 'portfolio' " class="input-group-append">
           <button class="btn btn-outline-success" id sellButton @click="sellStock">Sell</button>
         </div>
-
       </div>
     </div>
+    <!-- <loader></loader> -->
   </div>
 </template>
 <script>
@@ -44,9 +44,15 @@ import { db, increment } from "../main.js";
 import firebase from "firebase";
 import firestore from "firebase";
 import { EventBus } from "./eventBus";
+import loader from '../components/loader'
+
+
 
 export default {
   props: ["results", "funds"],
+  components: {
+    loader
+  },
   data() {
     return {
       currentUser: null,
@@ -89,7 +95,6 @@ export default {
                 console.log("New stock added");
                 //stockRef.FieldValue('stock').add({ [order.name]: order})
               });
-
 
             //Update existing stock
           } else {

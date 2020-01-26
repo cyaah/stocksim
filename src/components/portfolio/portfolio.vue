@@ -10,7 +10,6 @@
         <portfolioTable v-on:stockSelected="stockSelected" :portfolio="portfolio"></portfolioTable>
 
         <!-- <div class="column">
-
           <transition-group tag="div" name="portfolio">
             <app-stock
               v-for="(stock,index) in portfolio"
@@ -27,6 +26,7 @@
         <div class="chart-card-body" v-if="this.selected === true">
           <div id="chart-container">
             <canvas id="myChart" width="20px" height="320px"></canvas>
+            <loader></loader>
           </div>
           <info :results="stockSelected" v-if="this.selected === true"></info>
         </div>
@@ -48,9 +48,9 @@ import portfolioTable from "./portfolioTable";
 import { EventBus } from "./../eventBus";
 import axios from "axios";
 import info from "../info.vue";
+import loader from "../loader";
 
 var myChart;
-
 export default {
   data() {
     return {
@@ -70,7 +70,6 @@ export default {
               data: [],
               backgroundColor: "rgb(45, 58, 58)",
               borderColor: "rgb(43,168,74)",
-
               borderWidth: 3
             }
           ]
@@ -79,7 +78,6 @@ export default {
           responsive: true,
           lineTension: 1,
           maintainAspectRatio: false,
-
           scales: {
             xAxes: [
               {
@@ -115,14 +113,14 @@ export default {
     sideBar2: sideBar2,
     navBar,
     portfolioTable,
-    info
+    info,
+    loader
   },
   computed: {
     selected() {
       this.createChart("Intra Day Chart", this.canvasData);
     }
   },
-
   created() {
     //Getting user funds
     if (
@@ -132,7 +130,6 @@ export default {
       console.log("gettinnggg fundsssssss");
       var user = firebase.auth().currentUser;
       var userId = user.uid;
-
       var stockRef = db.collection(userId).doc("Portfolio");
       stockRef
         .get()
@@ -149,11 +146,9 @@ export default {
     } else {
       this.funds = this.$store.getters.getUserFunds;
     }
-
     var user = firebase.auth().currentUser;
     this.userId = user.uid;
     var stockRef = db.collection(this.userId).doc("Portfolio");
-
     stockRef.get().then(doc => {
       if (doc.exists) {
         //console.log("document exists on created");
@@ -166,18 +161,17 @@ export default {
         this.$store.commit("SET_PORTFOLIO", this.portfolio);
       }
     });
-
     //EventBus listener
     EventBus.$on("stockSelected", stock => {
       this.selected = true;
-
       this.canvasData.data.datasets[0].data = [];
       this.canvasData.data.labels = [];
       console.log("event bus listener");
       console.log(stock);
+      this.$store.dispatch("changeLoading", true); //Getting stock price info
+
       this.stockSelected = stock;
       var term = stock.symbol;
-
       axios
         .get(
           `https://cloud.iexapis.com/stable/stock/${encodeURIComponent(
@@ -200,13 +194,15 @@ export default {
           console.log("canvas data portfolio");
           console.log(this.canvasData.data);
           console.log(this.canvasData.data.datasets[0].data);
-
           // this.canvas();
         })
         .then(res => {
           this.$store.dispatch("getTimeSeries", this.canvasData);
           //this.$emit("chartData", this.canvasData);
           this.createChart("Intra Day Chart", this.canvasData);
+        })
+        .then(() => {
+          this.$store.dispatch("changeLoading", false); //Getting stock price info
         })
         .catch(err => {
           console.log(err);
@@ -216,7 +212,6 @@ export default {
   methods: {
     createChart(chartId, chartData) {
       console.log("trying to create ");
-
       if (myChart) {
         console.log("inside");
         document.getElementById("myChart").remove();
@@ -227,11 +222,9 @@ export default {
         canvas.setAttribute("height", "300px");
         console.log(document.getElementById("chart-container"));
         document.getElementById("chart-container").appendChild(canvas);
-
         myChart.destroy();
       }
       const ctx = document.getElementById("myChart").getContext("2d");
-
       myChart = new Chart(ctx, {
         type: chartData.type,
         data: chartData.data,
@@ -278,7 +271,6 @@ export default {
   align-items: stretch;
   font-family: "Montserrat", sans-serif;
 }
-
 .body {
   /* font-family: "Oswald"; */
   background: #fafafa;
@@ -293,19 +285,16 @@ export default {
   height: 100vh;
   padding: 5px;
 }
-
 .dashboard-graph {
   height: 50px;
   border: 2px solid red;
   flex: flex-grow;
 }
-
 .dashboard-info {
   background: black;
   height: 100px;
   border: 2px solid red;
 }
-
 .chart-card-body {
   /* width: 60%; */
   width: 46%;
@@ -329,7 +318,6 @@ p {
   line-height: 1.7em;
   color: #999;
 }
-
 a,
 a:hover,
 a:focus {
@@ -337,91 +325,73 @@ a:focus {
   text-decoration: none;
   transition: all 0.3s;
 }
-
 .navbar {
   padding: 15px 10px;
-
   border: none;
   border-radius: 0;
   margin-bottom: 40px;
   /* box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); */
 }
-
 .navbar-btn {
   box-shadow: none;
   outline: none !important;
   border: none;
 }
-
 .line {
   width: 100%;
   height: 1px;
   border-bottom: 1px dashed #ddd;
   margin: 40px 0;
 }
-
 /* ---------------------------------------------------
         SIDEBAR STYLE
     ----------------------------------------------------- */
-
 $lila: $turbo-yellow /*#7386D5*/;
 $lila-60: $turbo-yellow-60 /*#6d7fcc*/;
 $lila-line: $turbo-yellow-70 /*#47748b*/;
-
 $text-sidebar: #6b6b6b /*#fff*/;
 $text-sidebar-hover: #6b6b6b /*#fff*/;
-
 .text-sidebar {
   color: $text-sidebar;
 }
-
 #sidebar {
   min-width: 112px;
   background: $lila;
   color: Black;
   transition: all 0.3s;
 }
-
 #sidebar.active {
   margin-left: -250px;
 }
-
 #sidebar .sidebar-header {
   padding: 20px;
   background: $lila-60 /*#6d7fcc*/;
 }
-
 #sidebar ul.components {
   padding: 20px 0;
   border-bottom: 1px solid $lila-line;
 }
-
 #sidebar ul p {
   color: $text-sidebar;
   padding: 10px;
 }
-
 #sidebar ul li a {
   padding: 10px;
   font-size: 1.1em;
   display: block;
 }
-
 #sidebar ul li a:hover {
   color: $lila;
   background: $text-sidebar-hover;
 }
-
 #sidebar ul li.active > a,
 a[aria-expanded="true"] {
   color: $text-sidebar;
   background: $lila-60;
 }
-
 a[data-toggle="collapse"] {
   position: relative;
 }
-
 .dropdown-toggle::after {
   display: block;
   position: absolute;
@@ -429,17 +399,14 @@ a[data-toggle="collapse"] {
   right: 20px;
   transform: translateY(-50%);
 }
-
 ul ul a {
   font-size: 0.9em !important;
   padding-left: 30px !important;
   background: $lila-60;
 }
-
 ul.CTAs {
   padding: 20px;
 }
-
 ul.CTAs a {
   text-align: center;
   font-size: 0.9em !important;
@@ -447,22 +414,18 @@ ul.CTAs a {
   border-radius: 5px;
   margin-bottom: 5px;
 }
-
 a.download {
   background: $text-sidebar;
   color: $lila;
 }
-
 a.article,
 a.article:hover {
   background: $lila-60 !important;
   color: $text-sidebar !important;
 }
-
 /* ---------------------------------------------------
         CONTENT STYLE
     ----------------------------------------------------- */
-
 #content {
   width: 100%;
   padding: 20px;
@@ -470,11 +433,9 @@ a.article:hover {
   transition: all 0.3s;
   /*background:blue;*/
 }
-
 /* ---------------------------------------------------
         MEDIAQUERIES
     ----------------------------------------------------- */
-
 @media (max-width: 768px) {
   #sidebar {
     margin-left: -250px;
@@ -486,7 +447,6 @@ a.article:hover {
     display: none;
   }
 }
-
 /* .funds-div {
   position: absolute;
   left: 90%;
@@ -494,28 +454,23 @@ a.article:hover {
 /* .column {
   /* background-color: blue; */
 /* }
-
 /* .stock-enter-active,
 .stock-leave-active,
 .stock-move {
   transition: 500ms cubic-bezier(0.59, 0.12, 0.34, 0.95);
   transition-property: opacity, transform;
 }
-
 .stock-enter {
   opacity: 0;
   transform: translateX(50px) scaleY(0.5);
 }
-
 .stock-enter-to {
   opacity: 1;
   transform: translateX(0) scaleY(1);
 }
-
 .stock-leave-active {
   position: absolute;
 }
-
 .stock-leave-to {
   opacity: 0;
   transform: scaleY(0);

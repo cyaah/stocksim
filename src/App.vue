@@ -18,11 +18,13 @@
 import { mapState } from "vuex";
 import Chart from "chart.js";
 import { EventBus } from "../src/components/eventBus";
+
+
 export default {
-  // components: {
-  //   appHeader: Header
-  //   //appHome: Home
-  // },
+  components: {
+    // appHeader: Header
+    //appHome: Home
+  },
   data() {
     return {
       keywords: "",

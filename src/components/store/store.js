@@ -25,7 +25,8 @@ export const store = new Vuex.Store({
         loggedIn: false,
         loginError: null,
         stockInfo: {},
-        timeSeries:{}
+        timeSeries:{},
+        loading: false
     },
     mutations: {
         BUY_STOCK(state, {
@@ -117,6 +118,12 @@ export const store = new Vuex.Store({
             //console.log(state.timeSeries.data.labels)
             state.timeSeries = timeSeries;
             console.log(state.timeSeries)
+        },
+        loadingStatus(state, loadingStatus){
+            console.log(state.loading)
+            console.log('loading status')
+            state.loading=loadingStatus;
+            console.log(state.loading)
         }
     },
     actions: {
@@ -139,6 +146,11 @@ export const store = new Vuex.Store({
             commit
         }, timeSeries) {
             commit('TIMESERIES', timeSeries)
+        },
+        changeLoading({
+            commit
+        }, loadingStatus){
+            commit('loadingStatus', loadingStatus)
         }
     },
     getters: {
@@ -162,6 +174,10 @@ export const store = new Vuex.Store({
         getTimeSeries: state => {
             console.log('123545454')
             return state.timeSeries
+        },
+        getLoadingStatus: state =>{
+            console.log('get loading status')
+            return state.loading
         }
 
     }

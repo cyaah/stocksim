@@ -9,11 +9,12 @@
     </div>-->
     <!-- Page Content  -->
     <div id="content">
-      <navBar v-on:chartData="createCanvas" v-on:stockInfo="stockCard"></navBar>
+      <navBar v-on:chartData="canvas" v-on:stockInfo="stockCard"></navBar>
       <!--<dashboard></dashboard>-->
       <div class="dashboard-container">
         <div class="chart-card-body" v-if="this.stockPicked === true">
           <div id="chart-container">
+            <loader></loader>
             <canvas id="myChart" height="320px"></canvas>
           </div>
         </div>
@@ -40,16 +41,17 @@ import dashboard from "./dashboard";
 import stockCard from "./stockCard";
 import firebase from "firebase";
 import { db, increment } from "../main.js";
+import loader from "../components/loader";
 
 var myChart;
-
 export default {
   name: "Home2",
   components: {
     sideBar2: sideBar2,
     navBar: navBar,
     dashboard: dashboard,
-    stockCard
+    stockCard,
+    loader
   },
   data() {
     return {
@@ -69,9 +71,7 @@ export default {
               label: "Monthly",
               data: [],
               backgroundColor: " rgb(34, 51, 38);",
-
               borderColor: " rgb(34, 51, 38);",
-
               borderWidth: 3
             }
           ]
@@ -106,36 +106,16 @@ export default {
             ]
           }
         }
-      },
-      timeSeriesPicked: false
+      }
+      // stockPicked: false
     };
   },
-  mounted() {
-    var stock = this.$store.getters.getStockInfo;
-    this.stockInfo = stock;
-    console.log("dashboard created");
-    var user = firebase.auth().currentUser;
-    this.userId = user.uid;
-    var stockRef = db.collection(this.userId).doc("Portfolio");
-    // this.canvasData = this.$store.getters.getTimeSeries;
-
-    stockRef.get().then(doc => {
-      if (doc.exists) {
-        this.funds = doc.data().funds.toFixed(2);
-        this.$store.commit("updateFunds", this.funds);
-      }
-    });
-  },
   methods: {
-    createCanvas(canvasData) {
-      console.log("canvas created 121232132158485318518181851318135484181");
+    canvas(canvasData) {
+      console.log("canvas created");
       console.log(canvasData);
-      this.canvasData = canvasData;
-
-      console.log(this.canvasData);
       this.createChart("Intra Day Chart", canvasData);
     },
-
     createChart(chartId, chartData) {
       if (myChart) {
         document.getElementById("myChart").remove();
@@ -146,13 +126,9 @@ export default {
         canvas.setAttribute("height", "300px");
         console.log(document.getElementById("chart-container"));
         document.getElementById("chart-container").appendChild(canvas);
-
         myChart.destroy();
       }
-      console.log(document.getElementById("myChart"));
-      console.log(document.getElementsByClassName("chart-card-body"));
       const ctx = document.getElementById("myChart").getContext("2d");
-
       myChart = new Chart(ctx, {
         type: chartData.type,
         data: chartData.data,
@@ -170,7 +146,20 @@ export default {
       this.success = true;
     }
   },
-
+  mounted() {
+    var stock = this.$store.getters.getStockInfo;
+    this.stockInfo = stock;
+    console.log("dashboard created");
+    var user = firebase.auth().currentUser;
+    this.userId = user.uid;
+    var stockRef = db.collection(this.userId).doc("Portfolio");
+    stockRef.get().then(doc => {
+      if (doc.exists) {
+        this.funds = doc.data().funds.toFixed(2);
+        this.$store.commit("updateFunds", this.funds);
+      }
+    });
+  },
   computed: {
     //Checking if the stock info object is empty
     stockPicked: function() {
@@ -178,18 +167,13 @@ export default {
         if (this.stockInfo.hasOwnProperty(key)) return true;
       }
       return false;
+    },
+    timeSeriesPicked: function() {
+      console.log("time series picked ");
+      if (this.canvasData.data.datasets[0].data.length > 0) {
+        console.log("yes");
+      }
     }
-    // timeSeriesPicked: function() {
-    //   console.log("time series picked ");
-    //   console.log(this.canvasData.data.datasets);
-    //   if (this.canvasData.data.datasets[0].data.length > 0) {
-
-    //     // this.createCanvas(this.canvasData);
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // }
   }
 };
 </script>
@@ -201,7 +185,6 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
 .main-header {
   font-weight: 900;
   font-size: 40px;
@@ -210,20 +193,16 @@ export default {
   animation-duration: 1.7s;
   animation-timing-function: ease-out;
 }
-
 @keyframes moveInLeft {
   0% {
     opacity: 0;
     transform: translateX(-100px);
   }
-
   80% {
     transform: translateX(15px);
   }
-
   100% {
     opacity: 1;
-
     /* We use tranlate 0 since it just renders it to how it actually is */
     transform: translate(0);
   }
@@ -231,13 +210,11 @@ export default {
 /* ---------------------------------------------------
           Chart STYLE
    ----------------------------------------------------- */
-
 .body {
   /* font-family: "Oswald"; */
   background: #fafafa;
   font-family: "Montserrat", sans-serif;
 }
-
 .dashboard-container {
   /* background: yellow; */
   display: flex;
@@ -247,19 +224,16 @@ export default {
   height: 100vh;
   padding: 5px;
 }
-
 .dashboard-graph {
   height: 50px;
   border: 2px solid red;
   flex: flex-grow;
 }
-
 .dashboard-info {
   background: black;
   height: 100px;
   border: 2px solid red;
 }
-
 .chart-card-body {
   /* width: 60%; */
   width: 90%;
@@ -276,6 +250,11 @@ export default {
   /* box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); */
 }
 
+.loader-container {
+  font-family: "Montserrat", sans-serif;
+  position: relative;
+  bottom: 50%;
+}
 p {
   font-family: "Poppins", sans-serif;
   font-size: 1.1em;
@@ -283,7 +262,6 @@ p {
   line-height: 1.7em;
   color: #999;
 }
-
 a,
 a:hover,
 a:focus {
@@ -291,98 +269,79 @@ a:focus {
   text-decoration: none;
   transition: all 0.3s;
 }
-
 .navbar {
   padding: 15px 10px;
-
   border: none;
   border-radius: 0;
   margin-bottom: 40px;
   /* box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); */
 }
-
 .navbar-btn {
   box-shadow: none;
   outline: none !important;
   border: none;
 }
-
 .line {
   width: 100%;
   height: 1px;
   border-bottom: 1px dashed #ddd;
   margin: 40px 0;
 }
-
 /* ---------------------------------------------------
         SIDEBAR STYLE
     ----------------------------------------------------- */
-
 $lila: $turbo-yellow /*#7386D5*/;
 $lila-60: $turbo-yellow-60 /*#6d7fcc*/;
 $lila-line: $turbo-yellow-70 /*#47748b*/;
-
 $text-sidebar: #6b6b6b /*#fff*/;
 $text-sidebar-hover: #6b6b6b /*#fff*/;
-
 .text-sidebar {
   color: $text-sidebar;
 }
-
 .wrapper {
   display: flex;
   width: 100%;
   align-items: stretch;
   font-family: "Montserrat", sans-serif;
 }
-
 #sidebar {
   min-width: 112px;
   background: $lila;
   color: Black;
   transition: all 0.3s;
 }
-
 #sidebar.active {
   margin-left: -250px;
 }
-
 #sidebar .sidebar-header {
   padding: 20px;
   background: $lila-60 /*#6d7fcc*/;
 }
-
 #sidebar ul.components {
   padding: 20px 0;
   border-bottom: 1px solid $lila-line;
 }
-
 #sidebar ul p {
   color: $text-sidebar;
   padding: 10px;
 }
-
 #sidebar ul li a {
   padding: 10px;
   font-size: 1.1em;
   display: block;
 }
-
 #sidebar ul li a:hover {
   color: $lila;
   background: $text-sidebar-hover;
 }
-
 #sidebar ul li.active > a,
 a[aria-expanded="true"] {
   color: $text-sidebar;
   background: $lila-60;
 }
-
 a[data-toggle="collapse"] {
   position: relative;
 }
-
 .dropdown-toggle::after {
   display: block;
   position: absolute;
@@ -390,17 +349,14 @@ a[data-toggle="collapse"] {
   right: 20px;
   transform: translateY(-50%);
 }
-
 ul ul a {
   font-size: 0.9em !important;
   padding-left: 30px !important;
   background: $lila-60;
 }
-
 ul.CTAs {
   padding: 20px;
 }
-
 ul.CTAs a {
   text-align: center;
   font-size: 0.9em !important;
@@ -408,22 +364,18 @@ ul.CTAs a {
   border-radius: 5px;
   margin-bottom: 5px;
 }
-
 a.download {
   background: $text-sidebar;
   color: $lila;
 }
-
 a.article,
 a.article:hover {
   background: $lila-60 !important;
   color: $text-sidebar !important;
 }
-
 /* ---------------------------------------------------
         CONTENT STYLE
     ----------------------------------------------------- */
-
 #content {
   width: 100%;
   padding: 20px;
@@ -431,11 +383,9 @@ a.article:hover {
   transition: all 0.3s;
   /*background:blue;*/
 }
-
 /* ---------------------------------------------------
         MEDIAQUERIES
     ----------------------------------------------------- */
-
 @media (max-width: 768px) {
   #sidebar {
     margin-left: -250px;

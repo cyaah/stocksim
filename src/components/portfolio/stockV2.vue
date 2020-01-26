@@ -24,6 +24,7 @@ export default {
     };
   },
   created() {
+    //Getting stock price info
     axios
       .get(
         `https://cloud.iexapis.com/stable/stock/${encodeURIComponent(
@@ -38,10 +39,9 @@ export default {
       })
       .then(con => {
         let q = this.stock.quantity;
-        // console.log(this.stock.name);
-        // console.log("db");
-        // console.log(this.dbQuantity);
-        // console.log(this.stock.quantity);
+        //Getting stock price info
+      }).catch(err =>{
+        console.log(err)
       });
   },
   methods: {

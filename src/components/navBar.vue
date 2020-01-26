@@ -177,8 +177,7 @@ export default {
       //     console.log(this.myChart);
       //   }
       this.results = [];
-
-      //Getting stock price info
+      this.$store.dispatch('changeLoading',true);      //Getting stock price info
       axios
         .get(
           `https://cloud.iexapis.com/stable/stock/${encodeURIComponent(
@@ -209,17 +208,8 @@ export default {
           console.log('12345678910121515121')
           this.error = false;
         })
-      //   .then(resp =>{
-      //   this.$router.push({ path: "/" })
-      // })
-      .
-      // catch(error => {
-      //     console.log(error);
-      //     this.error = true;
-      //   });
-
       //Getting time series data
-      then(() =>{
+      .then(() =>{
         axios
         .get(
           `https://cloud.iexapis.com/stable/stock/${encodeURIComponent(
@@ -253,6 +243,7 @@ export default {
         }).then(()=>{
           console.log('GOT HERR')
           this.$router.push({ path: "/" })
+          this.$store.dispatch('changeLoading',false);
         })
         .catch(err => {
           console.log(err);
