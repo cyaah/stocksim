@@ -155,8 +155,8 @@ export default {
         var funds = doc.data().funds;
         var quan = parseInt(currentStock.quantity) - parseInt(order.quantity);
         console.log(currentStock);
-        console.log(parseInt(order.quantity))
-        console.log(quan)
+        console.log(parseInt(order.quantity));
+        console.log(quan);
         var sellingPrice =
           parseFloat(this.results["latestPrice"]).toFixed(2) *
           parseInt(order.quantity);
@@ -207,8 +207,7 @@ export default {
             // stockRef.update({stock: {[order.name]: {[order.name.quantity] : decrement}})
             stockRef.update(update);
             order.sellingPrice = sellingPrice;
-        this.$store.commit("SELL_STOCK", order);
-            
+            this.$store.commit("SELL_STOCK", order);
 
             this.dbQuantity = quan;
           }
@@ -273,6 +272,9 @@ export default {
   font-weight: 300;
   /* letter-spacing: 4px; */
   font-weight: 400;
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 0;
+  
 }
 
 .card-info-left {

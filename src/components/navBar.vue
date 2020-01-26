@@ -29,6 +29,7 @@
             class="close"
             data-dismiss="alert"
             aria-label="Close"
+            @click="errorReset"
           >
             <span aria-hidden="true">&times;</span>
           </button>
@@ -50,9 +51,7 @@
               aria-expanded="false"
               aria-label="Toggle navigation"
               @click="logout"
-            >
-              Logout
-            </button>
+            >Logout</button>
           </li>
         </ul>
       </div>
@@ -131,7 +130,7 @@ export default {
   mounted() {
     var user = firebase.auth().currentUser;
     this.userName = user;
-    console.log(this.$route)
+    console.log(this.$route);
     // console.log('x0x0')
   },
   computed: {
@@ -169,6 +168,7 @@ export default {
         });
     },
     search: function() {
+      console.log("x0x0x0x1233");
       var term = this.searchTerm;
       //   if (this.myChart != null) {
       //     this.myChart.destroy();
@@ -177,7 +177,7 @@ export default {
       //     console.log(this.myChart);
       //   }
       this.results = [];
-      this.$store.dispatch('changeLoading',true);      //Getting stock price info
+      this.$store.dispatch("changeLoading", true); //Getting stock price info
       axios
         .get(
           `https://cloud.iexapis.com/stable/stock/${encodeURIComponent(
@@ -185,6 +185,7 @@ export default {
           )}/quote?token=pk_f606ae9814ec4d9e991aa1def338e260`
         )
         .then(res => {
+          console.log("x0x0x0x1233");
           if (res) {
             this.results = {};
             this.noResults = false;
@@ -201,22 +202,28 @@ export default {
           }
         })
         .then(res => {
+          console.log("x0x0x0x1233");
           this.$store.dispatch("getStockInfo", this.results);
-          console.log('0000000000000000000000000000')
+          console.log("0000000000000000000000000000");
 
           this.$emit("stockInfo", this.results);
-          console.log('12345678910121515121')
+          console.log("12345678910121515121");
           this.error = false;
         })
+        .catch(err => {
+          console.log(err);
+          console.log("x-x-0x0x");
+          this.$store.dispatch("changeLoading", false);
+        });
       //Getting time series data
-      .then(() =>{
-        axios
+      axios
         .get(
           `https://cloud.iexapis.com/stable/stock/${encodeURIComponent(
             term
           )}/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
         )
         .then(res => {
+          console.log("x0x0x0x1233");
           console.log("TIME SERIES");
           console.log(this.canvasData.data.labels);
 
@@ -239,17 +246,19 @@ export default {
         .then(res => {
           this.$store.dispatch("getTimeSeries", this.canvasData);
           // this.$emit("chartData", this.canvasData);
-        }).then(()=>{
-          console.log('GOT HERR')
-          this.$router.push({ path: "/" })
-          this.$store.dispatch('changeLoading',false);
+        })
+        .then(() => {
+          console.log("GOT HERR");
+          this.$router.push({ path: "/" });
+          this.$store.dispatch("changeLoading", false);
         })
         .catch(err => {
-          console.log('x0x')
-          this.error = true
+          console.log("x0x");
+          this.$store.dispatch("changeLoading", false);
+          this.error = true;
           console.log(err);
         });
-      })
+
       var isEmpty = obj => {
         for (var key in obj) {
           if (obj.hasOwnProperty(key)) {
@@ -268,6 +277,9 @@ export default {
       this.createChart("Intra Day Chart", this.canvasData);
     },
     errorChange: function() {
+      this.error = false;
+    },
+    errorReset: function() {
       this.error = false;
     }
   },
