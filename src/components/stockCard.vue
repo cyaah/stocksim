@@ -44,9 +44,7 @@ import { db, increment } from "../main.js";
 import firebase from "firebase";
 import firestore from "firebase";
 import { EventBus } from "./eventBus";
-import loader from '../components/loader'
-
-
+import loader from "../components/loader";
 
 export default {
   props: ["results", "funds"],
@@ -173,7 +171,7 @@ export default {
   /* width: 60%; */
   /*width: 30rem;*/
   height: 21rem;
-  box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5);
+  /* box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5); */
   /* box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); */
   font-family: "Montserrat", sans-serif;
   border-radius: 15px;
@@ -194,6 +192,8 @@ export default {
   font-family: "Montserrat", sans-serif;
   /* letter-spacing: 4px; */
   font-weight: 400;
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 0;
 }
 
 .card-info-left {

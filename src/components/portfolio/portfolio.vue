@@ -26,7 +26,6 @@
         <div class="chart-card-body" v-if="this.selected === true">
           <div id="chart-container">
             <canvas id="myChart" width="20px" height="320px"></canvas>
-            <loader></loader>
           </div>
           <info :results="stockSelected" v-if="this.selected === true"></info>
         </div>
@@ -48,8 +47,6 @@ import portfolioTable from "./portfolioTable";
 import { EventBus } from "./../eventBus";
 import axios from "axios";
 import info from "../info.vue";
-import loader from "../loader";
-
 var myChart;
 export default {
   data() {
@@ -113,8 +110,7 @@ export default {
     sideBar2: sideBar2,
     navBar,
     portfolioTable,
-    info,
-    loader
+    info
   },
   computed: {
     selected() {
@@ -168,8 +164,6 @@ export default {
       this.canvasData.data.labels = [];
       console.log("event bus listener");
       console.log(stock);
-      this.$store.dispatch("changeLoading", true); //Getting stock price info
-
       this.stockSelected = stock;
       var term = stock.symbol;
       axios
@@ -200,9 +194,6 @@ export default {
           this.$store.dispatch("getTimeSeries", this.canvasData);
           //this.$emit("chartData", this.canvasData);
           this.createChart("Intra Day Chart", this.canvasData);
-        })
-        .then(() => {
-          this.$store.dispatch("changeLoading", false); //Getting stock price info
         })
         .catch(err => {
           console.log(err);
@@ -310,7 +301,6 @@ export default {
   justify-content: flex-start;
   /* box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); */
 }
-
 p {
   font-family: "Poppins", sans-serif;
   font-size: 1.1em;
@@ -354,7 +344,12 @@ $text-sidebar-hover: #6b6b6b /*#fff*/;
 .text-sidebar {
   color: $text-sidebar;
 }
-
+#sidebar {
+  min-width: 132px;
+  background: $lila;
+  color: Black;
+  transition: all 0.3s;
+}
 #sidebar.active {
   margin-left: -250px;
 }

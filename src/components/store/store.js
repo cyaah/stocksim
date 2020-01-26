@@ -105,7 +105,6 @@ export const store = new Vuex.Store({
         },
         STOCKINFO(state, stockInfo) {
             console.log(stockInfo);
-            console.log('stock info1212121WWOWOWOWOWOWOWOWOWOWOWOWOOWOWOWOWOWOW');
             state.stockInfo = {};
             state.stockInfo = stockInfo
             console.log(state.stockInfo)

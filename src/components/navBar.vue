@@ -238,7 +238,6 @@ export default {
         })
         .then(res => {
           this.$store.dispatch("getTimeSeries", this.canvasData);
-          console.log()
           // this.$emit("chartData", this.canvasData);
         }).then(()=>{
           console.log('GOT HERR')
@@ -246,6 +245,8 @@ export default {
           this.$store.dispatch('changeLoading',false);
         })
         .catch(err => {
+          console.log('x0x')
+          this.error = true
           console.log(err);
         });
       })

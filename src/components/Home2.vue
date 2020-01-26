@@ -11,11 +11,11 @@
     <div id="content">
       <navBar v-on:chartData="canvas" v-on:stockInfo="stockCard"></navBar>
       <!--<dashboard></dashboard>-->
-      <div class="dashboard-container">
-        <div class="chart-card-body" v-if="this.stockPicked === true">
-          <div id="chart-container">
+      <div id="dashboard-container" class="dashboard-container">
+        <div id="chart-body-container" class="chart-card-body" >
+          <div id="chart-container" class="chart-container">
             <loader></loader>
-            <canvas id="myChart" height="320px"></canvas>
+            <canvas id="myChart" class = "canvasChart"height="320px" ></canvas>
           </div>
         </div>
         <stockCard
@@ -112,12 +112,43 @@ export default {
   },
   methods: {
     canvas(canvasData) {
-      console.log("canvas created");
+      this.canvasData = canvasData;
+      console.log("canvasData");
       console.log(canvasData);
+      console.log(this.stockPicked);
+      console.log(document.getElementById("chart-body-container"));
+      // if (!document.getElementById("myChart")) {
+      //   let dashBoardContainer = document.getElementById("dashboard-container");
+      //   let chartBodyContainer = document.createElement("div");
+      //   let chartContainer = document.createElement("div");
+      //   chartBodyContainer.setAttribute("class", "chart-card-body");
+
+      //   chartContainer.setAttribute("id", "chart-container");
+      //   let canvas = document.createElement("canvas");
+      //   let x = document.getElementsByClassName('canvasChart')
+
+      //   console.log(x);
+      //   canvas.setAttribute("id", "myChart");
+      //   canvas.setAttribute("width", "300px");
+      //   canvas.setAttribute("height", "300px");
+      //   dashBoardContainer.appendChild(chartBodyContainer);
+      //   chartBodyContainer.appendChild(chartContainer);
+      //   chartContainer.appendChild(canvas);
+      //   console.log(canvas);
+      //   document.getElementById("chart-container").appendChild(canvas);
+      //   // x.appendChild(canvas)
+      //   console.log(document.getElementById("myChart"));
+      // }
+      console.log(document.getElementById("myChart"));
+
       this.createChart("Intra Day Chart", canvasData);
     },
     createChart(chartId, chartData) {
+      console.log("canvas created");
+      console.log(document.getElementById("myChart"));
+      console.log(myChart);
       if (myChart) {
+        // myChart.destroy();
         document.getElementById("myChart").remove();
         console.log(document.getElementById("myChart"));
         let canvas = document.createElement("canvas");
@@ -128,7 +159,9 @@ export default {
         document.getElementById("chart-container").appendChild(canvas);
         myChart.destroy();
       }
-      const ctx = document.getElementById("myChart").getContext("2d");
+      var ctx = document.getElementById("myChart").getContext("2d");
+// var ctx = $('#myChart');
+
       myChart = new Chart(ctx, {
         type: chartData.type,
         data: chartData.data,
@@ -150,9 +183,20 @@ export default {
     var stock = this.$store.getters.getStockInfo;
     this.stockInfo = stock;
     console.log("dashboard created");
+    console.log(document.getElementById("myChart"));
+    console.log(this.stockPicked);
+
     var user = firebase.auth().currentUser;
     this.userId = user.uid;
-   this.canvasData = this.$store.getters.getTimeSeries
+    console.log(this.$store.getters.getTimeSeries);
+    this.canvasData = this.$store.getters.getTimeSeries;
+
+    if (this.canvasData.data.datasets[0].data.length > 0) {
+      console.log("x0x0x0");
+      this.canvas(this.canvasData);
+    }
+
+    console.log(this.$store.getters.getTimeSeries);
     var stockRef = db.collection(this.userId).doc("Portfolio");
     stockRef.get().then(doc => {
       if (doc.exists) {
@@ -239,7 +283,7 @@ export default {
   /* width: 60%; */
   width: 90%;
   height: 25rem;
-  box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5);
+  /* box-shadow: 2px 2px 2px 0 hsla(0, 0%, 0%, 0.5); */
   border-radius: 15px;
   border: black;
   /*position: absolute;*/
