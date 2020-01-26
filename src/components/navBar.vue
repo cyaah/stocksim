@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <div class="search-container">
+        <div class="search-container" v-if="this.$route.path === '/'">
           <!--          <div v-if="this.error === true " class="alert alert-dark" role="alert">-->
           <!--            Error stock ticker "{{searchTerm}}" cannot be found. Try another ticker-->
           <!--            <button type="button" class="close" data-dismiss="alert" aria-label="Close">-->
@@ -29,6 +29,7 @@
             class="close"
             data-dismiss="alert"
             aria-label="Close"
+            @click="errorReset"
           >
             <span aria-hidden="true">&times;</span>
           </button>
@@ -50,9 +51,7 @@
               aria-expanded="false"
               aria-label="Toggle navigation"
               @click="logout"
-            >
-              Logout
-            </button>
+            >Logout</button>
           </li>
         </ul>
       </div>
@@ -131,6 +130,8 @@ export default {
   mounted() {
     var user = firebase.auth().currentUser;
     this.userName = user;
+    console.log(this.$route);
+    // console.log('x0x0')
   },
   computed: {
     funds() {
@@ -167,6 +168,7 @@ export default {
         });
     },
     search: function() {
+      console.log("x0x0x0x1233");
       var term = this.searchTerm;
       //   if (this.myChart != null) {
       //     this.myChart.destroy();
@@ -175,8 +177,7 @@ export default {
       //     console.log(this.myChart);
       //   }
       this.results = [];
-
-      //Getting stock price info
+      this.$store.dispatch("changeLoading", true); //Getting stock price info
       axios
         .get(
           `https://cloud.iexapis.com/stable/stock/${encodeURIComponent(
@@ -184,6 +185,7 @@ export default {
           )}/quote?token=pk_f606ae9814ec4d9e991aa1def338e260`
         )
         .then(res => {
+          console.log("x0x0x0x1233");
           if (res) {
             this.results = {};
             this.noResults = false;
@@ -200,19 +202,19 @@ export default {
           }
         })
         .then(res => {
+          console.log("x0x0x0x1233");
           this.$store.dispatch("getStockInfo", this.results);
-          console.log('0000000000000000000000000000')
+          console.log("0000000000000000000000000000");
 
           this.$emit("stockInfo", this.results);
-          console.log('12345678910121515121')
+          console.log("12345678910121515121");
           this.error = false;
-        }).then(resp =>{
-        this.$router.push({ path: "/" })
-      }).catch(error => {
-          console.log(error);
-          this.error = true;
+        })
+        .catch(err => {
+          console.log(err);
+          console.log("x-x-0x0x");
+          this.$store.dispatch("changeLoading", false);
         });
-
       //Getting time series data
       axios
         .get(
@@ -221,6 +223,7 @@ export default {
           )}/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
         )
         .then(res => {
+          console.log("x0x0x0x1233");
           console.log("TIME SERIES");
           console.log(this.canvasData.data.labels);
 
@@ -235,16 +238,24 @@ export default {
             );
           }
           console.log("canvas data navbar");
-          console.log(this.canvasData.data.labels);
+          // console.log(this.canvasData.data.labels);
           console.log(this.canvasData.data.datasets[0].data);
-
+          this.$emit("chartData", this.canvasData);
           // this.canvas();
         })
         .then(res => {
           this.$store.dispatch("getTimeSeries", this.canvasData);
-          this.$emit("chartData", this.canvasData);
+          // this.$emit("chartData", this.canvasData);
+        })
+        .then(() => {
+          console.log("GOT HERR");
+          this.$router.push({ path: "/" });
+          this.$store.dispatch("changeLoading", false);
         })
         .catch(err => {
+          console.log("x0x");
+          this.$store.dispatch("changeLoading", false);
+          this.error = true;
           console.log(err);
         });
 
@@ -267,6 +278,9 @@ export default {
     },
     errorChange: function() {
       this.error = false;
+    },
+    errorReset: function() {
+      this.error = false;
     }
   },
   filters: {
@@ -279,17 +293,6 @@ export default {
       return formatter.format(value);
     }
   }
-  // watch: {
-  //   results: function(newVal, oldVal) {
-  //     console.log("new");
-  //     this.$store.dispatch("getStockInfo", newVal);
-  //   },
-  //   canvasData: function(newVal, oldVal) {
-  //     console.log(newVal)
-  //     console.log('NEWvalD')
-  //     this.$store.dispatch("getTimeSeries", newVal);
-  //   }
-  // }
 };
 </script>
 

@@ -3,9 +3,11 @@
     <div class="sidebar-contents">
       <ul class="list-unstyled components">
         <li>
+          <i class="fas fa-search fa-lg"></i>
           <router-link to="/">Dashboard</router-link>
         </li>
         <li>
+          <i class="fas fa-chart-line fa-lg"></i>
           <router-link to="/portfolio">Portfolio</router-link>
         </li>
       </ul>
@@ -38,15 +40,14 @@ $text-sidebar-hover: #6b6b6b /*#fff*/;
 }
 
 #sidebar {
-  min-width: 112px;
-  max-width: 112px;
+  min-width: 142px;
+  /* max-width: 112px; */
   /*background: #5A5A5C;*/
   color: white;
   transition: all 0.3s;
-  background: #313A3A;
+  background: #313a3a;
   box-shadow: 3px 1px 3px rgba(0, 0, 0, 0.1);
   font-family: "Montserrat", sans-serif;
-
 }
 
 #sidebar.active {
@@ -71,9 +72,9 @@ $text-sidebar-hover: #6b6b6b /*#fff*/;
 #sidebar ul li a {
   padding: 10px;
   padding-top: 40px;
-  font-size: 1.1em;
-  font-weight: bold;
-  color: #FCFFFC;
+  font-size: 15px;
+  font-weight: 800;
+  color: #fcfffc;
   display: inline-block;
 }
 
@@ -116,6 +117,13 @@ ul.CTAs a {
   display: block;
   border-radius: 5px;
   margin-bottom: 5px;
+}
+
+
+
+i {
+  color: whitesmoke;
+  padding-left: 4px;
 }
 
 a.download {
