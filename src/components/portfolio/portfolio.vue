@@ -354,12 +354,7 @@ $text-sidebar-hover: #6b6b6b /*#fff*/;
 .text-sidebar {
   color: $text-sidebar;
 }
-#sidebar {
-  min-width: 112px;
-  background: $lila;
-  color: Black;
-  transition: all 0.3s;
-}
+
 #sidebar.active {
   margin-left: -250px;
 }

@@ -152,6 +152,7 @@ export default {
     console.log("dashboard created");
     var user = firebase.auth().currentUser;
     this.userId = user.uid;
+   this.canvasData = this.$store.getters.getTimeSeries
     var stockRef = db.collection(this.userId).doc("Portfolio");
     stockRef.get().then(doc => {
       if (doc.exists) {
@@ -304,12 +305,7 @@ $text-sidebar-hover: #6b6b6b /*#fff*/;
   align-items: stretch;
   font-family: "Montserrat", sans-serif;
 }
-#sidebar {
-  min-width: 112px;
-  background: $lila;
-  color: Black;
-  transition: all 0.3s;
-}
+
 #sidebar.active {
   margin-left: -250px;
 }
