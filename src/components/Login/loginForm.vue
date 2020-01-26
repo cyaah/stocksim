@@ -48,20 +48,13 @@ export default {
   name: "loginForm",
   methods: {
     loginUser() {
-      console.log("asd");
-      console.log(this.email);
-      console.log(this.password);
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then(cred => {
-          console.log("login");
-          console.log(cred.user);
           this.$store.commit("LOGIN", cred.user);
         })
         .then(res => {
-          console.log(this.email);
-          console.log("email");
           //this.$store.dispatch("buyStock", order);
           this.$router.push({ path: "/" });
         })

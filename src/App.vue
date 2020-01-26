@@ -19,7 +19,6 @@ import { mapState } from "vuex";
 import Chart from "chart.js";
 import { EventBus } from "../src/components/eventBus";
 
-
 export default {
   components: {
     // appHeader: Header
@@ -32,22 +31,18 @@ export default {
     };
   },
   mounted() {
-    console.log("at create");
     //this.$store.dispatch("loadStocks");
     EventBus.$on("successNotification", resp => {
-      console.log(resp);
       this.show("notification", "success");
     });
 
     EventBus.$on("soldNotification", resp => {
-      console.log("x0x0x0x0x0x0");
       this.show("notification", "error");
     });
   },
 
   methods: {
     show(group, type = "") {
-      console.log("sucess");
       let action = type === "success" ? "Bought" : "Sold";
       const text = `
         Shares Sucessfully ${action}!
@@ -95,5 +90,4 @@ export default {
   min-height: 100vh;
   font-family: "Montserrat", sans-serif;
 }
-
 </style>

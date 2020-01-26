@@ -2,23 +2,23 @@
   <div class="dashboard-container">
     <div class="dashboard-graph">
       <div class="card-body">
-          <div v-if="this.canvasCreated" id="chart-container">
-            <canvas id="myChart" width="320px" height="320px"></canvas>
-          </div>
+        <div v-if="this.canvasCreated" id="chart-container">
+          <canvas id="myChart" width="320px" height="320px"></canvas>
         </div>
-        <p>{{getTimeSeries}}</p>
+      </div>
+      <p>{{getTimeSeries}}</p>
     </div>
     <!-- <div>{{getstockInfo}}</div> -->
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 var myChart;
 export default {
-  data (){
+  data() {
     return {
       stockInfo: [],
-      timeSeries:[],
+      timeSeries: [],
       canvasData: {
         type: "line",
         data: {
@@ -69,36 +69,25 @@ export default {
         }
       },
       canvasCreated: false
-    }
+    };
   },
-  created() {
-
-  },
+  created() {},
   methods: {
-      canvas(canvasData) {
-        console.log('121221121212121212121212')
+    canvas(canvasData) {
       this.createChart("Intra Day Chart", canvasData);
     },
 
     createChart(chartId, chartData) {
-      console.log("chartData" );
-      console.log(chartId)
-      console.log(chartData)
-
       if (myChart) {
         document.getElementById("myChart").remove();
-        console.log(document.getElementById("myChart"));
         let canvas = document.createElement("canvas");
         canvas.setAttribute("id", "myChart");
         canvas.setAttribute("width", "300px");
         canvas.setAttribute("height", "300px");
-        console.log(document.getElementById("chart-container"));
         document.getElementById("chart-container").appendChild(canvas);
 
         myChart.destroy();
       }
-      console.log("ctx" + myChart);
-      console.log('xoxoxoxoxoxoxoxoxoxo')
       const ctx = document.getElementById("myChart").getContext("2d");
 
       myChart = new Chart(ctx, {
@@ -107,27 +96,24 @@ export default {
         options: chartData.options
       });
       this.canvasCreated = true;
-    },
+    }
   },
   computed: {
     // ...mapGetters([
     //   'getstockInfo',
     //   'gettimeSeries'
     // ]),
-    getTimeSeries (){
-      console.log('triggered')
-       this.canvas(this.$store.getters.getTimeSeries);
-       //this.canvasCreated = true
+    getTimeSeries() {
+      console.log("triggered");
+      this.canvas(this.$store.getters.getTimeSeries);
+      //this.canvasCreated = true
       //return this.$store.getters.getTimeSeries
-
     },
-    getstockInfo (){
-      return this.$store.getters.getStockInfo
+    getstockInfo() {
+      return this.$store.getters.getStockInfo;
     }
   },
-  watch:{
-
-  }
+  watch: {}
 };
 </script>
 

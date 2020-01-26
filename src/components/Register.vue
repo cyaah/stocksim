@@ -80,14 +80,8 @@ export default {
               stock: {},
               funds: 1000
             });
-          // console.log('res')
-          // console.log(res)
         })
         .then(res => {
-          // console.log(res)
-          // console.log('PUSH HOME')
-          var blah = firebase.auth().currentUser;
-          console.log(blah);
           this.$store.commit("LOGIN", this.id);
           this.$router.push({ path: "/" });
         })

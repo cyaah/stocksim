@@ -73,30 +73,25 @@ export default {
 
       //CHeck if you have enough funds
       if (buyingPrice > this.funds) {
-        console.log("cant afford");
         alert("Not enough funds to buy stock");
       } else {
         //Updating portfolio funds to firestore
         var stockRef = db.collection(this.userId).doc("Portfolio");
         stockRef.get().then(doc => {
-          console.log("doc does not exist");
           var currentStock = doc.data().stock;
 
           //Creating new stock
           if (!currentStock[order.name] && !Object.keys({}).length) {
-            console.log("inside if");
             stockRef
               .set({ stock: { [order.name]: order } }, { merge: true })
               //Tried to change db scheme but this only make it into an array by default. Look into inserting straight object instead of object
               //.set({[order.name]: [order]},  { merge: true })
               .then(resp => {
-                console.log("New stock added");
                 //stockRef.FieldValue('stock').add({ [order.name]: order})
               });
 
             //Update existing stock
           } else {
-            console.log("else");
             var quantity =
               parseInt(currentStock[order.name].quantity) +
               parseInt(order.quantity);
@@ -105,7 +100,6 @@ export default {
               parseFloat(currentStock[order.name].quantity).toFixed(2) *
                 parseFloat(currentStock[order.name].price).toFixed(2) +
               parseInt(order.quantity) * parseInt(order.price);
-            console.log("total price");
             var average =
               parseFloat(totalPrice).toFixed(2) / parseInt(quantity).toFixed(2);
             var name = currentStock[order.name].name;
@@ -117,11 +111,9 @@ export default {
             };
             var update = {};
             update[`stock.${name}`] = newOrder;
-            console.log("does exist");
             stockRef.update(update);
           }
         });
-        console.log("when buying price less than funds");
 
         //updating funds
         var newFunds = (this.funds - buyingPrice).toFixed(2);

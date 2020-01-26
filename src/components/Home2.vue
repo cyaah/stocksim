@@ -12,10 +12,10 @@
       <navBar v-on:chartData="canvas" v-on:stockInfo="stockCard"></navBar>
       <!--<dashboard></dashboard>-->
       <div id="dashboard-container" class="dashboard-container">
-        <div id="chart-body-container" class="chart-card-body" >
+        <div id="chart-body-container" class="chart-card-body">
           <div id="chart-container" class="chart-container">
             <loader></loader>
-            <canvas id="myChart" class = "canvasChart"height="320px" ></canvas>
+            <canvas id="myChart" class="canvasChart" height="320px"></canvas>
           </div>
         </div>
         <stockCard
@@ -113,10 +113,6 @@ export default {
   methods: {
     canvas(canvasData) {
       this.canvasData = canvasData;
-      console.log("canvasData");
-      console.log(canvasData);
-      console.log(this.stockPicked);
-      console.log(document.getElementById("chart-body-container"));
       // if (!document.getElementById("myChart")) {
       //   let dashBoardContainer = document.getElementById("dashboard-container");
       //   let chartBodyContainer = document.createElement("div");
@@ -139,28 +135,21 @@ export default {
       //   // x.appendChild(canvas)
       //   console.log(document.getElementById("myChart"));
       // }
-      console.log(document.getElementById("myChart"));
-
       this.createChart("Intra Day Chart", canvasData);
     },
     createChart(chartId, chartData) {
-      console.log("canvas created");
-      console.log(document.getElementById("myChart"));
-      console.log(myChart);
       if (myChart) {
         // myChart.destroy();
         document.getElementById("myChart").remove();
-        console.log(document.getElementById("myChart"));
         let canvas = document.createElement("canvas");
         canvas.setAttribute("id", "myChart");
         canvas.setAttribute("width", "300px");
         canvas.setAttribute("height", "300px");
-        console.log(document.getElementById("chart-container"));
         document.getElementById("chart-container").appendChild(canvas);
         myChart.destroy();
       }
       var ctx = document.getElementById("myChart").getContext("2d");
-// var ctx = $('#myChart');
+      // var ctx = $('#myChart');
 
       myChart = new Chart(ctx, {
         type: chartData.type,
@@ -171,32 +160,23 @@ export default {
     },
     stockCard(stockInfo) {
       this.stockInfo = stockInfo;
-      console.log(stockInfo);
-      console.log("x0x0x0x");
     },
     stockBought() {
-      console.log("switichjing to true");
       this.success = true;
     }
   },
   mounted() {
     var stock = this.$store.getters.getStockInfo;
     this.stockInfo = stock;
-    console.log("dashboard created");
-    console.log(document.getElementById("myChart"));
-    console.log(this.stockPicked);
 
     var user = firebase.auth().currentUser;
     this.userId = user.uid;
-    console.log(this.$store.getters.getTimeSeries);
     this.canvasData = this.$store.getters.getTimeSeries;
 
     if (this.canvasData.data.datasets[0].data.length > 0) {
-      console.log("x0x0x0");
       this.canvas(this.canvasData);
     }
 
-    console.log(this.$store.getters.getTimeSeries);
     var stockRef = db.collection(this.userId).doc("Portfolio");
     stockRef.get().then(doc => {
       if (doc.exists) {
@@ -212,13 +192,12 @@ export default {
         if (this.stockInfo.hasOwnProperty(key)) return true;
       }
       return false;
-    },
-    timeSeriesPicked: function() {
-      console.log("time series picked ");
-      if (this.canvasData.data.datasets[0].data.length > 0) {
-        console.log("yes");
-      }
     }
+    // timeSeriesPicked: function() {
+    //   if (this.canvasData.data.datasets[0].data.length > 0) {
+    //     console.log("yes");
+    //   }
+    // }
   }
 };
 </script>

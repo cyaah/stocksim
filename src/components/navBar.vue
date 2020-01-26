@@ -130,8 +130,6 @@ export default {
   mounted() {
     var user = firebase.auth().currentUser;
     this.userName = user;
-    console.log(this.$route);
-    // console.log('x0x0')
   },
   computed: {
     funds() {
@@ -154,27 +152,23 @@ export default {
       }
     },
     logout() {
-      console.log("sign out");
+      // console.log("sign out");
       firebase
         .auth()
         .signOut()
         .then(resp => {
-          // console.log("ssss");
           this.$store.commit("LOGOUT");
         })
         .then(() => {
-          // console.log('then');
           this.$router.push({ path: "/login" });
         });
     },
     search: function() {
-      console.log("x0x0x0x1233");
       var term = this.searchTerm;
       //   if (this.myChart != null) {
       //     this.myChart.destroy();
       this.canvasData.data.datasets[0].data = [];
       this.canvasData.data.labels = [];
-      //     console.log(this.myChart);
       //   }
       this.results = [];
       this.$store.dispatch("changeLoading", true); //Getting stock price info
@@ -185,7 +179,6 @@ export default {
           )}/quote?token=pk_f606ae9814ec4d9e991aa1def338e260`
         )
         .then(res => {
-          console.log("x0x0x0x1233");
           if (res) {
             this.results = {};
             this.noResults = false;
@@ -202,17 +195,13 @@ export default {
           }
         })
         .then(res => {
-          console.log("x0x0x0x1233");
           this.$store.dispatch("getStockInfo", this.results);
-          console.log("0000000000000000000000000000");
 
           this.$emit("stockInfo", this.results);
-          console.log("12345678910121515121");
           this.error = false;
         })
         .catch(err => {
           console.log(err);
-          console.log("x-x-0x0x");
           this.$store.dispatch("changeLoading", false);
         });
       //Getting time series data
@@ -223,10 +212,6 @@ export default {
           )}/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
         )
         .then(res => {
-          console.log("x0x0x0x1233");
-          console.log("TIME SERIES");
-          console.log(this.canvasData.data.labels);
-
           this.timeSeriesData = res.data;
           //this.canvasData.labels = res.data;
           for (var i = 0; i < this.timeSeriesData.length; i++) {
@@ -237,23 +222,17 @@ export default {
               this.timeSeriesData[i].close
             );
           }
-          console.log("canvas data navbar");
-          // console.log(this.canvasData.data.labels);
-          console.log(this.canvasData.data.datasets[0].data);
           this.$emit("chartData", this.canvasData);
-          // this.canvas();
         })
         .then(res => {
           this.$store.dispatch("getTimeSeries", this.canvasData);
           // this.$emit("chartData", this.canvasData);
         })
         .then(() => {
-          console.log("GOT HERR");
           this.$router.push({ path: "/" });
           this.$store.dispatch("changeLoading", false);
         })
         .catch(err => {
-          console.log("x0x");
           this.$store.dispatch("changeLoading", false);
           this.error = true;
           console.log(err);

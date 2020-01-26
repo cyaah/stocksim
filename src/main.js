@@ -9,7 +9,9 @@ import {
   routes
 } from './routes';
 //import store from './components/store/store';
-import { store } from './components/store/store.js';
+import {
+  store
+} from './components/store/store.js';
 
 
 

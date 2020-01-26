@@ -35,7 +35,6 @@
 </template>
 
 <script>
-import stock from "./stock.vue";
 import { mapGetters } from "vuex";
 import { db, increment } from "../../main.js";
 import firebase from "firebase";
@@ -123,7 +122,6 @@ export default {
       this.$store.getters.getUserFunds === null ||
       this.$store.getters.getUserFunds === undefined
     ) {
-      console.log("gettinnggg fundsssssss");
       var user = firebase.auth().currentUser;
       var userId = user.uid;
       var stockRef = db.collection(userId).doc("Portfolio");
@@ -132,8 +130,6 @@ export default {
         .then(doc => {
           if (doc.exists) {
             this.funds = doc.data().funds.toFixed(2);
-            console.log(this.funds);
-            console.log("x0x0x0x1212221");
           }
         })
         .then(resp => {
@@ -147,13 +143,10 @@ export default {
     var stockRef = db.collection(this.userId).doc("Portfolio");
     stockRef.get().then(doc => {
       if (doc.exists) {
-        //console.log("document exists on created");
         var arr = Object.values(doc.data().stock);
         for (var i = 0; i < arr.length; i++) {
           this.portfolio.push(arr[i]);
         }
-        //console.log("portfolio");
-        //console.log(this.portfolio);
         this.$store.commit("SET_PORTFOLIO", this.portfolio);
       }
     });
@@ -162,8 +155,6 @@ export default {
       this.selected = true;
       this.canvasData.data.datasets[0].data = [];
       this.canvasData.data.labels = [];
-      console.log("event bus listener");
-      console.log(stock);
       this.stockSelected = stock;
       var term = stock.symbol;
       axios
@@ -173,8 +164,6 @@ export default {
           )}/time-series/?token=pk_f606ae9814ec4d9e991aa1def338e260`
         )
         .then(res => {
-          console.log("TIME SERIES");
-          console.log(this.canvasData.data.labels);
           this.timeSeriesData = res.data;
           //this.canvasData.labels = res.data;
           for (var i = 0; i < this.timeSeriesData.length; i++) {
@@ -185,9 +174,6 @@ export default {
               this.timeSeriesData[i].close
             );
           }
-          console.log("canvas data portfolio");
-          console.log(this.canvasData.data);
-          console.log(this.canvasData.data.datasets[0].data);
           // this.canvas();
         })
         .then(res => {
@@ -202,16 +188,12 @@ export default {
   },
   methods: {
     createChart(chartId, chartData) {
-      console.log("trying to create ");
       if (myChart) {
-        console.log("inside");
         document.getElementById("myChart").remove();
-        console.log(document.getElementById("myChart"));
         let canvas = document.createElement("canvas");
         canvas.setAttribute("id", "myChart");
         canvas.setAttribute("width", "300px");
         canvas.setAttribute("height", "300px");
-        console.log(document.getElementById("chart-container"));
         document.getElementById("chart-container").appendChild(canvas);
         myChart.destroy();
       }
@@ -224,31 +206,23 @@ export default {
       this.stockData = true;
     },
     deleteThisStock: function(payload) {
-      console.log("DELETE STOCK");
       let index = payload.index;
       this.portfolio.splice(index, 1);
-      console.log(payload);
       this.funds += payload.sellingPrice;
     },
     updateStock: function(order) {
-      console.log("UPDATE STOCK");
-      console.log(order.name);
       for (var i = 0; i < this.portfolio.length; i++) {
         if (this.portfolio[i].name === order.name) {
           this.portfolio[i].quantity = order.quantity;
-          console.log("found");
-          console.log(this.portfolio[i]);
         }
       }
-      console.log(order.sellingPrice);
       let funds = this.funds;
       this.funds += order.sellingPrice;
-      console.log(this.funds);
-    },
-    stockSelected: function(stock) {
-      console.log(stock);
-      console.log("grand parent reached");
     }
+    // stockSelected: function(stock) {
+    //   console.log(stock);
+    //   console.log("grand parent reached");
+    // }
   }
 };
 //}
